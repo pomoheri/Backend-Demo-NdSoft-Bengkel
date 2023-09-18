@@ -32,5 +32,6 @@
     - DB_PASSWORD=
 4. run composer install
 5. run php artisan key:generate
-6. run development in webserver with php artisan serve
+6. run php artisan migrate --seed
+7. run development in webserver with php artisan serve
 
