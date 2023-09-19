@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class RoleMenu extends Model
 {
     protected $table = 'role_menu';
-
+    protected $primaryKey = null;
+    public $incrementing = false;
+    public $timestamps = true;
     protected $casts = [
         'role_id' => 'int',
         'menu_id' => 'int'
@@ -16,12 +18,6 @@ class RoleMenu extends Model
         'role_id',
         'menu_id'
     ];
-
-    protected $primaryKey = null;
-    
-    public $incrementing = false;
-
-    public $timestamps = true;
 
     public function menu(){
         return $this->belongsTo(Menu::class, 'menu_id');
