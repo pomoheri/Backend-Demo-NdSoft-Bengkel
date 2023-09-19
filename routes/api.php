@@ -26,11 +26,30 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/list-role', [\App\Http\Controllers\Api\MasterDataController::class, 'listRole']);
         Route::get('/list-menu', [\App\Http\Controllers\Api\MasterDataController::class, 'listMenu']);
     });
+
     Route::group(['prefix' => 'menu-management', "as" => 'menu-management.'], function () {
         Route::get('/list', [\App\Http\Controllers\Api\MenuManagementController::class, 'list']);
         Route::post('/add', [\App\Http\Controllers\Api\MenuManagementController::class, 'add']);
         Route::get('/delete/{menus}', [\App\Http\Controllers\Api\MenuManagementController::class, 'delete']);
         Route::get('/detail/{menus}', [\App\Http\Controllers\Api\MenuManagementController::class, 'detail']);
         Route::post('/update/{menus}', [\App\Http\Controllers\Api\MenuManagementController::class, 'update']);
+    });
+
+    Route::group(['prefix' => 'users-management', "as" => 'users-management.'], function () {
+        Route::get('/list', [\App\Http\Controllers\Api\UsersManagementController::class, 'list']);
+        Route::post('/add', [\App\Http\Controllers\Api\UsersManagementController::class, 'add']);
+        Route::get('/detail/{user}', [\App\Http\Controllers\Api\UsersManagementController::class, 'detail']);
+        Route::post('/update/{user}', [\App\Http\Controllers\Api\UsersManagementController::class, 'update']);
+        Route::get('/delete/{user}', [\App\Http\Controllers\Api\UsersManagementController::class, 'delete']);
+    });
+
+    Route::group(['prefix' => 'role-access-management', "as" => 'role-access-management.'], function () {
+        Route::get('/list', [\App\Http\Controllers\Api\RoleAccessManagement::class, 'list']);
+        Route::post('/add', [\App\Http\Controllers\Api\RoleAccessManagement::class, 'add']);
+        Route::get('/detail/{role}', [\App\Http\Controllers\Api\RoleAccessManagement::class, 'detail']);
+        Route::post('/update/{role}', [\App\Http\Controllers\Api\RoleAccessManagement::class, 'update']);
+        Route::get('/delete/{role}', [\App\Http\Controllers\Api\RoleAccessManagement::class, 'delete']);
+        Route::get('/role-menu-lists/{role}', [\App\Http\Controllers\Api\RoleAccessManagement::class, 'roleMenuList']);
+        Route::post('/set-role-menu/{role}', [\App\Http\Controllers\Api\RoleAccessManagement::class, 'setRoleMenu']);
     });
 });
