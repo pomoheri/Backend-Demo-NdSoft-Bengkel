@@ -7,6 +7,168 @@
 	},
 	"item": [
 		{
+			"name": "Data Master",
+			"item": [
+				{
+					"name": "List Role",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}master-data/list-role",
+							"host": [
+								"{{url}}master-data"
+							],
+							"path": [
+								"list-role"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Menu",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}master-data/list-menu",
+							"host": [
+								"{{url}}master-data"
+							],
+							"path": [
+								"list-menu"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Manajemen Menu",
+			"item": [
+				{
+					"name": "List Menu Tree",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}menu-management/list",
+							"host": [
+								"{{url}}menu-management"
+							],
+							"path": [
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Menu",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Menu Baru\", //[required,unique]\r\n    \"icon\" : \"fa fa-users\",\r\n    \"url\"  : \"/menu-baru\", \r\n    \"parent_id\" : \"\" //(ada menu induk ? \"required\" : \"nullable\")\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}menu-management/add",
+							"host": [
+								"{{url}}menu-management"
+							],
+							"path": [
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Menu",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}menu-management/delete/6",
+							"host": [
+								"{{url}}menu-management"
+							],
+							"path": [
+								"delete",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail Menu",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}menu-management/detail/4",
+							"host": [
+								"{{url}}menu-management"
+							],
+							"path": [
+								"detail",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Menu",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Menu Barus\", //[required,unique]\r\n    \"icon\" : \"fa fa-users\",\r\n    \"url\"  : \"/menu-baru\", \r\n    \"parent_id\" : \"\" //(ada menu induk ? \"required\" : \"nullable\")\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}menu-management/update/4",
+							"host": [
+								"{{url}}menu-management"
+							],
+							"path": [
+								"update",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Login",
 			"request": {
 				"auth": {
@@ -162,7 +324,7 @@
 		},
 		{
 			"key": "token",
-			"value": "10|cX7qUpNDAy5QVbj7sSXCbSC88jzlZMZnS4uGrb9J3dc4c567",
+			"value": "1|c0LFFO1hkegTLWan0id7sX6dmrh2wBlisgVBQSaA88a89ac0",
 			"type": "string"
 		}
 	]
