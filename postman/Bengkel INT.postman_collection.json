@@ -43,6 +43,23 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "List Car Brand",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}master-data/list-car-brand",
+							"host": [
+								"{{url}}master-data"
+							],
+							"path": [
+								"list-car-brand"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -449,7 +466,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\"data\": {\r\n        \"1\" : { \r\n                \"menu_id\" : 2,\r\n                \"value\": true\r\n        },\r\n        \"2\" : { \r\n                \"menu_id\" : 3,\r\n                \"value\": false\r\n        }\r\n    }\r\n}"
+							"raw": "{\r\n\"data\": {\r\n        \"1\" : { \r\n                \"menu_id\" : 2,\r\n                \"value\": true\r\n        },\r\n        \"2\" : { \r\n                \"menu_id\" : 3,\r\n                \"value\": true\r\n        }\r\n    }\r\n}"
 						},
 						"url": {
 							"raw": "{{url}}role-access-management/set-role-menu/1",
@@ -463,6 +480,262 @@
 						}
 					},
 					"response": []
+				}
+			]
+		},
+		{
+			"name": "Part Inventory",
+			"item": [
+				{
+					"name": "Manajemen Supplier",
+					"item": [
+						{
+							"name": "List Supplier",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}supplier-management/list",
+									"host": [
+										"{{url}}supplier-management"
+									],
+									"path": [
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Supplier",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"supplier_code\" : \"SPL02\", //[required, unique]\r\n    \"name\"          : \"Toko Berkah Selalu Ada\", //[required, unique]\r\n    \"address\"       : \"Candi, Mlese, Gantiwarno\",\r\n    \"phone\"         : \"083869550401\",\r\n    \"pic\"           : \"pomo\"\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}supplier-management/add",
+									"host": [
+										"{{url}}supplier-management"
+									],
+									"path": [
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Detail Supplier",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}supplier-management/detail/2",
+									"host": [
+										"{{url}}supplier-management"
+									],
+									"path": [
+										"detail",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Supplier",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"supplier_code\" : \"SPL021\", //[required, unique]\r\n    \"name\"          : \"Toko Berkah Selalu Ada\", //[required, unique]\r\n    \"address\"       : \"Candi, Mlese, Gantiwarno\",\r\n    \"phone\"         : \"083869550401\",\r\n    \"pic\"           : \"pomo\"\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}supplier-management/update/2",
+									"host": [
+										"{{url}}supplier-management"
+									],
+									"path": [
+										"update",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Supplier",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}supplier-management/delete/2",
+									"host": [
+										"{{url}}supplier-management"
+									],
+									"path": [
+										"delete",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Pelanggan",
+			"item": [
+				{
+					"name": "Manajemen Car Type",
+					"item": [
+						{
+							"name": "List Car Type",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}car-type-management/list",
+									"host": [
+										"{{url}}car-type-management"
+									],
+									"path": [
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Car Type",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"car_brand_id\" : 2,\r\n    \"name\"         : \"Jazz RS 2019\", //[required]\r\n    \"type\"         : \"CVT\", //[required, unique]\r\n    \"cc\"           : \"1497\",\r\n    \"engine_type\"  : \"Matic\"\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}car-type-management/add",
+									"host": [
+										"{{url}}car-type-management"
+									],
+									"path": [
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Detail Car Type",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}car-type-management/detail/1",
+									"host": [
+										"{{url}}car-type-management"
+									],
+									"path": [
+										"detail",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Car Type",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"car_brand_id\" : 2,\r\n    \"name\"         : \"Jazz RS 2019\", //[required]\r\n    \"type\"         : \"CVT\", //[required, unique]\r\n    \"cc\"           : \"1497\",\r\n    \"engine_type\"  : \"Matic\"\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}car-type-management/update/1",
+									"host": [
+										"{{url}}car-type-management"
+									],
+									"path": [
+										"update",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Car Type",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}car-type-management/delete/3",
+									"host": [
+										"{{url}}car-type-management"
+									],
+									"path": [
+										"delete",
+										"3"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},

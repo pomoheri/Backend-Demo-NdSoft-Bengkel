@@ -25,6 +25,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'master-data', "as" => 'master-data.'], function () {
         Route::get('/list-role', [\App\Http\Controllers\Api\MasterDataController::class, 'listRole']);
         Route::get('/list-menu', [\App\Http\Controllers\Api\MasterDataController::class, 'listMenu']);
+        Route::get('/list-car-brand', [\App\Http\Controllers\Api\MasterDataController::class, 'listCarBrand']);
     });
 
     Route::group(['prefix' => 'menu-management', "as" => 'menu-management.'], function () {
