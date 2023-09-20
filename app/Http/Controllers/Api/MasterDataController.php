@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Menus;
 use App\Models\Roles;
+use App\Models\CarBrand;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -29,6 +30,16 @@ class MasterDataController extends Controller
         try {
             $menus = Menus::orderBy('name', 'ASC')->get();
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($menus, ['Data List Menu']);
+        } catch (\Exception $e) {
+            return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
+        }
+    }
+
+    public function listCarBrand()
+    {
+        try {
+            $car_brand = CarBrand::orderBy('name', 'ASC')->get();
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($car_brand, ['Data List Car Brand']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
