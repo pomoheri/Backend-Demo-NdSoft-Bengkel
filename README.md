@@ -19,6 +19,7 @@
         "phpunit/phpunit": "^10.1",
         "spatie/laravel-ignition": "^2.0"
     },
+
 ```
 ## how to install
 1. Clone this repository
