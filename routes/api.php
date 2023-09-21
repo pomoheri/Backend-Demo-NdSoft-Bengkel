@@ -20,6 +20,7 @@ Route::post('/register', [\App\Http\Controllers\Api\AuthController::class, 'regi
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/user-profile', [\App\Http\Controllers\Api\AuthController::class, 'getUserProfile']);
     Route::get('/default-menu', [\App\Http\Controllers\Api\AuthController::class, 'defaultMenu']);
+    Route::post('/reset-password', [\App\Http\Controllers\Api\AuthController::class, 'resetPassword']);
     Route::post('/logout', [\App\Http\Controllers\Api\AuthController::class, 'logout']);
 
     Route::group(['prefix' => 'master-data', "as" => 'master-data.'], function () {

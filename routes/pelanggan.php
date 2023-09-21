@@ -10,4 +10,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/update/{car_type}', [\App\Http\Controllers\Api\Pelanggan\ManagementCarTypeController::class, 'update']);
         Route::get('/delete/{car_type}', [\App\Http\Controllers\Api\Pelanggan\ManagementCarTypeController::class, 'delete']);
     });
+
+    Route::group(['prefix' => 'customer-management', "as" => 'customer-management'], function () {
+        Route::get('/list', [\App\Http\Controllers\Api\Pelanggan\CustomerManagementController::class, 'list']);
+        Route::post('/add', [\App\Http\Controllers\Api\Pelanggan\CustomerManagementController::class, 'add']);
+        Route::get('/edit/{customer}', [\App\Http\Controllers\Api\Pelanggan\CustomerManagementController::class, 'edit']);
+        Route::post('/update/{customer}', [\App\Http\Controllers\Api\Pelanggan\CustomerManagementController::class, 'update']);
+        Route::get('/delete/{customer}', [\App\Http\Controllers\Api\Pelanggan\CustomerManagementController::class, 'delete']);
+    });
 });

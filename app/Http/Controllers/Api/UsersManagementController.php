@@ -79,8 +79,7 @@ class UsersManagementController extends Controller
             $validation = Validator::make($request->all(), [
                 'name'     => ['required', 'unique:users,name,'.$user->id],
                 'username' => ['required', 'unique:users,username,'.$user->id],
-                'email'    => ['required', 'unique:users,email,'.$user->id],
-                'role_id'  => ['required']
+                'email'    => ['required', 'unique:users,email,'.$user->id]
             ]);
 
             if ($validation->fails()) {
@@ -91,9 +90,10 @@ class UsersManagementController extends Controller
                     'name'     => $request->name,
                     'username' => $request->username,
                     'email'    => $request->email,
-                    'role_id'  => $request->role_id,
+                    'role_id'  => ($request->role_id) ? $request->role_id : $user->role_id,
                     'phone'    => $request->phone,
                     'address'  => $request->address,
+                    'password' => ($request->password) ? $request->password : $user->password,
                     'is_active' => $request->is_active
             ]);
 
@@ -103,7 +103,6 @@ class UsersManagementController extends Controller
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
     }
-
     public function delete(User $user)
     {
         try {
