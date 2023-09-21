@@ -736,6 +736,129 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Manajemen Customer",
+					"item": [
+						{
+							"name": "List Customer",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}customer-management/list",
+									"host": [
+										"{{url}}customer-management"
+									],
+									"path": [
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Customer",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\" : \"Pomo Heri Santoso\", //[required]\r\n    \"email\" : \"\",\r\n    \"phone\" : \"083869550401\", //[required]\r\n    \"address\" : \"Candi, Mlese, Gantiwarno\"  //[required]\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}customer-management/add",
+									"host": [
+										"{{url}}customer-management"
+									],
+									"path": [
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Edit Customer",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}customer-management/edit/1",
+									"host": [
+										"{{url}}customer-management"
+									],
+									"path": [
+										"edit",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Customer",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\" : \"Pomo Heri Santosooo\", //[required]\r\n    \"email\" : \"\",\r\n    \"phone\" : \"083869550401\", //[required]\r\n    \"address\" : \"Candi, Mlese, Gantiwarno\"  //[required]\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}customer-management/update/1",
+									"host": [
+										"{{url}}customer-management"
+									],
+									"path": [
+										"update",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Customer",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}customer-management/delete/3",
+									"host": [
+										"{{url}}customer-management"
+									],
+									"path": [
+										"delete",
+										"3"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
@@ -851,6 +974,35 @@
 					"raw": "{{url}}default-menu",
 					"host": [
 						"{{url}}default-menu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reset Password",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"password\" : \"default123\",\r\n    \"password_confirmation\" : \"default123\"\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}reset-password",
+					"host": [
+						"{{url}}reset-password"
 					]
 				}
 			},

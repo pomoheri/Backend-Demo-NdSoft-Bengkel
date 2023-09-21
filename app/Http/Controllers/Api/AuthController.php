@@ -151,4 +151,37 @@ class AuthController extends Controller
         return (new \App\Helpers\GlobalResponseHelper())->sendResponse(['access_token' => null], ['Berhasil Logout']);
         
     }
+    public function resetPassword(Request $request)
+    {
+        try {
+            $validation = Validator::make($request->all(), [
+                'old_password' => ['required'],
+                'password' => ['required','min:8','string','confirmed'],
+                'password_confirmation' => ['required', 'same:password']
+            ]);
+
+            if($validation->fails()){
+                return (new \App\Helpers\GlobalResponseHelper())->sendError($validation->errors()->all());
+            }
+
+            $user = User::where('id', auth()->user()->id)->first();
+            
+            if ($user) {
+                if(!Hash::check($request->old_password,$user->password)){
+                    return response()->json([
+                        'status' => false,
+                        'message' => ['Passwor lama anda salah']
+                    ]);
+                }
+                $user->password = Hash::make($request->password);
+                $user->update();
+                
+                return (new \App\Helpers\GlobalResponseHelper())->sendResponse([],['Berhasil Mengubah Password']);
+            }else{
+                return (new \App\Helpers\GlobalResponseHelper())->sendError([],['Data Tidak Ditemukan']);
+            }
+        } catch (\Exception $e) {
+            return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
+        }
+    }
 }
