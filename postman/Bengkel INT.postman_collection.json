@@ -857,6 +857,165 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Detail Customer",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Manajamen Vehicle",
+					"item": [
+						{
+							"name": "List Vehicle",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}vehicle-management/list",
+									"host": [
+										"{{url}}vehicle-management"
+									],
+									"path": [
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Vehicle (Old Customer)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"customer_id\" : \"2\", //[required]\r\n    \"car_type_id\" : \"4\", //[required]\r\n    \"license_plate\" : \"AD 1 KL\",\r\n    \"engine_no\" : \"4556901223413213\",\r\n    \"chassis_no\" : \"4556901223413213\",\r\n    \"color\"     : \"Merah\",\r\n    \"year\"      : \"2017\",\r\n    \"last_km\"   : \"5000\",\r\n    \"transmission\" : \"A/T\"\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}vehicle-management/add-old-customer",
+									"host": [
+										"{{url}}vehicle-management"
+									],
+									"path": [
+										"add-old-customer"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Vehicle (New Customer)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\" : \"Pomo Heri Santoso\", //[required]\r\n    \"email\" : \"\",\r\n    \"phone\" : \"083869550401\", //[required]\r\n    \"address\" : \"Candi, Mlese, Gantiwarno\",  //[required]\r\n\r\n    \"customer_id\" : \"2\", //[required]\r\n    \"car_type_id\" : \"4\", //[required]\r\n    \"license_plate\" : \"AD 1 KL\",\r\n    \"engine_no\" : \"4556901223413213\",\r\n    \"chassis_no\" : \"4556901223413213\",\r\n    \"color\"     : \"Merah\",\r\n    \"year\"      : \"2017\",\r\n    \"last_km\"   : \"5000\",\r\n    \"transmission\" : \"A/T\"\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}vehicle-management/add-new-customer",
+									"host": [
+										"{{url}}vehicle-management"
+									],
+									"path": [
+										"add-new-customer"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Vehicle",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}vehicle-management/delete/2",
+									"host": [
+										"{{url}}vehicle-management"
+									],
+									"path": [
+										"delete",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Edit Vehicle",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}vehicle-management/edit/3",
+									"host": [
+										"{{url}}vehicle-management"
+									],
+									"path": [
+										"edit",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Vehicle",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url}}vehicle-management/update/3",
+									"host": [
+										"{{url}}vehicle-management"
+									],
+									"path": [
+										"update",
+										"3"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}

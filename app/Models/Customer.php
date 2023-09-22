@@ -16,4 +16,8 @@ class Customer extends Model
         'created_by',
         'updated_by'
     ];
+    public function vehicle()
+    {
+        return $this->hasMany(Vehicle::class);
+    }
 }
