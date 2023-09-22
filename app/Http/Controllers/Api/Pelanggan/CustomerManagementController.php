@@ -99,4 +99,18 @@ class CustomerManagementController extends Controller
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
     }
+
+    public function detail($id)
+    {
+        try {
+            $customer = Customer::with('vehicle', 'vehicle.carType')->where('id', $id)->first();
+            if($customer){
+                return (new \App\Helpers\GlobalResponseHelper())->sendResponse($customer, ['detail Data']);
+            }else{
+                return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data tidak di temukan']);
+            }
+        } catch (\Exception $e) {
+            return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
+        }
+    }
 }

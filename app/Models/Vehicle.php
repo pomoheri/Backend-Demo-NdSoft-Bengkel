@@ -10,21 +10,20 @@ class Vehicle extends Model
     protected $fillable = [
         'car_type_id',
         'customer_id',
-        'lisence_plat',
+        'license_plate',
+        'chassis_no',
         'engine_no',
         'color',
         'year',
-        'las_km',
-        'trnasmission',
+        'last_km',
+        'transmission',
         'created_by',
         'updated_by'
     ];
-
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'customer_code', 'id');
     }
-
     public function carType()
     {
         return $this->belongsTo(Cartype::class, 'car_type_id', 'id');

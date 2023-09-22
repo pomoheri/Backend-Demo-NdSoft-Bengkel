@@ -38,6 +38,7 @@ class UsersManagementController extends Controller
                 'name'     => ['required', 'unique:users,name'],
                 'username' => ['required', 'unique:users,username'],
                 'email'    => ['required', 'unique:users,email'],
+                'password' => ['required', 'min:8', 'confirmed'],
                 'role_id'  => ['required']
             ]);
 
@@ -50,10 +51,10 @@ class UsersManagementController extends Controller
                 'username' => $request->username,
                 'email'    => $request->email,
                 'role_id'  => $request->role_id,
-                'password' => Hash::make('password123'),
+                'password' => Hash::make($request->password),
                 'phone'    => $request->phone,
                 'address'  => $request->address,
-                'is_active' => $request->is_active
+                'is_active' => ($request->is_active) ? 1 : 0
             ];
 
             User::updateOrCreate($data);
@@ -93,8 +94,8 @@ class UsersManagementController extends Controller
                     'role_id'  => ($request->role_id) ? $request->role_id : $user->role_id,
                     'phone'    => $request->phone,
                     'address'  => $request->address,
-                    'password' => ($request->password) ? $request->password : $user->password,
-                    'is_active' => $request->is_active
+                    'password' => ($request->password) ?  Hash::make($request->password) : $user->password,
+                    'is_active' => ($request->is_active) ? $request->is_active : $user->is_active
             ]);
 
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Di Update']);
