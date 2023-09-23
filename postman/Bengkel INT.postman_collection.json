@@ -183,6 +183,57 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Role Menu List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}menu-management/role-menu-lists/3",
+							"host": [
+								"{{url}}menu-management"
+							],
+							"path": [
+								"role-menu-lists",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set Role Menu",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"data\": {\r\n        \"1\" : { \r\n                \"role_id\" : 2,\r\n                \"value\": true\r\n        },\r\n        \"2\" : { \r\n                \"role_id\" : 3,\r\n                \"value\": false\r\n        }\r\n    }\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}menu-management/set-role-menu/3",
+							"host": [
+								"{{url}}menu-management"
+							],
+							"path": [
+								"set-role-menu",
+								"3"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -425,57 +476,6 @@
 							"path": [
 								"delete",
 								"2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Role Menu List",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}role-access-management/role-menu-lists/1",
-							"host": [
-								"{{url}}role-access-management"
-							],
-							"path": [
-								"role-menu-lists",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Set Role Menu",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\"data\": {\r\n        \"1\" : { \r\n                \"menu_id\" : 2,\r\n                \"value\": true\r\n        },\r\n        \"2\" : { \r\n                \"menu_id\" : 3,\r\n                \"value\": true\r\n        }\r\n    }\r\n}"
-						},
-						"url": {
-							"raw": "{{url}}role-access-management/set-role-menu/1",
-							"host": [
-								"{{url}}role-access-management"
-							],
-							"path": [
-								"set-role-menu",
-								"1"
 							]
 						}
 					},

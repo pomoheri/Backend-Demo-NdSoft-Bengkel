@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Menus;
+use App\Models\Roles;
+use App\Models\RoleMenu;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -115,6 +117,58 @@ class MenuManagementController extends Controller
             ]);
 
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($menus, ['Data Berhasil Diupdate']);
+        } catch (\Exception $e) {
+            return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
+        }
+    }
+
+    public function roleMenuList(Menus $menus)
+    {
+        try {
+            $role = Roles::all();
+            $tamp = [];
+            if ($role->count() > 0) {
+                foreach ($role as $key => $value) {
+                    $role_menu = RoleMenu::where('role_id', $value->id)->where('menu_id', $menus->id)->first();
+                    $tamp[] = [
+                        'role_id' => $value->id,
+                        'role' => $value->name,
+                        'value' => ($role_menu) ? true : false
+                    ];
+                }
+            }
+            $data = [
+                'menu'  => $menus->name,
+                'lists' => $tamp,
+            ];
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($data, ['List Role Menu List']);
+        } catch (\Exception $e) {
+            return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
+        }
+    }
+
+    public function setRoleMenu(Request $request, Menus $menus)
+    {
+        try {
+            $arr = [];
+            if ($request->has('data') && $request->filled('data')) {
+                foreach ($request->data as $k => $v) {
+                    $arr['menu_id'] = $menus->id;
+                    $arr['role_id'] = $v['role_id'];
+                    if($v['value'] === true){
+                        
+                        $rolemenu = RoleMenu::where($arr)->first();
+                        if ($rolemenu) {
+                            $rolemenu->update($arr);
+                        }else{
+                            $rolemenu = RoleMenu::create($arr);
+                        }
+                    }else{
+                        RoleMenu::where($arr)->delete();
+                    }
+                }
+            }
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([],['Berhasil Set Role']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
