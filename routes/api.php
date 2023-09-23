@@ -35,6 +35,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/delete/{menus}', [\App\Http\Controllers\Api\MenuManagementController::class, 'delete']);
         Route::get('/detail/{menus}', [\App\Http\Controllers\Api\MenuManagementController::class, 'detail']);
         Route::post('/update/{menus}', [\App\Http\Controllers\Api\MenuManagementController::class, 'update']);
+        Route::get('/role-menu-lists/{menus}', [\App\Http\Controllers\Api\MenuManagementController::class, 'roleMenuList']);
+        Route::post('/set-role-menu/{menus}', [\App\Http\Controllers\Api\MenuManagementController::class, 'setRoleMenu']);
     });
 
     Route::group(['prefix' => 'users-management', "as" => 'users-management.'], function () {
@@ -51,7 +53,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/detail/{role}', [\App\Http\Controllers\Api\RoleAccessManagement::class, 'detail']);
         Route::post('/update/{role}', [\App\Http\Controllers\Api\RoleAccessManagement::class, 'update']);
         Route::get('/delete/{role}', [\App\Http\Controllers\Api\RoleAccessManagement::class, 'delete']);
-        Route::get('/role-menu-lists/{role}', [\App\Http\Controllers\Api\RoleAccessManagement::class, 'roleMenuList']);
-        Route::post('/set-role-menu/{role}', [\App\Http\Controllers\Api\RoleAccessManagement::class, 'setRoleMenu']);
     });
 });
