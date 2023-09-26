@@ -17,10 +17,10 @@ class VehicleManagementController extends Controller
     public function list()
     {
         try {
-            $vehicles = Vehicle::with('carType', 'customer')
+            $vehicles = Vehicle::with('carType')
                             ->join('customer', 'vehicle.customer_id', '=', 'customer.id')
                             ->orderBy('customer.code')
-                            ->select('vehicle.*')
+                            ->select('vehicle.*','customer.code as kode_customer','customer.name as nama_customer')
                             ->get();
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($vehicles, ['List Data Vehicle']);
         } catch (\Exception $e) {
