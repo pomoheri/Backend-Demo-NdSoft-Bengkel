@@ -1,10 +1,8 @@
 {
 	"info": {
-		"_postman_id": "9d5ce04a-f12f-432b-b767-d9fe9d914b9e",
+		"_postman_id": "3c1096fa-2117-4741-9c18-685309f302b7",
 		"name": "Bengkel INT",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "14091603",
-		"_collection_link": "https://interstellar-station-501565.postman.co/workspace/My-Workspace~88dfcdca-66c0-40b1-81d0-e47da47fc618/collection/14091603-9d5ce04a-f12f-432b-b767-d9fe9d914b9e?action=share&source=collection_link&creator=14091603"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -738,6 +736,129 @@
 					]
 				},
 				{
+					"name": "Manajemen Car Brand",
+					"item": [
+						{
+							"name": "List Car Brand",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}car-brand-management/list",
+									"host": [
+										"{{url}}car-brand-management"
+									],
+									"path": [
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Car Brand",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\"         : \"Molis\" //['required, unique']\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}car-brand-management/add",
+									"host": [
+										"{{url}}car-brand-management"
+									],
+									"path": [
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Detail Car Brand",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}car-brand-management/detail/1",
+									"host": [
+										"{{url}}car-brand-management"
+									],
+									"path": [
+										"detail",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Car Brand",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\"         : \"Jazz RS 2019\" //[required, unique]\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}car-brand-management/update/1",
+									"host": [
+										"{{url}}car-brand-management"
+									],
+									"path": [
+										"update",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Car Brand",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}car-brand-management/delete/3",
+									"host": [
+										"{{url}}car-brand-management"
+									],
+									"path": [
+										"delete",
+										"3"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "Manajemen Customer",
 					"item": [
 						{
@@ -862,7 +983,17 @@
 							"name": "Detail Customer",
 							"request": {
 								"method": "GET",
-								"header": []
+								"header": [],
+								"url": {
+									"raw": "{{url}}customer-management/detail/1",
+									"host": [
+										"{{url}}customer-management"
+									],
+									"path": [
+										"detail",
+										"1"
+									]
+								}
 							},
 							"response": []
 						}
@@ -906,7 +1037,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"customer_id\" : \"2\", //[required]\r\n    \"car_type_id\" : \"4\", //[required]\r\n    \"license_plate\" : \"AD 1 KL\",\r\n    \"engine_no\" : \"4556901223413213\",\r\n    \"chassis_no\" : \"4556901223413213\",\r\n    \"color\"     : \"Merah\",\r\n    \"year\"      : \"2017\",\r\n    \"last_km\"   : \"5000\",\r\n    \"transmission\" : \"A/T\"\r\n}"
+									"raw": "{\r\n    \"customer_id\" : \"1\", //[required]\r\n    \"car_type_id\" : \"1\", //[required]\r\n    \"license_plate\" : \"AD 1 KL\",\r\n    \"engine_no\" : \"4556901223413213\",\r\n    \"chassis_no\" : \"4556901223413213\",\r\n    \"color\"     : \"Merah\",\r\n    \"year\"      : \"2017\",\r\n    \"last_km\"   : \"5000\",\r\n    \"transmission\" : \"A/T\"\r\n}"
 								},
 								"url": {
 									"raw": "{{url}}vehicle-management/add-old-customer",
@@ -1206,7 +1337,7 @@
 		},
 		{
 			"key": "token",
-			"value": "1|6CjBuRjctBImhvkT1rjmb3tMqNxPOd8nO7pVqEsubb90d007",
+			"value": "21|ASbaUa6NUS1iHcBZ2GiG6bxp4KC4JsaIr4fwTfLD84824f06",
 			"type": "string"
 		}
 	]

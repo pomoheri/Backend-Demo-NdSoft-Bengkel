@@ -3,6 +3,13 @@
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::group(['prefix' => 'car-brand-management', "as" => 'car-brand-management.'], function () {
+        Route::get('/list', [\App\Http\Controllers\Api\Pelanggan\CarBrandManagementController::class, 'list']);
+        Route::post('/add', [\App\Http\Controllers\Api\Pelanggan\CarBrandManagementController::class, 'add']);
+        Route::get('/detail/{car_brand}', [\App\Http\Controllers\Api\Pelanggan\CarBrandManagementController::class, 'detail']);
+        Route::post('/update/{car_brand}', [\App\Http\Controllers\Api\Pelanggan\CarBrandManagementController::class, 'update']);
+        Route::get('/delete/{car_brand}', [\App\Http\Controllers\Api\Pelanggan\CarBrandManagementController::class, 'delete']);
+    });
     Route::group(['prefix' => 'car-type-management', "as" => 'car-type-management.'], function () {
         Route::get('/list', [\App\Http\Controllers\Api\Pelanggan\ManagementCarTypeController::class, 'list']);
         Route::post('/add', [\App\Http\Controllers\Api\Pelanggan\ManagementCarTypeController::class, 'add']);

@@ -16,7 +16,7 @@ class CustomerManagementController extends Controller
     public function list()
     {
         try {
-            $data = Customer::orderBy('name', 'ASC')->get();
+            $data = Customer::selectRaw('id,code,name,email,phone,address')->orderBy('code', 'ASC')->get();
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($data,['List Data Customer']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
@@ -103,8 +103,12 @@ class CustomerManagementController extends Controller
     public function detail($id)
     {
         try {
-            $customer = Customer::with('vehicle', 'vehicle.carType')->where('id', $id)->first();
+            $customer = Customer::with('vehicle', 'vehicle.carType', 'vehicle.carType.carBrand')->where('id', $id)->selectRaw('id,code,name,email,phone,address')->first();
             if($customer){
+                $terdaftar = \Carbon\Carbon::parse($customer->created_at);
+                $updated = \Carbon\Carbon::parse($customer->updated_at);
+                $customer->terdaftar_sejak = $terdaftar->format('d F Y');
+                $customer->disunting_terakhir = $updated->format('d F Y');
                 return (new \App\Helpers\GlobalResponseHelper())->sendResponse($customer, ['detail Data']);
             }else{
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data tidak di temukan']);
