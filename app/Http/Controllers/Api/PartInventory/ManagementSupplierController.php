@@ -17,7 +17,7 @@ class ManagementSupplierController extends Controller
     public function list()
     {
         try {
-            $data = Supplier::orderBy('name', 'ASC');
+            $data = Supplier::orderBy('name', 'ASC')->get();
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($data, ['List Data Supplier']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
@@ -28,9 +28,9 @@ class ManagementSupplierController extends Controller
     {
         try {
             $validation = Validator::make($request->all(), [
-                'supplier_code' => ['required','max:100','unique:supplier,supplier_code'],
-                'name'          => ['required','string','max:255','unique:supplier,name'],
-                'address'       => ['required','string', 'max:255'],
+                // 'supplier_code' => ['required', 'max:100', 'unique:supplier,supplier_code'],
+                'name'          => ['required', 'string', 'max:255', 'unique:supplier,name'],
+                'address'       => ['required', 'string', 'max:255'],
                 'pic'           => ['required', 'max:100']
             ]);
 
@@ -38,8 +38,10 @@ class ManagementSupplierController extends Controller
                 return (new \App\Helpers\GlobalResponseHelper())->sendError($validation->errors()->all());
             }
 
+            $supplier_code = (new \App\Helpers\GlobalGenerateCodeHelper())->generateSupplierCode();
+
             $data = [
-                'supplier_code' => $request->supplier_code,
+                'supplier_code' => $supplier_code,
                 'name'          => $request->name,
                 'address'       => $request->address,
                 'pic'           => $request->pic,
@@ -48,8 +50,8 @@ class ManagementSupplierController extends Controller
             ];
 
             Supplier::updateOrCreate($data);
-            
-            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([],['Data Berhasil Disimpan']);
+
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Disimpan']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
@@ -68,9 +70,9 @@ class ManagementSupplierController extends Controller
     {
         try {
             $validation = Validator::make($request->all(), [
-                'supplier_code' => ['required','max:100','unique:supplier,supplier_code,'.$supplier->id],
-                'name'          => ['required','string','max:255','unique:supplier,name,'.$supplier->id],
-                'address'       => ['required','string', 'max:255'],
+                // 'supplier_code' => ['required', 'max:100', 'unique:supplier,supplier_code,' . $supplier->id],
+                'name'          => ['required', 'string', 'max:255', 'unique:supplier,name,' . $supplier->id],
+                'address'       => ['required', 'string', 'max:255'],
                 'pic'           => ['required', 'max:100']
             ]);
 
@@ -78,14 +80,14 @@ class ManagementSupplierController extends Controller
                 return (new \App\Helpers\GlobalResponseHelper())->sendError($validation->errors()->all());
             }
             $supplier->update([
-                'supplier_code' => $request->supplier_code,
+                // 'supplier_code' => $request->supplier_code,
                 'name'          => $request->name,
                 'address'       => $request->address,
                 'pic'           => $request->pic,
                 'phone'         => $request->phone,
                 'updated_by'    => auth()->user()->name
             ]);
-            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([],['Data Berhasil Disimpan']);
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Disimpan']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
@@ -94,7 +96,7 @@ class ManagementSupplierController extends Controller
     {
         try {
             $supplier->delete();
-            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([],['Data Berhasil Dihapus']);
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Dihapus']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
