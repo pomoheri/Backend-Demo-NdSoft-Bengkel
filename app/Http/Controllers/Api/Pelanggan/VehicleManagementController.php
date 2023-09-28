@@ -18,10 +18,10 @@ class VehicleManagementController extends Controller
     {
         try {
             $vehicles = Vehicle::with('carType')
-                            ->join('customer', 'vehicle.customer_id', '=', 'customer.id')
-                            ->orderBy('customer.code')
-                            ->select('vehicle.*','customer.code as kode_customer','customer.name as nama_customer')
-                            ->get();
+                ->join('customer', 'vehicle.customer_id', '=', 'customer.id')
+                ->orderBy('customer.code')
+                ->select('vehicle.*', 'customer.code as kode_customer', 'customer.name as nama_customer', 'customer.phone as phone')
+                ->get();
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($vehicles, ['List Data Vehicle']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
@@ -35,7 +35,7 @@ class VehicleManagementController extends Controller
                 'car_type_id'  => ['required'],
                 'customer_id'  => ['required'],
                 'license_plate' => ['required'],
-                'year'         => ['required','integer'],
+                'year'         => ['required', 'integer'],
                 'last_km'      => ['required', 'integer'],
             ]);
 
@@ -56,7 +56,7 @@ class VehicleManagementController extends Controller
             ];
 
             Vehicle::updateOrCreate($data);
-            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([],['Berhasil Menyimpan Data']);
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Berhasil Menyimpan Data']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
@@ -67,13 +67,13 @@ class VehicleManagementController extends Controller
             $validation = Validator::make($request->all(), [
                 'car_type_id'  => ['required'],
                 'license_plate' => ['required'],
-                'year'         => ['required','integer'],
+                'year'         => ['required', 'integer'],
                 'last_km'      => ['required', 'integer'],
 
-                'name' => ['required','string', 'max:255'],
-                'email' => ['nullable','string', 'email'],
-                'phone' => ['required','string', 'max:15'],
-                'address' => ['required','string', 'max:255'],
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['nullable', 'string', 'email'],
+                'phone' => ['required', 'string', 'max:15'],
+                'address' => ['required', 'string', 'max:255'],
             ]);
 
             if ($validation->fails()) {
@@ -106,7 +106,7 @@ class VehicleManagementController extends Controller
             ];
 
             Vehicle::updateOrCreate($data);
-            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([],['Berhasil Menyimpan Data']);
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Berhasil Menyimpan Data']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
@@ -115,7 +115,7 @@ class VehicleManagementController extends Controller
     {
         try {
             $vehicle->delete();
-            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([],['Berhasil Menghapus Data']);
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Berhasil Menghapus Data']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
@@ -124,7 +124,7 @@ class VehicleManagementController extends Controller
     public function edit(Vehicle $vehicle)
     {
         try {
-            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($vehicle,['Data Detail Vehicle']);
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($vehicle, ['Data Detail Vehicle']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
@@ -136,7 +136,7 @@ class VehicleManagementController extends Controller
                 'car_type_id'  => ['required'],
                 'customer_id'  => ['required'],
                 'license_plate' => ['required'],
-                'year'         => ['required','integer'],
+                'year'         => ['required', 'integer'],
                 'last_km'      => ['required', 'integer'],
             ]);
 
@@ -156,10 +156,9 @@ class VehicleManagementController extends Controller
                 'updated_by'     => auth()->user()->name
             ]);
 
-            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([],['Berhasil Menyimpan Data']);
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Berhasil Menyimpan Data']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
     }
-
 }

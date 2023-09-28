@@ -22,11 +22,10 @@ class Vehicle extends Model
     ];
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'customer_code', 'id');
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
     public function carType()
     {
         return $this->belongsTo(Cartype::class, 'car_type_id', 'id');
     }
-
 }
