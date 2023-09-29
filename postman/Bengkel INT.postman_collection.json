@@ -606,6 +606,234 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Manajemen Part Location",
+					"item": [
+						{
+							"name": "List Part Location",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}part-location-management/list",
+									"host": [
+										"{{url}}part-location-management"
+									],
+									"path": [
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Part Location",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\" : \"Loc010921\", //[required, unique]\r\n    \"location\" : \"Lemari A nomor 55\" //[required]\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}part-location-management/add",
+									"host": [
+										"{{url}}part-location-management"
+									],
+									"path": [
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Detail Part Location",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}part-location-management/detail/1",
+									"host": [
+										"{{url}}part-location-management"
+									],
+									"path": [
+										"detail",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Part Location",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\" : \"Loc010921\", //[required, unique]\r\n    \"location\" : \"Lemari A nomor 555\" //[required]\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}part-location-management/update/1",
+									"host": [
+										"{{url}}part-location-management"
+									],
+									"path": [
+										"update",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Part Location",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}part-location-management/delete/1",
+									"host": [
+										"{{url}}part-location-management"
+									],
+									"path": [
+										"delete",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Manajemen Spare Part",
+					"item": [
+						{
+							"name": "List Spare Part",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}spare-part-management/list",
+									"host": [
+										"{{url}}spare-part-management"
+									],
+									"path": [
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Spare Part",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\" : \"spare part 1\", //['required', 'string', 'max:255', 'unique:spare_part,name']\n    \"car_brand_id\" : 1, //['required']\n    \"grade\" : \"Genuine\", //['required', 'in:Genuine, Non Genuine'],\n    \"category\" : \"Spare Part\", //['required', 'in:Spare Part, Material, Asset']\n    \"buying_price\" : 25000, //['required']\n    \"selling_price\" : 28000, //['required']\n    \"profit\" : 3000, //nullable\n    \"location_id\" : 1 //nullable\n}"
+								},
+								"url": {
+									"raw": "{{url}}spare-part-management/add",
+									"host": [
+										"{{url}}spare-part-management"
+									],
+									"path": [
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Edit Spare Part",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}spare-part-management/edit/1",
+									"host": [
+										"{{url}}spare-part-management"
+									],
+									"path": [
+										"edit",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Spare Part",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\" : \"spare part 1 Edit\", //['required', 'string', 'max:255']\n    \"car_brand_id\" : 1, //['required']\n    \"grade\" : \"Genuine\", //['required', 'in:Genuine, Non Genuine'],\n    \"category\" : \"Spare Part\", //['required', 'in:Spare Part, Material, Asset'],\n    \"buying_price\" : 25000, //['required']\n    \"selling_price\" : 28000, //['required']\n    \"location_id\" : 1 //nullable\n}"
+								},
+								"url": {
+									"raw": "{{url}}spare-part-management/update/1",
+									"host": [
+										"{{url}}spare-part-management"
+									],
+									"path": [
+										"update",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
@@ -1145,6 +1373,57 @@
 										"3"
 									]
 								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Transaksi Spare Part",
+			"item": [
+				{
+					"name": "Pembelian Spare Part",
+					"item": [
+						{
+							"name": "Add PO Sparepart",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"supplier_id\"      : 1, //[required]\n    \"invoice_number\"   : \"01/01/2023\", //[required]\n    \"invoice_date\"     : \"2023-09-29\" //[required]\n}"
+								},
+								"url": {
+									"raw": "{{url}}sparepart-transaction/purchasing/add",
+									"host": [
+										"{{url}}sparepart-transaction"
+									],
+									"path": [
+										"purchasing",
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List PO Sparepart",
+							"request": {
+								"method": "GET",
+								"header": []
 							},
 							"response": []
 						}
