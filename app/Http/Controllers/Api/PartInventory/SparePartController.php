@@ -26,9 +26,10 @@ class SparePartController extends Controller
     {
         try {
             $validation = Validator::make($request->all(), [
+                'part_number'   => ['required', 'string', 'max:255', 'unique:spare_part,part_number'],
                 'name'          => ['required', 'string', 'max:255', 'unique:spare_part,name'],
-                'car_brand_id'  => ['required'],
-                'grade'         => ['required', 'in:Genuine, Non Genuine'],
+                // 'car_brand_id'  => ['required'],
+                'is_genuine'    => ['required', 'in:Genuine, Non Genuine'],
                 'category'      => ['required', 'in:Spare Part, Material, Asset'],
                 'buying_price'  => ['required'],
                 'selling_price' => ['required']
@@ -38,13 +39,13 @@ class SparePartController extends Controller
                 return (new \App\Helpers\GlobalResponseHelper())->sendError($validation->errors()->all());
             }
 
-            $partNumber = (new \App\Helpers\GlobalGenerateCodeHelper())->generateSparePartCode();
+            // $partNumber = (new \App\Helpers\GlobalGenerateCodeHelper())->generateSparePartCode();
 
             $data = [
-                'part_number'   => $partNumber,
+                'part_number'   => $request->part_number,
                 'name'          => $request->name,
                 'car_brand_id'  => $request->car_brand_id,
-                'grade'         => $request->grade,
+                'is_genuine'    => $request->is_genuine,
                 'category'      => $request->category,
                 'stock'         => ($request->stock) ? $request->stock : '0',
                 'buying_price'  => $request->buying_price,
@@ -73,9 +74,10 @@ class SparePartController extends Controller
     {
         try {
             $validation = Validator::make($request->all(), [
-                'name' => ['required', 'string', 'max:255', 'unique:spare_part,name,' . $spare_part->id],
-                'car_brand_id'  => ['required'],
-                'grade'         => ['required', 'in:Genuine, Non Genuine'],
+                'part_number'   => ['required', 'string', 'max:255', 'unique:spare_part,part_number,' . $spare_part->id],
+                'name'          => ['required', 'string', 'max:255', 'unique:spare_part,name,' . $spare_part->id],
+                // 'car_brand_id'  => ['required'],
+                'is_genuine'    => ['required', 'in:Genuine, Non Genuine'],
                 'category'      => ['required', 'in:Spare Part, Material, Asset'],
                 'buying_price'  => ['required'],
                 'selling_price' => ['required']
@@ -86,9 +88,10 @@ class SparePartController extends Controller
             }
 
             $spare_part->update([
+                'part_number'   => $request->part_number,
                 'name'          => $request->name,
                 'car_brand_id'  => $request->car_brand_id,
-                'grade'         => $request->grade,
+                'is_genuine'    => $request->is_genuine,
                 'category'      => $request->category,
                 'buying_price'  => $request->buying_price,
                 'selling_price' => $request->selling_price,
