@@ -19,7 +19,8 @@ class PurchaseOrder extends Model
         'total',
         'status',
         'remark',
-        'created_by'
+        'created_by',
+        'payment_method'
     ];
     protected static function boot()
     {
@@ -27,7 +28,6 @@ class PurchaseOrder extends Model
 
         static::creating(function ($model) {
             try {
-                $model->transaction_code = Uuid::uuid4()->toString();
                 $model->transaction_unique = Uuid::uuid4()->toString();
             } catch (UnsatisfiedDependencyException $e) {
                 abort(500, $e->getMessage());
