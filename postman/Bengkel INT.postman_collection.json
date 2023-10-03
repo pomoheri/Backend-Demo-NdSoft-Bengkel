@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "3c1096fa-2117-4741-9c18-685309f302b7",
+		"_postman_id": "ca60d9d2-82d9-4943-80f0-a279482f31b3",
 		"name": "Bengkel INT",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14091603"
 	},
 	"item": [
 		{
@@ -768,7 +769,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\" : \"spare part 1\", //['required', 'string', 'max:255', 'unique:spare_part,name']\n    \"car_brand_id\" : 1, //['required']\n    \"grade\" : \"Genuine\", //['required', 'in:Genuine, Non Genuine'],\n    \"category\" : \"Spare Part\", //['required', 'in:Spare Part, Material, Asset']\n    \"buying_price\" : 25000, //['required']\n    \"selling_price\" : 28000, //['required']\n    \"profit\" : 3000, //nullable\n    \"location_id\" : 1 //nullable\n}"
+									"raw": "{\n    \"name\" : \"spare part 2\", //['required', 'string', 'max:255', 'unique:spare_part,name']\n    \"car_brand_id\" : 1, //['required']\n    \"grade\" : \"Genuine\", //['required', 'in:Genuine, Non Genuine'],\n    \"category\" : \"Spare Part\", //['required', 'in:Spare Part, Material, Asset']\n    \"buying_price\" : 25000, //['required']\n    \"selling_price\" : 28000, //['required']\n    \"profit\" : 3000, //nullable\n    \"location_id\" : 1 //nullable\n}"
 								},
 								"url": {
 									"raw": "{{url}}spare-part-management/add",
@@ -1423,7 +1424,83 @@
 							"name": "List PO Sparepart",
 							"request": {
 								"method": "GET",
-								"header": []
+								"header": [],
+								"url": {
+									"raw": "{{url}}sparepart-transaction/purchasing/list",
+									"host": [
+										"{{url}}sparepart-transaction"
+									],
+									"path": [
+										"purchasing",
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Detail PO Sparepart",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"transaction_unique\" : \"2c85bb82-068b-4375-80ee-79598ef7cc55\", //[required]\r\n    \"spare_part\" : [\r\n        {\r\n            \"spare_part_id\" : \"1\", //[required]\r\n            \"quantity\"      : \"20\", //[required]\r\n            \"subtotal\"      : \"100000\" //[required]\r\n        },\r\n        {\r\n            \"spare_part_id\" : \"2\", //[required]\r\n            \"quantity\"      : \"5\", //[required]\r\n            \"subtotal\"      : \"10000\" //[required]\r\n        }\r\n    ],\r\n    \"payment_method\"     : \"Cash\", //[required, enum:Cash,Kredit]\r\n    \"remark\"             : \"Cek\" //[optional]\r\n\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}sparepart-transaction/purchasing/add-detail",
+									"host": [
+										"{{url}}sparepart-transaction"
+									],
+									"path": [
+										"purchasing",
+										"add-detail"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Submit Pembayaran (Paid)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\" : \"\", //[required]\r\n    \"transaction_unique\" : \"\", //[required]\r\n    \"transaction_code\"   : \"\" //[required]\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}sparepart-transaction/purchasing/submit-payment-po",
+									"host": [
+										"{{url}}sparepart-transaction"
+									],
+									"path": [
+										"purchasing",
+										"submit-payment-po"
+									]
+								}
 							},
 							"response": []
 						}
@@ -1616,7 +1693,7 @@
 		},
 		{
 			"key": "token",
-			"value": "21|ASbaUa6NUS1iHcBZ2GiG6bxp4KC4JsaIr4fwTfLD84824f06",
+			"value": "23|vXwftbAfyLri7heZZquNIgL3TfGZdhFmdgntGvF4bb60a494",
 			"type": "string"
 		}
 	]
