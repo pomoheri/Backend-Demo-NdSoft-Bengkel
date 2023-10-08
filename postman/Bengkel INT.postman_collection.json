@@ -1388,7 +1388,7 @@
 					"name": "Pembelian Spare Part",
 					"item": [
 						{
-							"name": "Add PO Sparepart",
+							"name": "Add PO Sparepart New Sparepart and Supplier",
 							"request": {
 								"method": "POST",
 								"header": [
@@ -1405,7 +1405,40 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"supplier_id\"      : 1, //[required]\n    \"invoice_number\"   : \"01/01/2023\", //[required]\n    \"invoice_date\"     : \"2023-09-29\" //[required]\n}"
+									"raw": "{\n    \"supplier_id\": \"\", //nullable\n    \"name\": \"supplier baru 1\", //nullable\n    \"address\": \"klaten\", //nullable\n    \"pic\": \"pomo\", //nullable\n    \"phone\": \"083869550401\", //nullable\n    \"invoice_number\": \"inv/01/01/2023\", //required\n    \"invoice_date\": \"2023-10-08\", //required\n    \"payment_method\" : \"Cash\", //required\n    \"remark\"         : \"engga ada catatan\",\n    \"spare_part\": [\n        {\n            \"spare_part_id\":\"\", //nullable\n            \"quantity\":\"10\", //required\n            \"per_piece\":\"1000\", //required\n            \"part_number\":\"b56j92k\", //nullable\n            \"name\":\"Skrup Kecil Avanza\", //nullable\n            \"car_brand_id\":\"1\", //nullable\n            \"is_genuine\": true, //nullable\n            \"category\":\"Spare Part\", //nullable\n            \"buying_price\":\"1200\", //nullable\n            \"selling_price\":\"1500\", //nullable\n            \"location_id\": \"1\" //nullable\n        },\n        {\n            \"spare_part_id\":\"\", //nullable\n            \"quantity\":\"100\", //required\n            \"per_piece\":\"5000\", //required\n            \"part_number\":\"b56j92lwk\", //nullable\n            \"name\":\"Skrup Kecil Inova\", //nullable\n            \"car_brand_id\":\"2\", //nullable\n            \"is_genuine\": true, //nullable\n            \"category\":\"Spare Part\", //nullable\n            \"selling_price\":\"5500\", //nullable\n            \"location_id\": \"1\" //nullable\n        }\n    ]\n}\n"
+								},
+								"url": {
+									"raw": "{{url}}sparepart-transaction/purchasing/add",
+									"host": [
+										"{{url}}sparepart-transaction"
+									],
+									"path": [
+										"purchasing",
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add PO Sparepart Existing Supplier and Sparepart",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"supplier_id\": \"10\", //nullable\n    \"name\": \"\", //nullable\n    \"address\": \"\", //nullable\n    \"pic\": \"\", //nullable\n    \"phone\": \"\", //nullable\n    \"invoice_number\": \"inv/01/01/2023\", //required\n    \"invoice_date\": \"2023-10-08\", //required\n    \"payment_method\" : \"Cash\", //required\n    \"remark\"         : \"engga ada catatan\",\n    \"spare_part\": [\n        {\n            \"spare_part_id\":\"1\", //nullable\n            \"quantity\":\"10\", //required\n            \"per_piece\":\"1000\", //required\n            \"part_number\":\"\", //nullable\n            \"name\":\"\", //nullable\n            \"car_brand_id\":\"\", //nullable\n            \"is_genuine\": \"\", //nullable\n            \"category\":\"\", //nullable\n            \"selling_price\":\"1500\", //nullable\n            \"location_id\": \"1\" //nullable\n        },\n        {\n            \"spare_part_id\":\"2\", //nullable\n            \"quantity\":\"100\", //required\n            \"per_piece\":\"5000\", //required\n            \"part_number\":\"b56j92lwk\", //nullable\n            \"name\":\"Skrup Kecil Inova\", //nullable\n            \"car_brand_id\":\"2\", //nullable\n            \"is_genuine\": true, //nullable\n            \"category\":\"Spare Part\", //nullable\n            \"selling_price\":\"5500\", //nullable\n            \"location_id\": \"1\" //nullable\n        }\n    ]\n}\n"
 								},
 								"url": {
 									"raw": "{{url}}sparepart-transaction/purchasing/add",
@@ -1439,66 +1472,38 @@
 							"response": []
 						},
 						{
-							"name": "Add Detail PO Sparepart",
+							"name": "Terima Barang",
 							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Accept",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"transaction_unique\" : \"2c85bb82-068b-4375-80ee-79598ef7cc55\", //[required]\r\n    \"spare_part\" : [\r\n        {\r\n            \"spare_part_id\" : \"1\", //[required]\r\n            \"quantity\"      : \"20\", //[required]\r\n            \"subtotal\"      : \"100000\" //[required]\r\n        },\r\n        {\r\n            \"spare_part_id\" : \"2\", //[required]\r\n            \"quantity\"      : \"5\", //[required]\r\n            \"subtotal\"      : \"10000\" //[required]\r\n        }\r\n    ],\r\n    \"payment_method\"     : \"Cash\", //[required, enum:Cash,Kredit]\r\n    \"remark\"             : \"Cek\" //[optional]\r\n\r\n}"
-								},
+								"method": "GET",
+								"header": [],
 								"url": {
-									"raw": "{{url}}sparepart-transaction/purchasing/add-detail",
+									"raw": "{{url}}sparepart-transaction/purchasing/accept-goods/d2357bbc-6dd8-464f-bed6-947920fd1478",
 									"host": [
 										"{{url}}sparepart-transaction"
 									],
 									"path": [
 										"purchasing",
-										"add-detail"
+										"accept-goods",
+										"d2357bbc-6dd8-464f-bed6-947920fd1478"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Submit Pembayaran (Paid)",
+							"name": "Submit Payment PO",
 							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Accept",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"id\" : \"\", //[required]\r\n    \"transaction_unique\" : \"\", //[required]\r\n    \"transaction_code\"   : \"\" //[required]\r\n}"
-								},
+								"method": "GET",
+								"header": [],
 								"url": {
-									"raw": "{{url}}sparepart-transaction/purchasing/submit-payment-po",
+									"raw": "{{url}}sparepart-transaction/purchasing/submit-payment-po/d2357bbc-6dd8-464f-bed6-947920fd1478",
 									"host": [
 										"{{url}}sparepart-transaction"
 									],
 									"path": [
 										"purchasing",
-										"submit-payment-po"
+										"submit-payment-po",
+										"d2357bbc-6dd8-464f-bed6-947920fd1478"
 									]
 								}
 							},

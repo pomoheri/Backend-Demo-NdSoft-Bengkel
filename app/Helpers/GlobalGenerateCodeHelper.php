@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\Customer;
+use App\Models\PurchaseOrder;
 use App\Models\SparePart;
 use App\Models\Supplier;
 
@@ -57,4 +58,25 @@ class GlobalGenerateCodeHelper
 
         return $mnemonic;
     }
+    public function generateTransactionCode($prefix = 'INT/PO/', $length = 6)
+    {
+        $currentMonth = now()->format('Y/m'); 
+        
+        $lastCode = PurchaseOrder::max('transaction_code');
+        $storedMonth = substr($lastCode, strlen($prefix), 7);
+
+        if ($storedMonth != $currentMonth) {
+            $nextNumber = 1;
+        } else {
+            $lastNumber = (int)substr($lastCode, -1 * $length);
+            $nextNumber = $lastNumber + 1;
+        }
+
+        $formattedNextNumber = str_pad($nextNumber, $length, '0', STR_PAD_LEFT); // Add leading zeros if necessary
+
+        $mnemonic = $prefix . $currentMonth .'/'. $formattedNextNumber;
+
+        return $mnemonic;
+    }
+
 }
