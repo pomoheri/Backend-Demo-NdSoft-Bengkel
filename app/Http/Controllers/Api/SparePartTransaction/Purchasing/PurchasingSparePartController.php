@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\SparePartTransaction\Purchasing;
 
+use App\Models\CreditPayment;
 use Ramsey\Uuid\Uuid;
 use App\Models\Supplier;
 use App\Models\SparePart;
@@ -74,7 +75,6 @@ class PurchasingSparePartController extends Controller
                             'car_brand_id'  => $value['car_brand_id'],
                             'grade'         => ($value['is_genuine']) ? 'Genuine' : 'Non Genuine',
                             'category'      => $value['category'],
-                            'buying_price'  => $value['buying_price'],
                             'selling_price' => $value['selling_price'],
                             'location_id'   => $value['location_id'],
                             'created_by'    => auth()->user()->name
@@ -106,7 +106,13 @@ class PurchasingSparePartController extends Controller
             'spare_part'            => ['required', 'array'],
             'spare_part.*.quantity' => ['required'],
             'spare_part.*.per_piece' => ['required'],
-            'remark'                => ['nullable', 'string', 'max:255']
+            'remark'                 => ['nullable', 'string', 'max:255'],
+
+            'spare_part.*.name'          => ['nullable', 'string', 'max:255', 'unique:spare_part,name'],
+            'spare_part.*.car_brand_id'  => ['nullable'],
+            'spare_part.*.category'      => ['nullable', 'in:Spare Part, Material, Asset'],
+            'spare_part.*.selling_price' => ['nullable'],
+            'spare_part.*.part_number'   => ['nullable', 'string', 'max:255', 'unique:spare_part,part_number'],
         ]);
 
         return $validation;
@@ -170,24 +176,65 @@ class PurchasingSparePartController extends Controller
         }
     }
 
-    public function submitPayment($transaction_unique)
+    public function submitPayment(Request $request)
     {
         try {
+            $transaction_unique = $request->transaction_unique;
             $po = PurchaseOrder::where('transaction_unique', $transaction_unique)->first();
             if (!$po) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
+
+            if($po->payment_method == 'Kredit'){
+                $credit_payment = CreditPayment::where('transaction_unique', $po->transaction_unique)->get();
+                $amount = 0;
+                if ($credit_payment->count() > 0) {
+                    foreach ($credit_payment as $key => $value) {
+                        $amount += $value->amount;
+                    }
+                }
+                $balance = $po->total - ($amount + (float)$request->amount);
+                $create_credit_payment = CreditPayment::create([
+                    'transaction_unique' => $po->transaction_unique,
+                    'date'               => date('Y-m-d'),
+                    'total'              => $po->total,
+                    'amount'             => $request->amount,
+                    'balance'            => $balance,
+                    'created_by'         => auth()->user()->name,
+                    'remark'             => $request->remark
+                ]);
+
+                if($balance != 0){
+                    return response()->json([
+                        'status'  => true,
+                        'message' => ['Berhasil Melakukan Pembayaran'],
+                        'data'    => [
+                            'balance' => $balance
+                        ]
+                    ]);
+                }
+            }
+
             $po_detail = PurchaseOrderDetail::where('transaction_unique', $transaction_unique)->get();
-            // if ($po_detail->count() > 0) {
-            //     foreach ($po_detail as $key => $value) {
-            //        $sparepart = SparePart::where('id', $value->spare_part_id)->first();
-            //        if ($sparepart) {
-            //             $sparepart->update([
-            //                 'selling_price' => $sparepart->stock + $value->quantity
-            //         ]);
-            //        }
-            //     }
-            // }
+
+            if ($po_detail->count() > 0) {
+                foreach ($po_detail as $key => $value) {
+                    $subtotal = $value->subtotal;
+                    $quantity = $value->quantity;
+                    $sparepart = SparePart::where('id', $value->spare_part_id)->first();
+                    $stock = ($sparepart->stock) ? $sparepart->stock : 0;
+                    $selling_price = ($sparepart->selling_price) ? $sparepart->selling_price : 0;
+                    $hpp = ($subtotal + ( $stock*$selling_price))/ ($stock+$quantity);
+
+                    if ($sparepart) {
+                            $sparepart->update([
+                                'buying_price' => $hpp,
+                                'profit'       => $selling_price-$hpp
+                        ]);
+                    }
+                }
+            }
+
             $po_code = (new \App\Helpers\GlobalGenerateCodeHelper())->generateTransactionCode();
             $po->update([
                 'status' => 'Paid',
