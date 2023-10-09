@@ -9,7 +9,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::post('/add', [\App\Http\Controllers\Api\SparePartTransaction\Purchasing\PurchasingSparePartController::class, 'add']);
             Route::post('/add-detail', [\App\Http\Controllers\Api\SparePartTransaction\Purchasing\PurchasingSparePartController::class, 'addDetail']);
             Route::get('/accept-goods/{transaction_unique}', [\App\Http\Controllers\Api\SparePartTransaction\Purchasing\PurchasingSparePartController::class, 'terimaBarang']);
-            Route::get('/submit-payment-po/{transaction_unique}', [\App\Http\Controllers\Api\SparePartTransaction\Purchasing\PurchasingSparePartController::class, 'submitPayment']);
+            Route::post('/submit-payment-po', [\App\Http\Controllers\Api\SparePartTransaction\Purchasing\PurchasingSparePartController::class, 'submitPayment']);
         });
     });
 });
