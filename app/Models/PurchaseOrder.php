@@ -20,7 +20,8 @@ class PurchaseOrder extends Model
         'status',
         'remark',
         'created_by',
-        'payment_method'
+        'payment_method',
+        'payment_due_date'
     ];
     protected static function boot()
     {

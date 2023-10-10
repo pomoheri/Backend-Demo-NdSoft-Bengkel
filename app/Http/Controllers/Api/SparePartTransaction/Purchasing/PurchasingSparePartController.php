@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api\SparePartTransaction\Purchasing;
 
-use App\Models\CreditPayment;
+use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
 use App\Models\Supplier;
 use App\Models\SparePart;
 use Illuminate\Http\Request;
+use App\Models\CreditPayment;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderDetail;
 use App\Http\Controllers\Controller;
@@ -108,11 +109,11 @@ class PurchasingSparePartController extends Controller
             'spare_part.*.per_piece' => ['required'],
             'remark'                 => ['nullable', 'string', 'max:255'],
 
-            'spare_part.*.name'          => ['nullable', 'string', 'max:255', 'unique:spare_part,name'],
+            'spare_part.*.name'          => ['nullable', 'string', 'max:255'],
             'spare_part.*.car_brand_id'  => ['nullable'],
             'spare_part.*.category'      => ['nullable', 'in:Spare Part, Material, Asset'],
             'spare_part.*.selling_price' => ['nullable'],
-            'spare_part.*.part_number'   => ['nullable', 'string', 'max:255', 'unique:spare_part,part_number'],
+            'spare_part.*.part_number'   => ['nullable', 'string', 'max:255'],
         ]);
 
         return $validation;
@@ -133,6 +134,11 @@ class PurchasingSparePartController extends Controller
         return Supplier::updateOrCreate($send_supplier);
     }
     private function createOrUpdatePurchaseOrder(Request $request, $supplier) {
+        $payment_due_date = null;
+        if(strtolower($request->payment_method) == 'kredit'){
+            $invoice_date = Carbon::parse($request->invoice_date);
+            $payment_due_date = $invoice_date->addDays($request->payment_due);
+        }
         return PurchaseOrder::updateOrCreate([
             'supplier_id'    => $supplier->id,
             'invoice_number' => $request->invoice_number,
@@ -142,6 +148,7 @@ class PurchasingSparePartController extends Controller
             'created_by'     => auth()->user()->name,
             'payment_method' => $request->payment_method,
             'remark'         => $request->remark,
+            'payment_due_date' => $payment_due_date
         ]);
     }
     public function terimaBarang($transaction_unique)
