@@ -269,4 +269,111 @@ class PurchasingSparePartController extends Controller
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
     }
+
+    public function updatePo(Request $request, $transaction_unique)
+    {
+        try {
+            $validation = Validator::make($request->all(), [
+                'spare_part'             => ['required', 'array'],
+                'spare_part.*.quantity'  => ['required'],
+                'spare_part.*.per_piece' => ['required']
+            ]);
+
+            if ($validation->fails()) {
+                return (new \App\Helpers\GlobalResponseHelper())->sendError($validation->errors()->all());
+            }
+
+            $po = PurchaseOrder::where('transaction_unique', $transaction_unique)->first();
+
+            if($po->status == 'Outstanding'){
+                return (new \App\Helpers\GlobalResponseHelper())->sendError(['Gagal, Data Sudah Outstanding']);
+            }
+
+            if($po && count($request->spare_part) > 0){
+                foreach ($request->spare_part as $key => $value) {
+                    $detail_po = PurchaseOrderDetail::where('id', $value['id'])->where('transaction_unique', $transaction_unique)->first();
+                    $data_detail = [
+                        'spare_part_id'      => ($value['spare_part_id']) ? $value['spare_part_id'] : $detail_po->spare_part_id,
+                        'quantity'           => ($value['quantity']) ? $value['quantity'] : $detail_po->quantity,
+                        'perpiece'           => ($value['per_piece']) ? $value['per_piece'] : $detail_po->perpiece,
+                        'subtotal'           => ($value['quantity'] != 0) ? $value['quantity']*$value['per_piece'] : 0
+                    ];
+                    if ($detail_po) {
+                        $detail_po->update($data_detail);
+                    }else{
+                        $data_detail = [
+                            'transaction_unique' => $transaction_unique,
+                            'spare_part_id'      => $value['spare_part_id'],
+                            'quantity'           => $value['quantity'],
+                            'perpiece'           => $value['per_piece'],
+                            'subtotal'           => ($value['quantity'] != 0) ? $value['quantity']*$value['per_piece'] : 0
+                        ];
+                        PurchaseOrderDetail::create($data_detail);
+                    }
+                }
+
+                $po_detail = PurchaseOrderDetail::where('transaction_unique', $transaction_unique)->get();
+                $sum_subtotal = 0;
+                if ($po_detail->count() > 0) {
+                    foreach ($po_detail as $val) {
+                        $sum_subtotal += $val->quantity*$val->perpiece;
+                    }
+                }
+
+                $po->update([
+                    'total' => $sum_subtotal
+                ]);
+    
+                return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Disimpan']);
+            }
+        } catch (\Exception $e) {
+            return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
+        }
+    }
+    public function terimaBarangByDetail($transaction_unique, $id)
+    {
+        try {
+            $po = PurchaseOrder::where('transaction_unique', $transaction_unique)->first();
+            if (!$po) {
+                return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
+            }
+            
+            $po_detail = PurchaseOrderDetail::where('transaction_unique', $transaction_unique)->where('id', $id)->first();
+            if($po_detail){
+                $sparepart = SparePart::where('id', $po_detail->spare_part_id)->first();
+                if ($sparepart) {
+                    $sparepart->update([
+                        'stock' => $sparepart->stock + $po_detail->quantity
+                    ]);
+                    $total_po = $po->total + $sparepart->subtotal;
+
+                    $po->update([
+                        'total'  => $total_po
+                    ]);
+                }
+                
+                $po_detail = $po_detail->update([
+                    'status' => 1 //if 1 = 'Outstanding',
+                ]);
+            }
+
+            $status = [];
+            $cek_status = PurchaseOrderDetail::where('transaction_unique', $transaction_unique)->get();
+            if ($cek_status->count() > 0) {
+                foreach ($cek_status as $key => $value) {
+                    $status[] = $value->status;
+                }
+            }
+
+            if (!in_array("Draft", $status)){
+                $po->update([
+                    'status'  => 'Outstanding'
+                ]);
+            }
+            
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Di Terima']);
+        } catch (\Exception $e) {
+            return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
+        }
+    }
 }
