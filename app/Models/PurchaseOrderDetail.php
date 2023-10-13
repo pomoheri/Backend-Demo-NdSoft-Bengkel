@@ -13,6 +13,7 @@ class PurchaseOrderDetail extends Model
         'quantity',
         'subtotal',
         'perpiece',
+        'status'
     ];
     public function sparepart(){
         return $this->belongsTo(SparePart::class, 'spare_part_id', 'id');

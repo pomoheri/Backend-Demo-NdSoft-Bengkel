@@ -1522,6 +1522,79 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Detail PO Sparepart",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}sparepart-transaction/purchasing/detail-po/5a2053d6-4b33-4ef0-b69f-5b988656bb21",
+									"host": [
+										"{{url}}sparepart-transaction"
+									],
+									"path": [
+										"purchasing",
+										"detail-po",
+										"5a2053d6-4b33-4ef0-b69f-5b988656bb21"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update PO Sparepart",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"spare_part\": [\r\n        {\r\n            \"id\"           : \"8\",\r\n            \"spare_part_id\":\"1\", //nullable\r\n            \"quantity\":\"10\", //required\r\n            \"per_piece\":\"1000\"\r\n        },\r\n        {\r\n            \"id\" : \"9\",\r\n            \"spare_part_id\":\"2\", //nullable\r\n            \"quantity\":\"100\", //required\r\n            \"per_piece\":\"5000\" //required\r\n        }\r\n    ]\r\n}\r\n"
+								},
+								"url": {
+									"raw": "{{url}}sparepart-transaction/purchasing/update-po/5a2053d6-4b33-4ef0-b69f-5b988656bb21",
+									"host": [
+										"{{url}}sparepart-transaction"
+									],
+									"path": [
+										"purchasing",
+										"update-po",
+										"5a2053d6-4b33-4ef0-b69f-5b988656bb21"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Terima Barang By Detail",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}sparepart-transaction/purchasing/accept-goods-by-detail/5a2053d6-4b33-4ef0-b69f-5b988656bb21/13",
+									"host": [
+										"{{url}}sparepart-transaction"
+									],
+									"path": [
+										"purchasing",
+										"accept-goods-by-detail",
+										"5a2053d6-4b33-4ef0-b69f-5b988656bb21",
+										"13"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
