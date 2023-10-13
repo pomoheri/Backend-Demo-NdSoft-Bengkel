@@ -55,6 +55,7 @@ class PurchasingSparePartController extends Controller
 
             $purchase_order = $this->createOrUpdatePurchaseOrder($request, $supplier);
 
+            $sum_subtotal = 0;
             if (count($request->spare_part) > 0) {
                 foreach ($request->spare_part as $key => $value) {
                     if (!$value['spare_part_id']) {
@@ -91,8 +92,12 @@ class PurchasingSparePartController extends Controller
                         'subtotal'           => ($value['quantity'] != 0) ? $value['quantity'] * $value['per_piece'] : 0
                     ];
                     PurchaseOrderDetail::updateOrCreate($data_detail);
+                    $sum_subtotal += ($value['quantity'] != 0) ? $value['quantity'] * $value['per_piece'] : 0;
                 }
             }
+            $purchase_order->update([
+                'total' => $sum_subtotal
+            ]);
 
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Disimpan']);
         } catch (\Exception $e) {
@@ -250,6 +255,16 @@ class PurchasingSparePartController extends Controller
                 'transaction_code' => $po_code
             ]);
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Di Update']);
+        } catch (\Exception $e) {
+            return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
+        }
+    }
+
+    public function detailPo($transaction_unique)
+    {
+        try {
+            $data = PurchaseOrder::with('details', 'details.sparepart')->where('transaction_unique', $transaction_unique)->first();
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($data, ['Detail Data PO']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
