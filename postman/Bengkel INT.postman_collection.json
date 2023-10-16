@@ -1477,14 +1477,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}sparepart-transaction/purchasing/accept-goods/d2357bbc-6dd8-464f-bed6-947920fd1478",
+									"raw": "{{url}}sparepart-transaction/purchasing/accept-goods/5a2053d6-4b33-4ef0-b69f-5b988656bb21",
 									"host": [
 										"{{url}}sparepart-transaction"
 									],
 									"path": [
 										"purchasing",
 										"accept-goods",
-										"d2357bbc-6dd8-464f-bed6-947920fd1478"
+										"5a2053d6-4b33-4ef0-b69f-5b988656bb21"
 									]
 								}
 							},
@@ -1560,7 +1560,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"spare_part\": [\r\n        {\r\n            \"id\"           : \"8\",\r\n            \"spare_part_id\":\"1\", //nullable\r\n            \"quantity\":\"10\", //required\r\n            \"per_piece\":\"1000\"\r\n        },\r\n        {\r\n            \"id\" : \"9\",\r\n            \"spare_part_id\":\"2\", //nullable\r\n            \"quantity\":\"100\", //required\r\n            \"per_piece\":\"5000\" //required\r\n        }\r\n    ]\r\n}\r\n"
+									"raw": "{\r\n    \"supplier_id\": \"10\", //nullable\r\n    \"invoice_number\": \"inv/01/01/2023\", //required\r\n    \"invoice_date\": \"2023-10-08\", //required\r\n    \"payment_method\" : \"Kredit\", //required\r\n    \"payment_due\"   : \"30\", //days ,if payment_method kredit this field must be required\r\n    \"remark\"         : \"engga ada catatan\",\r\n    \"spare_part\": [\r\n        {\r\n            \"id\"           : \"8\",\r\n            \"spare_part_id\":\"1\", //nullable\r\n            \"quantity\":\"10\", //required\r\n            \"per_piece\":\"1000\"\r\n        },\r\n        {\r\n            \"id\" : \"9\",\r\n            \"spare_part_id\":\"2\", //nullable\r\n            \"quantity\":\"100\", //required\r\n            \"per_piece\":\"5000\" //required\r\n        }\r\n    ]\r\n}\r\n"
 								},
 								"url": {
 									"raw": "{{url}}sparepart-transaction/purchasing/update-po/5a2053d6-4b33-4ef0-b69f-5b988656bb21",
