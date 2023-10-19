@@ -170,6 +170,10 @@ class PurchasingSparePartController extends Controller
             $total_po = 0;
             if ($po_detail->count() > 0) {
                 foreach ($po_detail as $key => $value) {
+                    if ($value->status == 0) {
+                        $value->status = 1;
+                        $value->save();
+                    }
                     $sparepart = SparePart::where('id', $value->spare_part_id)->first();
                     if ($sparepart) {
                         $sparepart->update([
@@ -184,7 +188,7 @@ class PurchasingSparePartController extends Controller
                 'total'  => $total_po
             ]);
 
-            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Di Update']);
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Di Diterima']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
@@ -263,7 +267,7 @@ class PurchasingSparePartController extends Controller
     public function detailPo($transaction_unique)
     {
         try {
-            $data = PurchaseOrder::with('details', 'details.sparepart')->where('transaction_unique', $transaction_unique)->first();
+            $data = PurchaseOrder::with('suppliers', 'details', 'details.sparepart')->where('transaction_unique', $transaction_unique)->first();
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($data, ['Detail Data PO']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
@@ -274,6 +278,9 @@ class PurchasingSparePartController extends Controller
     {
         try {
             $validation = Validator::make($request->all(), [
+                'invoice_number'        => ['required'],
+                'invoice_date'          => ['required', 'date'],
+                'payment_method'        => ['required', 'in:Cash,Kredit'],
                 'spare_part'             => ['required', 'array'],
                 'spare_part.*.quantity'  => ['required'],
                 'spare_part.*.per_piece' => ['required']
@@ -285,28 +292,46 @@ class PurchasingSparePartController extends Controller
 
             $po = PurchaseOrder::where('transaction_unique', $transaction_unique)->first();
 
-            if($po->status == 'Outstanding'){
-                return (new \App\Helpers\GlobalResponseHelper())->sendError(['Gagal, Data Sudah Outstanding']);
-            }
+            if ($po && !empty($request->spare_part)) {
+                $payment_due_date = null;
+                if (($request->invoice_date) && strtolower($request->payment_method) == 'kredit') {
+                    $invoice_date = Carbon::parse($request->invoice_date);
+                    $payment_due_date = $invoice_date->addDays($request->payment_due);
+                }
+                $po->update([
+                    'supplier_id'       => ($request->supplier_id) ? $request->supplier_id : $po->supplier_id,
+                    'invoice_number'    => ($request->invoice_number) ? $request->invoice_number : $po->invoice_number,
+                    'invoice_date'      => ($request->invoice_date) ? $request->invoice_date : $po->invoice_date,
+                    'payment_method'    => ($request->payment_method) ? $request->payment_method : $po->payment_method,
+                    'payment_due_date'  => ($payment_due_date) ? $payment_due_date : $po->payment_due_date,
+                    'remark'            => ($request->remark) ? $request->remark : $po->remark,
+                ]);
 
-            if($po && count($request->spare_part) > 0){
+                $get_id = [];
+                foreach ($request->spare_part as $key => $value) {
+                    $get_id[] = $value['id'];
+                };
+
+                $deleteNotInPo = PurchaseOrderDetail::where('transaction_unique', $transaction_unique)->whereNotIn('id', $get_id)->delete();
+
                 foreach ($request->spare_part as $key => $value) {
                     $detail_po = PurchaseOrderDetail::where('id', $value['id'])->where('transaction_unique', $transaction_unique)->first();
                     $data_detail = [
                         'spare_part_id'      => ($value['spare_part_id']) ? $value['spare_part_id'] : $detail_po->spare_part_id,
                         'quantity'           => ($value['quantity']) ? $value['quantity'] : $detail_po->quantity,
                         'perpiece'           => ($value['per_piece']) ? $value['per_piece'] : $detail_po->perpiece,
-                        'subtotal'           => ($value['quantity'] != 0) ? $value['quantity']*$value['per_piece'] : 0
+                        'subtotal'           => ($value['quantity'] != 0) ? $value['quantity'] * $value['per_piece'] : 0,
+                        'status'             => ($po->status == 'Outstanding') ? 1 : $detail_po->status,
                     ];
                     if ($detail_po) {
                         $detail_po->update($data_detail);
-                    }else{
+                    } else {
                         $data_detail = [
                             'transaction_unique' => $transaction_unique,
                             'spare_part_id'      => $value['spare_part_id'],
                             'quantity'           => $value['quantity'],
                             'perpiece'           => $value['per_piece'],
-                            'subtotal'           => ($value['quantity'] != 0) ? $value['quantity']*$value['per_piece'] : 0
+                            'subtotal'           => ($value['quantity'] != 0) ? $value['quantity'] * $value['per_piece'] : 0
                         ];
                         PurchaseOrderDetail::create($data_detail);
                     }
@@ -316,14 +341,14 @@ class PurchasingSparePartController extends Controller
                 $sum_subtotal = 0;
                 if ($po_detail->count() > 0) {
                     foreach ($po_detail as $val) {
-                        $sum_subtotal += $val->quantity*$val->perpiece;
+                        $sum_subtotal += $val->quantity * $val->perpiece;
                     }
                 }
 
                 $po->update([
                     'total' => $sum_subtotal
                 ]);
-    
+
                 return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Disimpan']);
             }
         } catch (\Exception $e) {
@@ -337,9 +362,9 @@ class PurchasingSparePartController extends Controller
             if (!$po) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
-            
+
             $po_detail = PurchaseOrderDetail::where('transaction_unique', $transaction_unique)->where('id', $id)->first();
-            if($po_detail){
+            if ($po_detail) {
                 $sparepart = SparePart::where('id', $po_detail->spare_part_id)->first();
                 if ($sparepart) {
                     $sparepart->update([
@@ -351,7 +376,7 @@ class PurchasingSparePartController extends Controller
                         'total'  => $total_po
                     ]);
                 }
-                
+
                 $po_detail = $po_detail->update([
                     'status' => 1 //if 1 = 'Outstanding',
                 ]);
@@ -365,12 +390,12 @@ class PurchasingSparePartController extends Controller
                 }
             }
 
-            if (!in_array("Draft", $status)){
+            if (!in_array("Draft", $status)) {
                 $po->update([
                     'status'  => 'Outstanding'
                 ]);
             }
-            
+
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Di Terima']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
