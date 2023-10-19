@@ -220,11 +220,11 @@ class PurchasingSparePartController extends Controller
                     'remark'             => $request->remark
                 ]);
 
-                $po->update([
-                    'is_paid' => 1
-                ]);
-
                 if($balance != 0){
+                    $po->update([
+                        'is_paid' => 1,
+                        'status'  => 'Not Paid'
+                    ]);
                     return response()->json([
                         'status'  => true,
                         'message' => ['Berhasil Melakukan Pembayaran'],
@@ -236,7 +236,6 @@ class PurchasingSparePartController extends Controller
             }
 
             $po_detail = PurchaseOrderDetail::where('transaction_unique', $transaction_unique)->get();
-
             $status_detail = [];
             if ($po_detail->count() > 0) {
                 foreach ($po_detail as $key => $value) {
