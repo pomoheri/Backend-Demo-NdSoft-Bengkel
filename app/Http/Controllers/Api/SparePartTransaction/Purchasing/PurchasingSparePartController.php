@@ -22,7 +22,7 @@ class PurchasingSparePartController extends Controller
     public function list()
     {
         try {
-            $data = PurchaseOrder::orderBy('created_at', 'desc')->get();
+            $data = PurchaseOrder::with('suppliers','details')->orderBy('created_at', 'desc')->get();
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($data, ['List Data Purchase Order']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
@@ -169,15 +169,15 @@ class PurchasingSparePartController extends Controller
             if ($po_detail->count() > 0) {
                 foreach ($po_detail as $key => $value) {
                     if ($value->status == 0) {
+                        $sparepart = SparePart::where('id', $value->spare_part_id)->first();
+                        if ($sparepart) {
+                                $sparepart->update([
+                                    'stock' => $sparepart->stock + $value->quantity
+                            ]);
+                            $total_po += $value->subtotal;
+                        }
                         $value->status = 1;
                         $value->save();
-                    }
-                    $sparepart = SparePart::where('id', $value->spare_part_id)->first();
-                    if ($sparepart) {
-                            $sparepart->update([
-                                'stock' => $sparepart->stock + $value->quantity
-                        ]);
-                        $total_po += $value->subtotal;
                     }
                 }
             }
@@ -220,6 +220,10 @@ class PurchasingSparePartController extends Controller
                     'remark'             => $request->remark
                 ]);
 
+                $po->update([
+                    'is_paid' => 1
+                ]);
+
                 if($balance != 0){
                     return response()->json([
                         'status'  => true,
@@ -233,6 +237,7 @@ class PurchasingSparePartController extends Controller
 
             $po_detail = PurchaseOrderDetail::where('transaction_unique', $transaction_unique)->get();
 
+            $status_detail = [];
             if ($po_detail->count() > 0) {
                 foreach ($po_detail as $key => $value) {
                     $subtotal = $value->subtotal;
@@ -243,17 +248,31 @@ class PurchasingSparePartController extends Controller
                     $hpp = ($subtotal + ( $stock*$selling_price))/ ($stock+$quantity);
 
                     if ($sparepart) {
-                            $sparepart->update([
-                                'buying_price' => $hpp,
-                                'profit'       => $selling_price-$hpp
+                        $sparepart->update([
+                            'buying_price' => $hpp,
+                            'profit'       => $selling_price-$hpp
                         ]);
                     }
+                    $status_detail = [
+                        'status_detail' => $status_detail
+                    ];
                 }
             }
 
             $po_code = (new \App\Helpers\GlobalGenerateCodeHelper())->generateTransactionCode();
+
+            if(count($status_detail) > 0 && in_array(0, $status_detail)){
+                $po->update([
+                    'status' => 'On Order',
+                ]);
+            }else{
+                $po->update([
+                    'status' => 'Paid',
+                ]);
+            }
+
             $po->update([
-                'status' => 'Paid',
+                'is_paid'          => 1,
                 'transaction_code' => $po_code
             ]);
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Di Update']);
