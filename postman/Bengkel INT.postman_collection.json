@@ -1508,7 +1508,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"transaction_unique\" : \"d2357bbc-6dd8-464f-bed6-947920fd1478\", //required\r\n    //if payment method kredit with request\r\n    \"amount\"             : \"509000\", //required\r\n    \"remark\"             : \"Kekurangan nya\" //required\r\n}"
+									"raw": "{\r\n    \"transaction_unique\" : \"5a2053d6-4b33-4ef0-b69f-5b988656bb21\", //required\r\n    //if payment method kredit with request\r\n    \"amount\"             : \"0\", //required\r\n    \"remark\"             : \"Kekurangan nya\" //required\r\n}"
 								},
 								"url": {
 									"raw": "{{url}}sparepart-transaction/purchasing/submit-payment-po",
@@ -1591,6 +1591,29 @@
 										"accept-goods-by-detail",
 										"5a2053d6-4b33-4ef0-b69f-5b988656bb21",
 										"13"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Penjualan Langsung Spare Part",
+					"item": [
+						{
+							"name": "List Penjualan",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}sparepart-transaction/sell/list",
+									"host": [
+										"{{url}}sparepart-transaction"
+									],
+									"path": [
+										"sell",
+										"list"
 									]
 								}
 							},
