@@ -14,4 +14,7 @@ class SellSparepartDetail extends Model
         'discount',
         'subtotal'
     ];
+    public function sparepart(){
+        return $this->belongsTo(SparePart::class, 'spare_part_id', 'id');
+    }
 }
