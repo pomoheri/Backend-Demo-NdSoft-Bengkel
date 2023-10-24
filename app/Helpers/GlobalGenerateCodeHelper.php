@@ -58,10 +58,10 @@ class GlobalGenerateCodeHelper
 
         return $mnemonic;
     }
-    public function generateTransactionCode($prefix = 'INT/PO/', $length = 6)
+    public function generateTransactionCode($prefix = 'INT/PO/', $length = 4)
     {
-        $currentMonth = now()->format('Y/m'); 
-        
+        $currentMonth = now()->format('Y/m');
+
         $lastCode = PurchaseOrder::max('transaction_code');
         $storedMonth = substr($lastCode, strlen($prefix), 7);
 
@@ -74,9 +74,8 @@ class GlobalGenerateCodeHelper
 
         $formattedNextNumber = str_pad($nextNumber, $length, '0', STR_PAD_LEFT); // Add leading zeros if necessary
 
-        $mnemonic = $prefix . $currentMonth .'/'. $formattedNextNumber;
+        $mnemonic = $prefix . $currentMonth . '/' . $formattedNextNumber;
 
         return $mnemonic;
     }
-
 }

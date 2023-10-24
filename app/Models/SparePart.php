@@ -11,7 +11,7 @@ class SparePart extends Model
         'part_number',
         'name',
         'car_brand_id',
-        'grade',
+        'is_genuine',
         'category',
         'stock',
         'buying_price',
@@ -31,4 +31,3 @@ class SparePart extends Model
         return $this->belongsTo(CarBrand::class, 'car_brand_id', 'id');
     }
 }
-
