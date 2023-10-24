@@ -1595,6 +1595,25 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Kredit History",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}sparepart-transaction/purchasing/kredit-history/5a2053d6-4b33-4ef0-b69f-5b988656bb21",
+									"host": [
+										"{{url}}sparepart-transaction"
+									],
+									"path": [
+										"purchasing",
+										"kredit-history",
+										"5a2053d6-4b33-4ef0-b69f-5b988656bb21"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},

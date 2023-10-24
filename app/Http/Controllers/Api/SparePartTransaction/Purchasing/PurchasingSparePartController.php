@@ -255,15 +255,13 @@ class PurchasingSparePartController extends Controller
                             'profit'       => $selling_price - $hpp
                         ]);
                     }
-                    $status_detail = [
-                        'status_detail' => $status_detail
-                    ];
+                    $status_detail[] =  $value->status;
                 }
             }
 
             $po_code = (new \App\Helpers\GlobalGenerateCodeHelper())->generateTransactionCode();
 
-            if (count($status_detail) > 0 && in_array(0, $status_detail)) {
+            if (count($status_detail) > 0 && in_array(0, $status_detail) || in_array(null, $status_detail)) {
                 $po->update([
                     'status' => 'On Order',
                 ]);
@@ -273,10 +271,17 @@ class PurchasingSparePartController extends Controller
                 ]);
             }
 
-            $po->update([
-                'is_paid'          => 1,
-                'transaction_code' => $po_code
-            ]);
+            if($po->transaction_code){
+                $po->update([
+                    'is_paid'          => 1
+                ]);
+            }else{
+                $po->update([
+                    'is_paid'          => 1,
+                    'transaction_code' => $po_code
+                ]);
+            }
+            
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Di Update']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
@@ -311,6 +316,10 @@ class PurchasingSparePartController extends Controller
 
             $po = PurchaseOrder::where('transaction_unique', $transaction_unique)->first();
 
+            if($po->status == 'Paid'){
+                return (new \App\Helpers\GlobalResponseHelper())->sendError(['Tidak dapat melakukan edit,Status PO sudah paid']);
+            }
+
             if ($po && !empty($request->spare_part)) {
                 $payment_due_date = null;
                 if (($request->invoice_date) && strtolower($request->payment_method) == 'kredit') {
@@ -341,7 +350,7 @@ class PurchasingSparePartController extends Controller
                         'quantity'           => ($value['quantity']) ? $value['quantity'] : $detail_po->quantity,
                         'perpiece'           => ($value['per_piece']) ? $value['per_piece'] : $detail_po->perpiece,
                         'subtotal'           => ($value['quantity'] != 0) ? $value['quantity'] * $value['per_piece'] : 0,
-                        'status'             => ($po->status == 'Outstanding') ? 1 : $detail_po->status,
+                        'status'             => ($po->status == 'Outstanding') ? 1 : 0,
                     ];
                     if ($detail_po) {
                         $detail_po->update($data_detail);
