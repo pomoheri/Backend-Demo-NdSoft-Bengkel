@@ -155,7 +155,8 @@ class PurchasingSparePartController extends Controller
             'created_by'     => auth()->user()->name,
             'payment_method' => $request->payment_method,
             'remark'         => $request->remark,
-            'payment_due_date' => $payment_due_date
+            // 'payment_due_date' => $payment_due_date
+            'payment_due_date' => $request->payment_due_date
         ]);
     }
     public function terimaBarang($transaction_unique)
@@ -321,7 +322,8 @@ class PurchasingSparePartController extends Controller
                     'invoice_number'    => ($request->invoice_number) ? $request->invoice_number : $po->invoice_number,
                     'invoice_date'      => ($request->invoice_date) ? $request->invoice_date : $po->invoice_date,
                     'payment_method'    => ($request->payment_method) ? $request->payment_method : $po->payment_method,
-                    'payment_due_date'  => ($payment_due_date) ? $payment_due_date : $po->payment_due_date,
+                    // 'payment_due_date'  => ($payment_due_date) ? $payment_due_date : $po->payment_due_date,
+                    'payment_due_date'  => ($request->payment_due_date) ? $request->payment_due_date : $po->payment_due_date,
                     'remark'            => ($request->remark) ? $request->remark : $po->remark,
                 ]);
 
