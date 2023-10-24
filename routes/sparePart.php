@@ -14,6 +14,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('/accept-goods/{transaction_unique}', [\App\Http\Controllers\Api\SparePartTransaction\Purchasing\PurchasingSparePartController::class, 'terimaBarang']);
             Route::get('/accept-goods-by-detail/{transaction_unique}/{id}', [\App\Http\Controllers\Api\SparePartTransaction\Purchasing\PurchasingSparePartController::class, 'terimaBarangByDetail']);
             Route::post('/submit-payment-po', [\App\Http\Controllers\Api\SparePartTransaction\Purchasing\PurchasingSparePartController::class, 'submitPayment']);
+            Route::get('/kredit-history/{transaction_unique}', [\App\Http\Controllers\Api\SparePartTransaction\Purchasing\KreditHistoryController::class, 'kreditHistory']);
         });
 
         //sell sparepart transaction
