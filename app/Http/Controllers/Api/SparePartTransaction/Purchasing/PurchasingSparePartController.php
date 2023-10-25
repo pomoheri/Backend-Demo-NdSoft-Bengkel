@@ -184,10 +184,23 @@ class PurchasingSparePartController extends Controller
                     }
                 }
             }
-            $po->update([
-                'status' => 'Outstanding',
-                'total'  => $total_po
-            ]);
+
+            if($po->is_paid == 1 && $po->status == 'Not Paid'){
+                $po->status = 'Not paid';
+            }else if($po->is_paid == 1 && $po->status == 'On Order'){
+                $po->status = 'Paid';
+            }else if($po->is_paid == 1 && $po->status == 'Paid'){
+                $po->status = 'Paid';
+            }else{
+                $po->status = 'Outstanding';
+            }
+            $po->total = $total_po;
+
+            $po->save();
+            // $po->update([
+            //     'status' => 'Outstanding',
+            //     'total'  => $total_po
+            // ]);
 
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Di Diterima']);
         } catch (\Exception $e) {
@@ -419,10 +432,17 @@ class PurchasingSparePartController extends Controller
                 }
             }
 
-            if (!in_array("Draft", $status)) {
-                $po->update([
-                    'status'  => 'Outstanding'
-                ]);
+            if (!in_array(0, $status)) {
+                if($po->is_paid == 1 && $po->status == 'Not Paid'){
+                    $po->status = 'Not paid';
+                }else if($po->is_paid == 1 && $po->status == 'On Order'){
+                    $po->status = 'Paid';
+                }else if($po->is_paid == 1 && $po->status == 'Paid'){
+                    $po->status = 'Paid';
+                }else{
+                    $po->status = 'Outstanding';
+                }
+                $po->save();
             }
 
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Di Terima']);
