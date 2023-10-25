@@ -1637,6 +1637,66 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Add Penjualan",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    //Data Pembeli\r\n    \"nama_pembeli\" : \"\",\r\n    \"kontak_pembeli\" : \"\",\r\n    \"alamat_pembeli\" : \"\",\r\n\r\n    //Data Sell\r\n    \"payment_method\" : \"\",\r\n    \"payment_gateway\" : \"\",\r\n    \"remark\"          : \"\",\r\n\r\n    //Data Detail Sell\r\n    \"sparepart\" : [\r\n        {\r\n            \"sparepart_id\" : \"\",\r\n            \"quantity\"     : \"\",\r\n            \"discount\"     : \"\"\r\n        }\r\n        {\r\n            \"sparepart_id\" : \"\",\r\n            \"quantity\"     : \"\",\r\n            \"discount\"     : \"\"\r\n        }\r\n    ]\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}sparepart-transaction/sell/add",
+									"host": [
+										"{{url}}sparepart-transaction"
+									],
+									"path": [
+										"sell",
+										"add"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Register",
+			"item": [
+				{
+					"name": "Register Pembelian Sparepart",
+					"item": [
+						{
+							"name": "Lists",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}register/purchasing-sparepart",
+									"host": [
+										"{{url}}register"
+									],
+									"path": [
+										"purchasing-sparepart"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
