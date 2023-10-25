@@ -20,6 +20,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         //sell sparepart transaction
         Route::group(['prefix' => 'sell', "as" => 'sell.'], function () {
             Route::get('/list', [\App\Http\Controllers\Api\SparePartTransaction\Sell\SellSparePartController::class, 'list']);
+            Route::post('/add', [\App\Http\Controllers\Api\SparePartTransaction\Sell\SellSparePartController::class, 'add']);
+            Route::post('/submit-payment', [\App\Http\Controllers\Api\SparePartTransaction\Sell\SellSparePartController::class, 'submitPayment']);
         });
     });
 });
