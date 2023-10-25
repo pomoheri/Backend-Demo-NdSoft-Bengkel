@@ -1656,7 +1656,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    //Data Pembeli\r\n    \"nama_pembeli\" : \"\",\r\n    \"kontak_pembeli\" : \"\",\r\n    \"alamat_pembeli\" : \"\",\r\n\r\n    //Data Sell\r\n    \"payment_method\" : \"\",\r\n    \"payment_gateway\" : \"\",\r\n    \"remark\"          : \"\",\r\n\r\n    //Data Detail Sell\r\n    \"sparepart\" : [\r\n        {\r\n            \"sparepart_id\" : \"\",\r\n            \"quantity\"     : \"\",\r\n            \"discount\"     : \"\"\r\n        }\r\n        {\r\n            \"sparepart_id\" : \"\",\r\n            \"quantity\"     : \"\",\r\n            \"discount\"     : \"\"\r\n        }\r\n    ]\r\n}"
+									"raw": "{\r\n    //Data Pembeli\r\n    \"name\" : \"Pomo Heri Santoso\", //[required]\r\n    \"phone\" : \"083869550401\", \r\n    \"address\" : \"Klaten\",\r\n\r\n    //Data Sell\r\n    \"payment_method\" : \"Cash\", //[required, enum:Cash,Kredit]\r\n    \"payment_gateway\" : \"Cash\", //[required, enum:Cash,Transfer,QRIS,EDC]\r\n    \"remark\"          : \"\",\r\n\r\n    //Data Detail Sell\r\n    \"sparepart\" : [\r\n        {\r\n            \"spare_part_id\" : \"8\", //[required]\r\n            \"quantity\"     : \"2\", //[required]\r\n            \"discount\"     : \"\" //[diskon dalam bentuk uang langsung]\r\n        },\r\n        {\r\n            \"spare_part_id\" : \"9\",\r\n            \"quantity\"     : \"5\",\r\n            \"discount\"     : \"1000\" //[diskon dalam bentuk uang langsung]\r\n        }\r\n    ]\r\n}"
 								},
 								"url": {
 									"raw": "{{url}}sparepart-transaction/sell/add",
@@ -1666,6 +1666,39 @@
 									"path": [
 										"sell",
 										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Submit Payment",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"transaction_unique\" : \"bc4242ce-f051-425e-b031-87f2cdb16770\", //required\r\n    //if payment method kredit with request\r\n    \"amount\"             : \"1000\", //required\r\n    \"remark\"             : \"Kekurangan nya\"\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}sparepart-transaction/sell/submit-payment",
+									"host": [
+										"{{url}}sparepart-transaction"
+									],
+									"path": [
+										"sell",
+										"submit-payment"
 									]
 								}
 							},
@@ -1693,6 +1726,25 @@
 									],
 									"path": [
 										"purchasing-sparepart"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Lists With Param Date",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}register/purchasing-sparepart/2023-10-21/2023-10-27",
+									"host": [
+										"{{url}}register"
+									],
+									"path": [
+										"purchasing-sparepart",
+										"2023-10-21",
+										"2023-10-27"
 									]
 								}
 							},
