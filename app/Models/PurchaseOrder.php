@@ -22,7 +22,9 @@ class PurchaseOrder extends Model
         'created_by',
         'payment_method',
         'payment_due_date',
-        'is_paid'
+        'is_paid',
+        'closed_at',
+        'closed_by'
     ];
     protected static function boot()
     {

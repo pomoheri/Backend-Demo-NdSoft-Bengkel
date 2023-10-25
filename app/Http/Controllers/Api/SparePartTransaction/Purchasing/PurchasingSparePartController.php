@@ -22,7 +22,7 @@ class PurchasingSparePartController extends Controller
     public function list()
     {
         try {
-            $data = PurchaseOrder::with('suppliers', 'details')->orderBy('created_at', 'desc')->get();
+            $data = PurchaseOrder::where('status', '!=' ,'Paid')->with('suppliers', 'details')->orderBy('created_at', 'desc')->get();
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($data, ['List Data Purchase Order']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
@@ -280,7 +280,9 @@ class PurchasingSparePartController extends Controller
                 ]);
             } else {
                 $po->update([
-                    'status' => 'Paid',
+                    'status'    => 'Paid',
+                    'closed_at' => date('Y-m-d'),
+                    'closed_by' => auth()->user()->name,
                 ]);
             }
 
