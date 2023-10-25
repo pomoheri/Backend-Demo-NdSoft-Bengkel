@@ -13,14 +13,18 @@ class RegisterSparepartPurchasingController extends Controller
         $this->middleware('auth:sanctum');
     }
 
-    public function list()
+    public function list($start_date = null, $end_date = null)
     {
         try {
             $data = PurchaseOrder::with('suppliers')
                 ->where('is_paid', 1)
-                ->where('status', 'Paid')
-                ->orderBy('updated_at', 'DESC')
-                ->get();
+                ->where('status', 'Paid');
+
+            if ($start_date && $end_date) {
+                $data = $data->whereBetween('closed_at', [$start_date, $end_date]);
+            }
+
+            $data = $data->orderBy('updated_at', 'DESC')->get();
 
             $output = [];
             if ($data->count() > 0) {
