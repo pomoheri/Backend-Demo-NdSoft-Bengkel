@@ -17,13 +17,13 @@ class RegisterSparepartPurchasingController extends Controller
     {
         try {
             $data = PurchaseOrder::with('suppliers')
-                                ->where('is_paid', 1)
-                                ->where('status', 'Paid')
-                                ->orderBy('updated_at', 'DESC')
-                                ->get();
+                ->where('is_paid', 1)
+                ->where('status', 'Paid')
+                ->orderBy('updated_at', 'DESC')
+                ->get();
 
             $output = [];
-            if($data->count() > 0){
+            if ($data->count() > 0) {
                 foreach ($data as $key => $value) {
                     $output[] = [
                         'id'                 => $value->id,
@@ -33,6 +33,7 @@ class RegisterSparepartPurchasingController extends Controller
                         'invoice_date'       => $value->invoice_date,
                         'closed_at'          => $value->closed_at,
                         'closed_by'          => $value->closed_by,
+                        'created_at'         => $value->created_at,
                         'supplier'           => ($value->suppliers) ? $value->suppliers->name : '',
                         'kontak'             => ($value->suppliers) ? $value->suppliers->phone : '',
                         'total'              => $value->total
