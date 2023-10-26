@@ -1822,6 +1822,30 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Register Penjualan Sparepart",
+					"item": [
+						{
+							"name": "Lists With Param Date",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}register/sell-sparepart/2023-10-21/2023-10-28",
+									"host": [
+										"{{url}}register"
+									],
+									"path": [
+										"sell-sparepart",
+										"2023-10-21",
+										"2023-10-28"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
