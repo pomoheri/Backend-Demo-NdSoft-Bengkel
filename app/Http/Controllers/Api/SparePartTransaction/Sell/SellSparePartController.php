@@ -151,12 +151,16 @@ class SellSparePartController extends Controller
 
                 if ($balance == 0) {
                     $sell->update([
-                        'status' => 'Closed'
+                        'status'    => 'Closed',
+                        'closed_at' => date('Y-m-d'),
+                        'closed_by' => auth()->user()->name
                     ]); 
                 }
             }else{
                 $sell->update([
-                    'status' => 'Closed'
+                    'status'    => 'Closed',
+                    'closed_at' => date('Y-m-d'),
+                    'closed_by' => auth()->user()->name
                 ]);
             }
 
