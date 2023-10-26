@@ -69,6 +69,11 @@ class SellSparePartController extends Controller
                     if(!$spare_part){
                         return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Spare Part Tidak Ditemukan']);
                     }
+                    if($spare_part->stock < $value['quantity']){
+                        return (new \App\Helpers\GlobalResponseHelper())->sendError(['Stock Sparepart Kurang dari Quantity']);
+                    }
+                    $stock = $spare_part->stock-$value['quantity'];
+                    $spare_part->update(['stock' => $stock]);
                     $subtotal = $spare_part->selling_price*$value['quantity'];
                     if($value['discount']){
                         $subtotal = $subtotal-$value['discount'];
@@ -90,7 +95,11 @@ class SellSparePartController extends Controller
                 ]);
             }
 
-            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Disimpan']);
+           $data = [
+            'transaction_unique' => $sell->transaction_unique,
+           ];
+
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($data, ['Data Berhasil Disimpan']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
@@ -142,17 +151,158 @@ class SellSparePartController extends Controller
 
                 if ($balance == 0) {
                     $sell->update([
-                        'status' => 'Closed'
+                        'status'    => 'Closed',
+                        'closed_at' => date('Y-m-d'),
+                        'closed_by' => auth()->user()->name
                     ]); 
                 }
             }else{
                 $sell->update([
-                    'status' => 'Closed'
+                    'status'    => 'Closed',
+                    'closed_at' => date('Y-m-d'),
+                    'closed_by' => auth()->user()->name
                 ]);
             }
 
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Dibayar']);
+        } catch (\Exception $e) {
+            return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
+        }
+    }
+    public function detail($transaction_unique)
+    {
+        try {
+            $sell = SellSparepart::with('details')->where('transaction_unique', $transaction_unique)->first();
 
+            if(!$sell){
+                return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
+            }
+            $detail = [];
+            if($sell->details->count() > 0){
+                foreach ($sell->details as $key => $value) {
+                    $detail[] = [
+                        'id'                 => $value->id,
+                        'transaction_unique' => $value->transaction_unique,
+                        'spare_part_id'      => $value->spare_part_id,
+                        'quantity'           => $value->quantity,
+                        'discount'           => $value->discount,
+                        'subtotal'           => $value->subtotal,
+                    ];
+                }
+            }
+            $output = [
+                'transaction_code'   => $sell->transaction_code,
+                'transaction_unique' => $sell->transaction_unique,
+                'name'               => $sell->name,
+                'phone'              => $sell->phone,
+                'address'            => $sell->address,
+                'total'              => $sell->total,
+                'payment_date'       => $sell->payment_date,
+                'payment_method'     => $sell->payment_method,
+                'payment_gateway'    => $sell->payment_gateway,
+                'status'             => $sell->status,
+                'remark'             => $sell->remark,
+                'closed_by'          => $sell->closed_by,
+                'closed_at'          => $sell->closed_at,
+                'details'            => $detail,
+            ];
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($output, ['Data Detail Sell']);
+        } catch (\Exception $e) {
+            return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
+        }
+    }
+
+    public function update(Request $request)
+    {
+        try {
+            $validation = Validator::make($request->all(), [
+                'transaction_unique'    => ['required'],
+                'name'                  => ['required', 'max:255', 'string'],
+                'phone'                 => ['nullable', 'max:255', 'string'],
+                'address'               => ['nullable', 'max:255', 'string'],
+                'payment_method'        => ['required', 'in:Cash,Kredit'],
+                'payment_gateway'       => ['required', 'in:Cash,Transfer,QRIS,EDC'],
+                'remark'                => ['nullable', 'string', 'max:255'],
+                'sparepart'             => ['required', 'array'],
+                'sparepart.*.quantity'  => ['required'],
+            ]);
+
+            if($validation->fails()){
+                return (new \App\Helpers\GlobalResponseHelper())->sendError($validation->errors()->all());
+            }
+
+            $sell = SellSparepart::where('transaction_unique', $request->transaction_unique)->first();
+            if(!$sell){
+                return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data tidak ditemukan']);
+            }
+            if($sell->status == 'Closed'){
+                return (new \App\Helpers\GlobalResponseHelper())->sendError(['Tidak dapat melakukan edit,Status Penjualan sudah Closed']);
+            }
+
+            $sell->update([
+                'name'           => ($request->name) ? $request->name : $sell->name,
+                'phone'          => ($request->phone) ? $request->phone : $sell->phone,
+                'address'        => ($request->address) ? $request->address : $sell->address,
+                'payment_method' => ($request->payment_method) ? $request->payment_method : $sell->payment_method,
+                'payment_gateway' => ($request->payment_gateway) ? $request->payment_gateway : $sell->payment_gateway,
+                'remark'         => ($request->remark) ? $request->remark : $sell->remark,
+            ]);
+
+            $get_id = [];
+                foreach ($request->sparepart as $key => $value) {
+                    $get_id[] = $value['spare_part_id'];
+                };
+
+            $deleteNotInSell = SellSparepartDetail::where('transaction_unique', $request->transaction_unique)->whereNotIn('spare_part_id', $get_id)->delete();
+
+            foreach ($request->sparepart as $key => $value) {
+                $detail_sell = SellSparepartDetail::where('spare_part_id', $value['spare_part_id'])->where('transaction_unique', $request->transaction_unique)->first();
+                $spare_part = Sparepart::where('id', $value['spare_part_id'])->first();
+                $subtotal = $spare_part->selling_price*$value['quantity'];
+                if($value['discount']){
+                    $subtotal = $subtotal-$value['discount'];
+                }
+                if ($detail_sell) {
+                    $data_detail = [
+                        'spare_part_id'      => ($value['spare_part_id']) ? $value['spare_part_id'] : $detail_sell->spare_part_id,
+                        'quantity'           => ($value['quantity']) ? $value['quantity'] : $detail_sell->quantity,
+                        'discount'           => ($value['discount']) ? $value['discount'] : $detail_sell->discount,
+                        'subtotal'           => $subtotal
+                    ];
+                    if($value['quantity'] > $detail_sell->quantity){
+                        $spare_part->update([
+                            'stock' => $spare_part->stock - $value['quantity'],
+                        ]);
+                    }else if($value['quantity'] < $detail_sell->quantity){
+                        $spare_part->update([
+                            'stock' => $spare_part->stock + ($detail_sell->quantity - $value['quantity']),
+                        ]);
+                    }
+                    $detail_sell->update($data_detail);
+                } else {
+                    $data_detail = [
+                        'transaction_unique' => $request->transaction_unique,
+                        'spare_part_id'      => $value['spare_part_id'],
+                        'quantity'           => $value['quantity'],
+                        'discount'           => $value['discount'],
+                        'subtotal'           => $subtotal
+                    ];
+                    SellSparepartDetail::create($data_detail);
+                }
+            }
+            $sell_detail = SellSparepartDetail::where('transaction_unique', $request->transaction_unique)->get();
+            $sum_subtotal = 0;
+            if ($sell_detail->count() > 0) {
+                foreach ($sell_detail as $val) {
+                    $sum_subtotal += $val->subtotal;
+                }
+            }
+
+            $sell->update([
+                'total' => $sum_subtotal
+            ]);
+
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Disimpan']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }

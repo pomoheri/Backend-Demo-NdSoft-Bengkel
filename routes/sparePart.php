@@ -22,6 +22,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('/list', [\App\Http\Controllers\Api\SparePartTransaction\Sell\SellSparePartController::class, 'list']);
             Route::post('/add', [\App\Http\Controllers\Api\SparePartTransaction\Sell\SellSparePartController::class, 'add']);
             Route::post('/submit-payment', [\App\Http\Controllers\Api\SparePartTransaction\Sell\SellSparePartController::class, 'submitPayment']);
+            Route::get('/detail/{transaction_unique}', [\App\Http\Controllers\Api\SparePartTransaction\Sell\SellSparePartController::class, 'detail']);
+            Route::post('/update', [\App\Http\Controllers\Api\SparePartTransaction\Sell\SellSparePartController::class, 'update']);
+            Route::get('/kredit-history/{transaction_unique}', [\App\Http\Controllers\Api\SparePartTransaction\Sell\KreditHistoryController::class, 'kreditHistory']);
         });
     });
 });
