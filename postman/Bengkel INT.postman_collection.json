@@ -1846,6 +1846,154 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Register Small Transaction",
+					"item": [
+						{
+							"name": "Lists",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}register/small-transaction/2023-10-21/2023-10-28",
+									"host": [
+										"{{url}}register"
+									],
+									"path": [
+										"small-transaction",
+										"2023-10-21",
+										"2023-10-28"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Small Transaction",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}small-transaction/list/2023-10-01/2023-10-30",
+							"host": [
+								"{{url}}small-transaction"
+							],
+							"path": [
+								"list",
+								"2023-10-01",
+								"2023-10-30"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Small Transaction",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"date\" : \"2023-10-26\", //required, date\r\n    \"description\" : \"Beli Makan Siang Oktober\", //required\r\n    \"pic\"         : \"Pomo\", //required\r\n    \"status\"      : \"Kredit\", //required, in:Debit,Kredit\r\n    \"category\"    : \"Prive\", //required, in:Cost,Sublet,Asset,Kas,Modal,Prive,SPM\r\n    \"total\"       : \"1500000\" //required\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}small-transaction/add",
+							"host": [
+								"{{url}}small-transaction"
+							],
+							"path": [
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}small-transaction/detail/1",
+							"host": [
+								"{{url}}small-transaction"
+							],
+							"path": [
+								"detail",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Small Transaction",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\"    : 1,\r\n    \"date\" : \"2023-10-25\", //required, date\r\n    \"description\" : \"Beli Makan Siang Oktober\", //required\r\n    \"pic\"         : \"Pomo\", //required\r\n    \"status\"      : \"Kredit\", //required, in:Debit,Kredit\r\n    \"category\"    : \"Prive\", //required, in:Cost,Sublet,Asset,Kas,Modal,Prive,SPM\r\n    \"total\"       : \"1500000\" //required\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}small-transaction/update",
+							"host": [
+								"{{url}}small-transaction"
+							],
+							"path": [
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Small Transaction",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}small-transaction/delete/1",
+							"host": [
+								"{{url}}small-transaction"
+							],
+							"path": [
+								"delete",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
