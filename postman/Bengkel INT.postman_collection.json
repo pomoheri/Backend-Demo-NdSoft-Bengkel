@@ -1703,6 +1703,77 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "detail",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}sparepart-transaction/sell/detail/bc4242ce-f051-425e-b031-87f2cdb16770",
+									"host": [
+										"{{url}}sparepart-transaction"
+									],
+									"path": [
+										"sell",
+										"detail",
+										"bc4242ce-f051-425e-b031-87f2cdb16770"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Kredit History",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}sparepart-transaction/sell/kredit-history/bc4242ce-f051-425e-b031-87f2cdb16770",
+									"host": [
+										"{{url}}sparepart-transaction"
+									],
+									"path": [
+										"sell",
+										"kredit-history",
+										"bc4242ce-f051-425e-b031-87f2cdb16770"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Penjualan",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"transaction_unique\" : \"bc4242ce-f051-425e-b031-87f2cdb16770\",\r\n    //Data Pembeli\r\n    \"name\" : \"Pomo Heri Santoso\", //[required]\r\n    \"phone\" : \"083869550401\", \r\n    \"address\" : \"Klaten\",\r\n\r\n    //Data Sell\r\n    \"payment_method\" : \"Cash\", //[required, enum:Cash,Kredit]\r\n    \"payment_gateway\" : \"Cash\", //[required, enum:Cash,Transfer,QRIS,EDC]\r\n    \"remark\"          : \"\",\r\n\r\n    //Data Detail Sell\r\n    \"sparepart\" : [\r\n        {\r\n            \"transaction_unique\" : \"bc4242ce-f051-425e-b031-87f2cdb16770\",\r\n            \"spare_part_id\" : \"8\", //[required]\r\n            \"quantity\"     : \"2\", //[required]\r\n            \"discount\"     : \"\" //[diskon dalam bentuk uang langsung]\r\n        }\r\n    ]\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}sparepart-transaction/sell/update",
+									"host": [
+										"{{url}}sparepart-transaction"
+									],
+									"path": [
+										"sell",
+										"update"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
