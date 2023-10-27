@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\SellSparepart;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use PDF;
 
 class SellSparePartController extends Controller
 {
@@ -172,41 +173,12 @@ class SellSparePartController extends Controller
     public function detail($transaction_unique)
     {
         try {
-            $sell = SellSparepart::with('details')->where('transaction_unique', $transaction_unique)->first();
+            $sell = SellSparepart::with('details','details.sparepart')->where('transaction_unique', $transaction_unique)->first();
 
             if(!$sell){
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
-            $detail = [];
-            if($sell->details->count() > 0){
-                foreach ($sell->details as $key => $value) {
-                    $detail[] = [
-                        'id'                 => $value->id,
-                        'transaction_unique' => $value->transaction_unique,
-                        'spare_part_id'      => $value->spare_part_id,
-                        'quantity'           => $value->quantity,
-                        'discount'           => $value->discount,
-                        'subtotal'           => $value->subtotal,
-                    ];
-                }
-            }
-            $output = [
-                'transaction_code'   => $sell->transaction_code,
-                'transaction_unique' => $sell->transaction_unique,
-                'name'               => $sell->name,
-                'phone'              => $sell->phone,
-                'address'            => $sell->address,
-                'total'              => $sell->total,
-                'payment_date'       => $sell->payment_date,
-                'payment_method'     => $sell->payment_method,
-                'payment_gateway'    => $sell->payment_gateway,
-                'status'             => $sell->status,
-                'remark'             => $sell->remark,
-                'closed_by'          => $sell->closed_by,
-                'closed_at'          => $sell->closed_at,
-                'details'            => $detail,
-            ];
-            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($output, ['Data Detail Sell']);
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($sell, ['Data Detail Sell']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
@@ -303,6 +275,23 @@ class SellSparePartController extends Controller
             ]);
 
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Disimpan']);
+        } catch (\Exception $e) {
+            return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
+        }
+    }
+
+    public function getInvoice($transaction_unique)
+    {
+        try {
+            $sell = SellSparepart::where('transaction_unique', $transaction_unique)->first();
+            if(!$sell){
+                return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
+            }
+
+            $pdf = PDF::loadView('documents.invoice-sell-sparepart')->setPaper('a7');
+            
+            return $pdf->stream();
+
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
