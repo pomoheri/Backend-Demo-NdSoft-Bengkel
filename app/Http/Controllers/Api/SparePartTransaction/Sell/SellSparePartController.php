@@ -55,7 +55,7 @@ class SellSparePartController extends Controller
                 'payment_date'     => date('Y-m-d'),
                 'payment_method'   => $request->payment_method,
                 'payment_gateway'  => $request->payment_gateway,
-                'status'           => 'Outstanding',
+                'status'           => ($request->payment_method == 'Cash') ? 'Outstanding' : 'Receivable',
                 'remark'           => $request->remark,
                 'created_by'       => auth()->user()->name,
             ];
@@ -156,12 +156,17 @@ class SellSparePartController extends Controller
                         'closed_at' => date('Y-m-d'),
                         'closed_by' => auth()->user()->name
                     ]); 
+                }else{
+                    $sell->update([
+                        'is_paid' => 1
+                    ]);
                 }
             }else{
                 $sell->update([
                     'status'    => 'Closed',
                     'closed_at' => date('Y-m-d'),
-                    'closed_by' => auth()->user()->name
+                    'closed_by' => auth()->user()->name,
+                    'is_paid'   => 1
                 ]);
             }
 
@@ -225,7 +230,17 @@ class SellSparePartController extends Controller
                     $get_id[] = $value['spare_part_id'];
                 };
 
-            $deleteNotInSell = SellSparepartDetail::where('transaction_unique', $request->transaction_unique)->whereNotIn('spare_part_id', $get_id)->delete();
+            $deleteNotInSell = SellSparepartDetail::with('sparepart')->where('transaction_unique', $request->transaction_unique)->whereNotIn('spare_part_id', $get_id)->get();
+            if($deleteNotInSell){
+                foreach ($deleteNotInSell as $keys => $val) {
+                    if($val->sparepart){
+                        $val->sparepart->update([
+                            'stock' =>  $val->sparepart->stock + $val->quantity
+                        ]);
+                    }
+                    $val->delete();
+                }
+            }
 
             foreach ($request->sparepart as $key => $value) {
                 $detail_sell = SellSparepartDetail::where('spare_part_id', $value['spare_part_id'])->where('transaction_unique', $request->transaction_unique)->first();
@@ -241,15 +256,9 @@ class SellSparePartController extends Controller
                         'discount'           => ($value['discount']) ? $value['discount'] : $detail_sell->discount,
                         'subtotal'           => $subtotal
                     ];
-                    if($value['quantity'] > $detail_sell->quantity){
-                        $spare_part->update([
-                            'stock' => $spare_part->stock - $value['quantity'],
-                        ]);
-                    }else if($value['quantity'] < $detail_sell->quantity){
-                        $spare_part->update([
-                            'stock' => $spare_part->stock + ($detail_sell->quantity - $value['quantity']),
-                        ]);
-                    }
+                    $spare_part->update([
+                        'stock' => ($spare_part->stock - $detail_sell->quantity) + $value['quantity']
+                    ]);
                     $detail_sell->update($data_detail);
                 } else {
                     $data_detail = [
@@ -260,6 +269,9 @@ class SellSparePartController extends Controller
                         'subtotal'           => $subtotal
                     ];
                     SellSparepartDetail::create($data_detail);
+                    $spare_part->update([
+                        'stock' => $spare_part->stock + $value['quantity']
+                    ]);
                 }
             }
             $sell_detail = SellSparepartDetail::where('transaction_unique', $request->transaction_unique)->get();
