@@ -1774,6 +1774,25 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "get Invoice PDF",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}sparepart-transaction/sell/get-invoice/bc4242ce-f051-425e-b031-87f2cdb16770",
+									"host": [
+										"{{url}}sparepart-transaction"
+									],
+									"path": [
+										"sell",
+										"get-invoice",
+										"bc4242ce-f051-425e-b031-87f2cdb16770"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
@@ -1994,6 +2013,138 @@
 						}
 					},
 					"response": []
+				}
+			]
+		},
+		{
+			"name": "Service",
+			"item": [
+				{
+					"name": "Labour",
+					"item": [
+						{
+							"name": "Lists",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}service/labour/",
+									"host": [
+										"{{url}}service"
+									],
+									"path": [
+										"labour",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"labour_code\" : \"Tek-Pomo\", //[required, unique]\r\n    \"frt\"         : \"1\", //[required]\r\n    \"price\"       : \"100000\" //[required]\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}service/labour/add",
+									"host": [
+										"{{url}}service"
+									],
+									"path": [
+										"labour",
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Detail",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}service/labour/detail/1",
+									"host": [
+										"{{url}}service"
+									],
+									"path": [
+										"labour",
+										"detail",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\"          : 1,\r\n    \"labour_code\" : \"Tek-Pomo\", //[required, unique]\r\n    \"frt\"         : \"1.5\", //[required]\r\n    \"price\"       : \"100000\" //[required]\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}service/labour/update",
+									"host": [
+										"{{url}}service"
+									],
+									"path": [
+										"labour",
+										"update"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}service/labour/delete/1",
+									"host": [
+										"{{url}}service"
+									],
+									"path": [
+										"labour",
+										"delete",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
