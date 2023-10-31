@@ -20,7 +20,7 @@ class SellSparePartController extends Controller
     public function list()
     {
         try {
-            $data = SellSparepart::where('status', '!=', 'Closed')->with('details', 'details.sparepart')->orderBy('created_at', 'desc')->get();
+            $data = SellSparepart::with('details', 'details.sparepart')->where('status', '!=', 'Closed')->orderBy('created_at', 'desc')->get();
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($data, ['List Data Sell Sparepart']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
