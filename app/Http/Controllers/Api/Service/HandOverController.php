@@ -11,10 +11,10 @@ use PDF;
 
 class HandOverController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:sanctum');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:sanctum');
+    // }
 
     public function list(Request $request)
     {
@@ -72,6 +72,78 @@ class HandOverController extends Controller
         }
     }
 
+    public function detail($estimation_unique){
+        try {
+            $estimation = Estimation::with('Vehicle','Vehicle.customer','Vehicle.carType','Vehicle.carType.carBrand','estimationRequest')->where('estimation_unique', $estimation_unique)->first();
+            if(!$estimation) {
+                return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
+            }
+
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($estimation, ['Data Detail']);
+        } catch (\Exception $e) {
+            return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
+        }
+    }
+
+    public function update(Request $request)
+    {
+        try {
+            $validation = Validator::make($request->all(),[
+                'estimation_unique'           => ['required'],
+                'vehicle_id'                  => ['required', 'integer'],
+                'request_order'               => ['required', 'array'],
+                'request_order.*.description' => ['required'],
+           ]);
+
+           if($validation->fails()){
+                return (new \App\Helpers\GlobalResponseHelper())->sendError($validation->errors()->all());
+            }
+
+           $estimation = Estimation::where('estimation_unique', $request->estimation_unique)->first();
+           if(!$estimation){
+                return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
+           }
+           if($estimation->status == 'New' || $estimation->status == 'Transfered'){
+                return (new \App\Helpers\GlobalResponseHelper())->sendError(['Gagal, Data sudah di keluarkan']);
+           }
+
+           $data = [
+                'vehicle_id' => $request->vehicle_id,
+                'updated_by' => auth()->user()->name
+            ];
+
+            $estimation->update($data);
+
+            $get_id = [];
+            foreach ($request->request_order as $key => $value) {
+                $get_id[] = $value['id'];
+            };
+
+            $deleteNotrequest = EstimationRequest::where('estimation_unique', $request->estimation_unique)->whereNotIn('id', $get_id)->delete();
+
+            foreach ($request->request_order as $key => $value) {
+                $detail_request = EstimationRequest::where('id', $value['id'])->where('estimation_unique', $request->estimation_unique)->first();
+               
+                if ($detail_request) {
+                    $data_detail = [
+                        'request'      => $value['description']
+                    ];
+                    $detail_request->update($data_detail);
+                } else {
+                    $data_detail = [
+                        'estimation_unique'  => $request->estimation_unique,
+                        'request'            => $value['description']
+                    ];
+                    EstimationRequest::create($data_detail);
+                }
+            }
+
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($estimation, ['Data Berhasil Disimpan']);
+        } catch (\Exception $e) {
+            return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
+        }
+    }
+
     public function printHandOver($estimation_unique)
     {
         try {
@@ -80,21 +152,43 @@ class HandOverController extends Controller
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
 
+            if($estimation->status == 'Draft'){
+                $estimation->update([
+                    'status' => 'New'
+                ]);
+            }
+
             $data = [
                 'estimation' => $estimation
             ];
             $pdf = PDF::loadView('documents.hand-over-document', $data)->setPaper('a4', 'potrait');
 
             $pdf_file = $pdf->output();
-
+            
             $directory = 'public/handover/'.$estimation_unique.'.pdf';
 
             \Storage::put($directory,$pdf_file);
 
-            $pdf_url = asset($directory);
+            $pdf_url = env('APP_URL').\Storage::url($directory);
 
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($pdf_url,['Data Berhasil Di Generate']);
+        } catch (\Exception $e) {
+            return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
+        }
+    }
 
+    public function delete($estimation_unique)
+    {
+        try {
+            $estimation = Estimation::where('estimation_unique',$estimation_unique)->first();
+            if(!$estimation){
+                return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
+            }
+            if($estimation->status == 'New' || $estimation->status == 'Transfered'){
+                return (new \App\Helpers\GlobalResponseHelper())->sendError(['Gagal, Data sudah di keluarkan']);
+           }
+            $estimation->delete();
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([],['Data Berhasil Dihapus']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }

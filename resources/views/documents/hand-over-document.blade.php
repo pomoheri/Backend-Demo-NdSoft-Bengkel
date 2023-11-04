@@ -19,7 +19,7 @@
             width: 100%; 
             border: 1px solid #ddd; 
             vertical-align: top; 
-            margin-top: 15px;
+            margin-top: 85px;
         }
 		.table-header th { 
             padding: 8px 5px; 
@@ -36,6 +36,13 @@
             border: 1px;
             font-size: 11px;
             border-collapse: collapse;
+        }
+        .request tbody {
+            page-break-after: auto; 
+            page-break-before: auto; 
+        }
+        .request tbody:last-child { 
+            page-break-after: never; 
         }
         .request th {
             border: 1px; 
@@ -63,10 +70,26 @@
         .page {
             /* page-break-after: auto; */
         }
+        header { 
+            position: fixed; 
+            top: -20px; 
+            left: 0px; 
+            right: 0px;  
+            height: 50px; 
+        }
+        footer { 
+            position: fixed; 
+            bottom: -55px; 
+            left: 0px; 
+            right: 0px;  
+            height: 50px; 
+            text-align: center; 
+            color: #808080;
+        }
     </style>
 </head>
 <body>
-    <div class="page">
+    <header>
         <table class="page_header">
             <tr>
                 <td style="text-align: left; width: 10%;">
@@ -85,6 +108,12 @@
                 <td style="text-align: right; width: 25%; font-size: 14px"><b>SURAT BUKTI SERVICE</b></td>
             </tr>
         </table>
+    </header>
+    <footer>
+        <div class="line"></div>
+        Copyright © {{ date('Y') }} - INT AUTOCARE
+    </footer>
+    <main>
         <table class="table-header">
             <tr>
                 <td><b>Kepada :</b></td>
@@ -106,7 +135,7 @@
                     Warna
                 </td>
                 @if ($estimation->Vehicle)
-                    <td style="width: 22%">
+                    <td style="width: 22%" colspan="2">
                         :  {{ ($estimation->Vehicle->carType) ? (($estimation->Vehicle->carType->carBrand) ? $estimation->Vehicle->carType->carBrand->name : '') : '' }} - {{ ($estimation->Vehicle->carType) ? $estimation->Vehicle->carType->name : '' }}<br>
                         : {{ $estimation->Vehicle->transmission }}<br>
                         : {{ $estimation->Vehicle->license_plate }}<br>
@@ -154,10 +183,6 @@
                 </tr>
             </table>
         </div>
-        <div class="footer">
-            <div class="line"></div>
-            Copyright © <?php echo date("Y");?> - INT AUTOCARE
-        </div>
-    </div>
+    </main>
 </body>
 </html>

@@ -1336,13 +1336,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}vehicle-management/edit/3",
+									"raw": "{{url}}vehicle-management/edit/2",
 									"host": [
 										"{{url}}vehicle-management"
 									],
 									"path": [
 										"edit",
-										"3"
+										"2"
 									]
 								}
 							},
@@ -2139,6 +2139,163 @@
 										"labour",
 										"delete",
 										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Hand Over",
+					"item": [
+						{
+							"name": "List Hand Over",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}service/hand-over?start_date&end_date",
+									"host": [
+										"{{url}}service"
+									],
+									"path": [
+										"hand-over"
+									],
+									"query": [
+										{
+											"key": "start_date",
+											"value": null,
+											"description": "nullable"
+										},
+										{
+											"key": "end_date",
+											"value": null,
+											"description": "nullable"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Serah Terima",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"vehicle_id\" : \"2\",\r\n    \"request_order\" : [\r\n        {\r\n            \"description\" : \"Ganti Olie\"\r\n        },\r\n        {\r\n            \"description\" : \"Service Rem Belakang\"\r\n        }\r\n    ]\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}service/hand-over/add",
+									"host": [
+										"{{url}}service"
+									],
+									"path": [
+										"hand-over",
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Print Hand Over",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}service/hand-over/print-hand-over/a16cf6de-4a93-49b5-998a-5bacd335aba1",
+									"host": [
+										"{{url}}service"
+									],
+									"path": [
+										"hand-over",
+										"print-hand-over",
+										"a16cf6de-4a93-49b5-998a-5bacd335aba1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Detail Hand Over",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}service/hand-over/detail/9dbad948-5076-48de-b8d7-3fecce5de6ae",
+									"host": [
+										"{{url}}service"
+									],
+									"path": [
+										"hand-over",
+										"detail",
+										"9dbad948-5076-48de-b8d7-3fecce5de6ae"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Hand Over",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"estimation_unique\" : \"9dbad948-5076-48de-b8d7-3fecce5de6ae\",\r\n    \"vehicle_id\" : \"2\",\r\n    \"request_order\" : [\r\n        {\r\n            \"id\": 4,\r\n            \"description\" : \"Ganti Olie\"\r\n        },\r\n        {\r\n            \"id\": \"\",\r\n            \"description\" : \"Ganti Olie new\"\r\n        }\r\n    ]\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}service/hand-over/update",
+									"host": [
+										"{{url}}service"
+									],
+									"path": [
+										"hand-over",
+										"update"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}service/hand-over/delete/a16cf6de-4a93-49b5-998a-5bacd335aba1",
+									"host": [
+										"{{url}}service"
+									],
+									"path": [
+										"hand-over",
+										"delete",
+										"a16cf6de-4a93-49b5-998a-5bacd335aba1"
 									]
 								}
 							},
