@@ -28,17 +28,19 @@ class LabourController extends Controller
         try {
             $validation = Validator::make($request->all(), [
                 'labour_code' => ['required', 'unique:labour,labour_code'],
+                'labour_name' => ['required', 'max:255'],
                 'frt'         => ['required', 'max:255'],
                 'price'       => ['required']
             ]);
 
-            if($validation->fails()){
+            if ($validation->fails()) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError($validation->errors()->all());
             }
 
             $data = [
                 'labour_code' => $request->labour_code,
-                'frt'         => $request->frt, 
+                'labour_name' => $request->labour_name,
+                'frt'         => $request->frt,
                 'price'       => $request->price,
                 'created_by'  => auth()->user()->name
             ];
@@ -55,7 +57,7 @@ class LabourController extends Controller
     {
         try {
             $data = Labour::where('id', $id)->first();
-            if(!$data) {
+            if (!$data) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($data, ['Data Detail Labour']);
@@ -69,29 +71,31 @@ class LabourController extends Controller
         try {
             $validation = Validator::make($request->all(), [
                 'id'          => ['required', 'integer'],
-                'labour_code' => ['required', 'unique:labour,labour_code,'.$request->id],
+                'labour_code' => ['required', 'unique:labour,labour_code,' . $request->id],
+                'labour_name' => ['required', 'max:255'],
                 'frt'         => ['required', 'max:255'],
                 'price'       => ['required']
             ]);
 
-            if($validation->fails()){
+            if ($validation->fails()) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError($validation->errors()->all());
             }
 
             $labour = Labour::where('id', $request->id)->first();
-            if(!$labour) {
+            if (!$labour) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
 
             $data = [
                 'labour_code' => $request->labour_code,
-                'frt'         => $request->frt, 
+                'labour_name' => $request->labour_name,
+                'frt'         => $request->frt,
                 'price'       => $request->price,
                 'updated_by'  => auth()->user()->name
             ];
 
             $labour->update($data);
-            
+
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Disimpan']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
