@@ -20,6 +20,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::post('/update', [\App\Http\Controllers\Api\Service\HandOverController::class, 'update']);
             Route::get('/print-hand-over/{estimation_unique}', [\App\Http\Controllers\Api\Service\HandOverController::class, 'printHandOver']);
             Route::get('/delete/{estimation_unique}', [\App\Http\Controllers\Api\Service\HandOverController::class, 'delete']);
+            Route::get('/transfer/{estimation_unique}', [\App\Http\Controllers\Api\Service\HandOverController::class, 'transferToWo']);
+        });
+        //Estimation (estimasi dibuat atas permintaan/hand over)
+        Route::group(['prefix' => 'estimation', "as" => 'estimation.'], function () {
+            Route::get('/', [\App\Http\Controllers\Api\Service\EstimationController::class, 'list']);
+        });
+        //WorkOrder
+        Route::group(['prefix' => 'work-order', "as" => 'work-order.'], function () {
+            Route::get('/', [\App\Http\Controllers\Api\Service\WorkOrderController::class, 'list']);
+            Route::post('/update', [\App\Http\Controllers\Api\Service\WorkOrderController::class, 'updateWo']);
         });
 
     });

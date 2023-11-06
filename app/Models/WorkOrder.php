@@ -18,10 +18,16 @@ class WorkOrder extends Model
         'remark',
         'technician',
         'created_by',
+        'updated_by'
     ];
 
     public function vehicle()
     {
         return $this->belongsTo(Vehicle::class, 'vehicle_id', 'id');
+    }
+
+    public function serviceRequest()
+    {
+        return $this->hasMany(ServiceRequest::class,'transaction_unique','transaction_unique');
     }
 }
