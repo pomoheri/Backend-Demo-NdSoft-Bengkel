@@ -7,6 +7,7 @@ use App\Models\PurchaseOrder;
 use App\Models\SellSparepart;
 use App\Models\SparePart;
 use App\Models\Supplier;
+use App\Models\WorkOrder;
 
 class GlobalGenerateCodeHelper
 {
@@ -84,6 +85,26 @@ class GlobalGenerateCodeHelper
         $currentMonth = now()->format('Y/m');
 
         $lastCode = SellSparepart::max('transaction_code');
+        $storedMonth = substr($lastCode, strlen($prefix), 7);
+
+        if ($storedMonth != $currentMonth) {
+            $nextNumber = 1;
+        } else {
+            $lastNumber = (int)substr($lastCode, -1 * $length);
+            $nextNumber = $lastNumber + 1;
+        }
+
+        $formattedNextNumber = str_pad($nextNumber, $length, '0', STR_PAD_LEFT); // Add leading zeros if necessary
+
+        $mnemonic = $prefix . $currentMonth . '/' . $formattedNextNumber;
+
+        return $mnemonic;
+    }
+    public function generateTransactionCodeWo($prefix = 'INT/WO/', $length = 4)
+    {
+        $currentMonth = now()->format('Y/m');
+
+        $lastCode = WorkOrder::max('transaction_code');
         $storedMonth = substr($lastCode, strlen($prefix), 7);
 
         if ($storedMonth != $currentMonth) {

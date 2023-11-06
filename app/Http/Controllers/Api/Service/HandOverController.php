@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Api\Service;
 
+use App\Models\ServiceRequest;
+use PDF;
+use App\Models\WorkOrder;
 use App\Models\Estimation;
-use App\Models\EstimationRequest;
 use Illuminate\Http\Request;
+use App\Models\EstimationRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use PDF;
 
 class HandOverController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:sanctum');
-    // }
-
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum');
+    }
     public function list(Request $request)
     {
         try {
@@ -26,7 +27,7 @@ class HandOverController extends Controller
             if(isset($request->end_date) && $request->end_date){
                 $data = $data->where('created_at', '<=' ,$request->end_date);
             }
-            $data = $data->with('Vehicle')->orderBy('created_at', 'desc')->get();
+            $data = $data->where('status', 'Draft')->with('Vehicle')->orderBy('created_at', 'desc')->get();
             
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($data, ['List Data HandOver']);
         } catch (\Exception $e) {
@@ -41,6 +42,8 @@ class HandOverController extends Controller
                 'vehicle_id'            => ['required', 'integer'],
                 'request_order'               => ['required', 'array'],
                 'request_order.*.description' => ['required'],
+                'carrier'               => ['required'],
+                'carrier_phone'         => ['required']
            ]);
 
            if($validation->fails()){
@@ -50,6 +53,8 @@ class HandOverController extends Controller
            $data = [
                 'vehicle_id' => $request->vehicle_id,
                 'status'     => 'Draft',
+                'carrier'    => $request->carrier,
+                'carrier_phone'    => $request->carrier_phone,
                 'created_by' => auth()->user()->name
            ];
 
@@ -93,6 +98,8 @@ class HandOverController extends Controller
                 'vehicle_id'                  => ['required', 'integer'],
                 'request_order'               => ['required', 'array'],
                 'request_order.*.description' => ['required'],
+                'carrier'                     => ['required', 'max:200'],
+                'carrier_phone'               => ['required', 'max:15']
            ]);
 
            if($validation->fails()){
@@ -108,8 +115,10 @@ class HandOverController extends Controller
            }
 
            $data = [
-                'vehicle_id' => $request->vehicle_id,
-                'updated_by' => auth()->user()->name
+                'vehicle_id'    => $request->vehicle_id,
+                'updated_by'    => auth()->user()->name,
+                'carrier'       => $request->carrier,
+                'carrier_phone' => $request->carrier_phone,
             ];
 
             $estimation->update($data);
@@ -152,12 +161,6 @@ class HandOverController extends Controller
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
 
-            if($estimation->status == 'Draft'){
-                $estimation->update([
-                    'status' => 'New'
-                ]);
-            }
-
             $data = [
                 'estimation' => $estimation
             ];
@@ -189,6 +192,51 @@ class HandOverController extends Controller
            }
             $estimation->delete();
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse([],['Data Berhasil Dihapus']);
+        } catch (\Exception $e) {
+            return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
+        }
+    }
+
+    public function transferToWo($estimation_unique)
+    {
+        try {
+            $estimation = Estimation::with('Vehicle','estimationRequest')->where('estimation_unique', $estimation_unique)->first();
+            if(!$estimation){
+                return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
+            }
+
+            $work_order = WorkOrder::where('transaction_unique', $estimation->estimation_unique)->first();
+            if($work_order){
+                return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Sudah ada di Work Order']);
+            }else{
+                $wo_code = (new \App\Helpers\GlobalGenerateCodeHelper())->generateTransactionCodeWo();
+                
+                $work_order = WorkOrder::create([
+                    'transaction_code'     => $wo_code,
+                    'transaction_unique'   => $estimation->estimation_unique,
+                    'vehicle_id'           => $estimation->vehicle_id,
+                    'total'                => 0,
+                    'status'               => 'Draft',
+                    'carrier'              => $estimation->carrier,
+                    'carrier_phone'        => $estimation->carrier_phone,
+                    'created_by'           => auth()->user()->name
+                ]);
+
+                if($estimation->estimationRequest){
+                    foreach ($estimation->estimationRequest as $key => $value) {
+                        $service_request = ServiceRequest::create([
+                            'transaction_unique' => $work_order->transaction_unique,
+                            'request'            => $value->request
+                        ]);
+                    }
+                }
+
+                $estimation->update([
+                    'status' => 'Transfered'
+                ]);
+            }
+            
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse([$work_order],['Data Berhasil Disimpan']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
