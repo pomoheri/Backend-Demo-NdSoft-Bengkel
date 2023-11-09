@@ -118,13 +118,13 @@
             <tr>
                 <td><b>Kepada :</b></td>
                 <td colspan="2"><b>Detail Kendaraan :</b></td>
-                <td align="right"><b>Tgl Bukti : {{ Carbon\Carbon::parse($estimation->created_at)->format('d-M-Y') }}</b></td>
+                <td align="right"><b>Tgl Bukti : {{ Carbon\Carbon::parse($handOver->created_at)->format('d-M-Y') }}</b></td>
             </tr>
             <tr>
                 <td style="width: 34%">
-                    <b>{{ ($estimation->Vehicle) ? (($estimation->Vehicle->customer) ? $estimation->Vehicle->customer->name : '') : ''}}</b><br>
-                    {{ ($estimation->Vehicle) ? (($estimation->Vehicle->customer) ? $estimation->Vehicle->customer->address : '') : ''}}<br>
-                    {{ ($estimation->Vehicle) ? (($estimation->Vehicle->customer) ? $estimation->Vehicle->customer->phone : '') : ''}}<br>
+                    <b>{{ ($handOver->vehicle) ? (($handOver->vehicle->customer) ? $handOver->vehicle->customer->name : '') : ''}}</b><br>
+                    {{ ($handOver->vehicle) ? (($handOver->vehicle->customer) ? $handOver->vehicle->customer->address : '') : ''}}<br>
+                    {{ ($handOver->vehicle) ? (($handOver->vehicle->customer) ? $handOver->vehicle->customer->phone : '') : ''}}<br>
                 </td>
                 <td style="width: 11%">
                     Jenis Mobil<br>
@@ -134,14 +134,14 @@
                     No. Mesin <br>
                     Warna
                 </td>
-                @if ($estimation->Vehicle)
+                @if ($handOver->vehicle)
                     <td style="width: 22%" colspan="2">
-                        :  {{ ($estimation->Vehicle->carType) ? (($estimation->Vehicle->carType->carBrand) ? $estimation->Vehicle->carType->carBrand->name : '') : '' }} - {{ ($estimation->Vehicle->carType) ? $estimation->Vehicle->carType->name : '' }}<br>
-                        : {{ $estimation->Vehicle->transmission }}<br>
-                        : {{ $estimation->Vehicle->license_plate }}<br>
-                        : {{ $estimation->Vehicle->chassis_no }}<br>
-                        : {{ $estimation->Vehicle->engine_no }}<br>
-                        : {{ $estimation->Vehicle->color }}<br>
+                        :  {{ ($handOver->vehicle->carType) ? (($handOver->vehicle->carType->carBrand) ? $handOver->vehicle->carType->carBrand->name : '') : '' }} - {{ ($handOver->vehicle->carType) ? $handOver->vehicle->carType->name : '' }}<br>
+                        : {{ $handOver->vehicle->transmission }}<br>
+                        : {{ $handOver->vehicle->license_plate }}<br>
+                        : {{ $handOver->vehicle->chassis_no }}<br>
+                        : {{ $handOver->vehicle->engine_no }}<br>
+                        : {{ $handOver->vehicle->color }}<br>
                     </td>
                 @endif
             </tr>
@@ -152,8 +152,8 @@
                 <th style="width: 10%">#</th>
                 <th style="width: 90%">Request</th>
             </tr>
-            @if ($estimation->estimationRequest->count() > 0)
-                @foreach ($estimation->estimationRequest as $key => $req)
+            @if ($handOver->handOverRequest->count() > 0)
+                @foreach ($handOver->handOverRequest as $key => $req)
                     <tr>
                         <td style="width: 10%; text-align: center">{{ $key+1 }}</td>
                         <td style="width: 90%; margin-left:5px;">{{ $req->request }}</td>

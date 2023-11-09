@@ -66,7 +66,11 @@ class WorkOrderController extends Controller
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
 
+            $wo_code = (new \App\Helpers\GlobalGenerateCodeHelper())->generateTransactionCodeWo();
+
             $data = [
+                'transaction_code' => $wo_code,
+                'status'     => 'New',
                 'remark'     => $request->remark,
                 'updated_by' => auth()->user()->name,
                 'technician' => $request->technician
