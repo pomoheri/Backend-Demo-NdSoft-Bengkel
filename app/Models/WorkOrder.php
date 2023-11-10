@@ -30,4 +30,19 @@ class WorkOrder extends Model
     {
         return $this->hasMany(ServiceRequest::class,'transaction_unique','transaction_unique');
     }
+
+    public function serviceSublet()
+    {
+        return $this->hasMany(ServiceSublet::class,'transaction_unique','transaction_unique');
+    }
+
+    public function serviceLabour()
+    {
+        return $this->hasMany(ServiceLabour::class,'transaction_unique', 'transaction_unique');
+    }
+
+    public function sellSparepartDetail()
+    {
+        return $this->hasMany(SellSparepartDetail::class,'transaction_unique', 'transaction_unique');
+    }
 }
