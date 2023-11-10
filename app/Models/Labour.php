@@ -14,4 +14,9 @@ class Labour extends Model
         'created_by',
         'updated_by',
     ];
+
+    public function serviceLabour()
+    {
+        return $this->hasMany(ServiceLabour::class);
+    }
 }
