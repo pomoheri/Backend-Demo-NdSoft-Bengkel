@@ -36,6 +36,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         //Invoice
         Route::group(['prefix' => 'invoice', "as" => 'invoice.'], function () {
             Route::get('/', [\App\Http\Controllers\Api\Service\InvoiceController::class, 'list']);
+            Route::get('/detail/{transaction_unique}', [\App\Http\Controllers\Api\Service\InvoiceController::class, 'detail']);
+            Route::get('/submit-payment/{transaction_unique}', [\App\Http\Controllers\Api\Service\InvoiceController::class, 'submitPayment']);
         });
 
     });

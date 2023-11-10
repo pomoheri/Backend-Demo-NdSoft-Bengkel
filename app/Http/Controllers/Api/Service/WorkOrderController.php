@@ -68,22 +68,12 @@ class WorkOrderController extends Controller
                 return (new \App\Helpers\GlobalResponseHelper())->sendError($validation->errors()->all());
             }
 
-            $wo = WorkOrder::where('transaction_unique', $request->transaction_unique)->first();
+            $wo = WorkOrder::with('serviceSublet', 'serviceLabour', 'sellSparepartDetail')->where('transaction_unique', $request->transaction_unique)->first();
             if(!$wo){
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
 
             $wo_code = (new \App\Helpers\GlobalGenerateCodeHelper())->generateTransactionCodeWo();
-
-            $data = [
-                'transaction_code' => $wo_code,
-                'status'           => 'New',
-                'remark'           => $request->remark,
-                'updated_by'       => auth()->user()->name,
-                'technician'       => $request->technician
-            ];
-            
-            $wo->update($data);
 
             //Transaction Service Request
             if($request->service_request && count($request->service_request) > 0){
@@ -134,6 +124,36 @@ class WorkOrderController extends Controller
                 }
                 $service_part = $this->servicePart($request, $wo);
             }
+
+            $total_sublet = 0;
+            if($wo->serviceSublet && count($wo->serviceSublet) > 0){
+                foreach ($wo->serviceSublet as $value) {
+                    $total_sublet += $value->subtotal;
+                }
+            }
+            $total_labour = 0;
+            if($wo->serviceLabour && count($wo->serviceLabour) > 0){
+                foreach ($wo->serviceLabour as $val) {
+                    $total_labour += $val->subtotal;
+                }
+            }
+            $total_part = 0;
+            if($wo->sellSparepartDetail && count($wo->sellSparepartDetail) > 0){
+                foreach ($wo->sellSparepartDetail as $part) {
+                    $total_part += $part->subtotal;
+                }
+            }
+
+            $data = [
+                'transaction_code' => $wo_code,
+                'status'           => 'New',
+                'total'            => $total_sublet + $total_labour + $total_part,
+                'remark'           => $request->remark,
+                'updated_by'       => auth()->user()->name,
+                'technician'       => $request->technician
+            ];
+            
+            $wo->update($data);
 
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($wo, ['Data Berhasil Disimpan']);
 

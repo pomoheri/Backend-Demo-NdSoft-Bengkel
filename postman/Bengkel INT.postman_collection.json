@@ -2450,7 +2450,36 @@
 							"name": "List Invoice",
 							"request": {
 								"method": "GET",
-								"header": []
+								"header": [],
+								"url": {
+									"raw": "{{url}}service/invoice/",
+									"host": [
+										"{{url}}service"
+									],
+									"path": [
+										"invoice",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Detail",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}service/invoice/detail/bd7bcbc9-0d7f-44f9-b32a-6c2788dced2a",
+									"host": [
+										"{{url}}service"
+									],
+									"path": [
+										"invoice",
+										"detail",
+										"bd7bcbc9-0d7f-44f9-b32a-6c2788dced2a"
+									]
+								}
 							},
 							"response": []
 						}
