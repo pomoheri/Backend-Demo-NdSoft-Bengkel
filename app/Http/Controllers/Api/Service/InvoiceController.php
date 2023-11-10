@@ -30,4 +30,20 @@ class InvoiceController extends Controller
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
     }
+    public function detail($transaction_unique)
+    {
+        try {
+            $invoice = ServiceInvoice::with('workOrder','workOrder.vehicle','workOrder.vehicle.customer', 'workOrder.serviceRequest' , 'workOrder.serviceLabour', 'workOrder.serviceSublet', 'workOrder.sellSparepartDetail')
+                                    ->where('transaction_unique', $transaction_unique)
+                                    ->first();
+            if(!$invoice) {
+                return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
+            }
+
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($invoice, ['Data Detail Invoice']);
+
+        } catch (\Exception $e) {
+            return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
+        }
+    }
 }
