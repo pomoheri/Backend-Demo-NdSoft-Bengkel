@@ -16,5 +16,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::group(['prefix' => 'small-transaction', "as" => 'small-transaction.'], function () {
             Route::get('/{start_date?}/{end_date?}', [\App\Http\Controllers\Api\Register\RegisterSmallTransactionController::class, 'list']);
         });
+        //Register Service Invoice
+        Route::group(['prefix' => 'service-invoice', "as" => 'service-invoice.'], function () {
+            Route::get('/{start_date?}/{end_date?}', [\App\Http\Controllers\Api\Register\RegisterServiceInvoiceController::class, 'list']);
+        });
     });
 });
