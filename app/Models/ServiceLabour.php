@@ -15,4 +15,9 @@ class ServiceLabour extends Model
         'subtotal',
     ];
 
+    public function labour()
+    {
+        return $this->belongsTo(Labour::class, 'labour_id', 'id');
+    }
+
 }

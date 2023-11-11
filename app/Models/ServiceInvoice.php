@@ -16,5 +16,11 @@ class ServiceInvoice extends Model
         'created_by',
         'closed_by',
         'closed_at',
+        'is_paid'
     ];
+
+    public function workOrder()
+    {
+        return $this->belongsTo(WorkOrder::class, 'transaction_unique', 'transaction_unique');
+    }
 }
