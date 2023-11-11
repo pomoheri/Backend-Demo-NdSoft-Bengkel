@@ -1889,6 +1889,28 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Register Service Invoice",
+					"item": [
+						{
+							"name": "List",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}register/service-invoice",
+									"host": [
+										"{{url}}register"
+									],
+									"path": [
+										"service-invoice"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
@@ -2478,6 +2500,39 @@
 										"invoice",
 										"detail",
 										"bd7bcbc9-0d7f-44f9-b32a-6c2788dced2a"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Submit Payment",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"transaction_unique\" : \"bd7bcbc9-0d7f-44f9-b32a-6c2788dced2a\",\r\n    \"payment_method\"     : \"Kredit\", //[enum:Tunai,Kredit]\r\n    \"payment_gateway\"    : \"Cash\", //[enum('Cash','Transfer','QRIS','EDC')]\r\n\r\n    //if payment method kredit with request\r\n    \"amount\"             : \"1000\", //required\r\n    \"remark\"             : \"Kekurangan nya\"\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}service/invoice/submit-payment",
+									"host": [
+										"{{url}}service"
+									],
+									"path": [
+										"invoice",
+										"submit-payment"
 									]
 								}
 							},

@@ -16,6 +16,7 @@ class ServiceInvoice extends Model
         'created_by',
         'closed_by',
         'closed_at',
+        'is_paid'
     ];
 
     public function workOrder()
