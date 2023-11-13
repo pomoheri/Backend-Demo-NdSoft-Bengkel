@@ -11,6 +11,7 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
+        "nim4n/date-format-indonesia": "^0.0.1",
         "ramsey/uuid": "^4.7"
     },
     "require-dev": {
