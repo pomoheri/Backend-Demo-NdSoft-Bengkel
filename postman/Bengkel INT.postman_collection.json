@@ -1911,6 +1911,28 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Register Workorder",
+					"item": [
+						{
+							"name": "List",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}register/work-order",
+									"host": [
+										"{{url}}register"
+									],
+									"path": [
+										"work-order"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
@@ -2615,6 +2637,10 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Laporan",
+			"item": []
 		},
 		{
 			"name": "Login",
