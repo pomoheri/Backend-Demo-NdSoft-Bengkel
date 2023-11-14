@@ -17,6 +17,7 @@ class WorkOrder extends Model
         'status',
         'remark',
         'technician',
+        'km',
         'created_by',
         'updated_by'
     ];
@@ -28,21 +29,21 @@ class WorkOrder extends Model
 
     public function serviceRequest()
     {
-        return $this->hasMany(ServiceRequest::class,'transaction_unique','transaction_unique');
+        return $this->hasMany(ServiceRequest::class, 'transaction_unique', 'transaction_unique');
     }
 
     public function serviceSublet()
     {
-        return $this->hasMany(ServiceSublet::class,'transaction_unique','transaction_unique');
+        return $this->hasMany(ServiceSublet::class, 'transaction_unique', 'transaction_unique');
     }
 
     public function serviceLabour()
     {
-        return $this->hasMany(ServiceLabour::class,'transaction_unique', 'transaction_unique');
+        return $this->hasMany(ServiceLabour::class, 'transaction_unique', 'transaction_unique');
     }
 
     public function sellSparepartDetail()
     {
-        return $this->hasMany(SellSparepartDetail::class,'transaction_unique', 'transaction_unique');
+        return $this->hasMany(SellSparepartDetail::class, 'transaction_unique', 'transaction_unique');
     }
 }

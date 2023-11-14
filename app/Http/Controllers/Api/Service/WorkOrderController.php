@@ -25,14 +25,14 @@ class WorkOrderController extends Controller
     {
         try {
             $data = WorkOrder::query();
-            if(isset($request->start_date) && $request->start_date){
+            if (isset($request->start_date) && $request->start_date) {
                 $data = $data->where('created_at', '>=', $request->start_date);
             }
-            if(isset($request->end_date) && $request->end_date){
+            if (isset($request->end_date) && $request->end_date) {
                 $data = $data->where('created_at', '<=', $request->end_date);
             }
 
-            $data = $data->where('status', '!=', 'Closed')->orderBy('created_at', 'desc')->get();
+            $data = $data->where('status', '!=', 'Closed')->with('vehicle', 'vehicle.carType', 'vehicle.carType.carBrand', 'vehicle.customer')->orderBy('created_at', 'desc')->get();
 
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($data, ['List Data Work order']);
         } catch (\Exception $e) {
@@ -43,15 +43,14 @@ class WorkOrderController extends Controller
     public function detail($transaction_unique)
     {
         try {
-            $wo = WorkOrder::with(['vehicle','vehicle.customer','serviceRequest','serviceLabour','serviceLabour.labour','serviceSublet','sellSparepartDetail','sellSparepartDetail.sparepart'])
-                            ->where('transaction_unique', $transaction_unique)
-                            ->first();
-            if(!$wo){
+            $wo = WorkOrder::with(['vehicle', 'vehicle.customer', 'vehicle.carType', 'vehicle.carType.carBrand', 'serviceRequest', 'serviceLabour', 'serviceLabour.labour', 'serviceSublet', 'sellSparepartDetail', 'sellSparepartDetail.sparepart'])
+                ->where('transaction_unique', $transaction_unique)
+                ->first();
+            if (!$wo) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
 
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($wo, ['Detail Work Order']);
-            
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
@@ -64,36 +63,36 @@ class WorkOrderController extends Controller
                 'transaction_unique'     => ['required']
             ]);
 
-            if($validation->fails()){
+            if ($validation->fails()) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError($validation->errors()->all());
             }
 
             $wo = WorkOrder::with('serviceSublet', 'serviceLabour', 'sellSparepartDetail')->where('transaction_unique', $request->transaction_unique)->first();
-            if(!$wo){
+            if (!$wo) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
 
             $wo_code = (new \App\Helpers\GlobalGenerateCodeHelper())->generateTransactionCodeWo();
 
             //Transaction Service Request
-            if($request->service_request && count($request->service_request) > 0){
+            if ($request->service_request && count($request->service_request) > 0) {
                 $validation_request = Validator::make($request->all(), [
                     'service_request'               => ['required', 'array'],
                     'service_request.*.description' => ['required']
                 ]);
-                if($validation_request->fails()){
+                if ($validation_request->fails()) {
                     return (new \App\Helpers\GlobalResponseHelper())->sendError($validation_request->errors()->all());
                 }
                 $service_request = $this->serviceRequest($request, $wo);
             }
 
             //Transaction Service Labour
-            if($request->service_labour && count($request->service_labour) > 0){
+            if ($request->service_labour && count($request->service_labour) > 0) {
                 $validation_labour = Validator::make($request->all(), [
                     'service_labour'             => ['required', 'array'],
                     'service_labour.*.labour_id' => ['required']
                 ]);
-                if($validation_labour->fails()){
+                if ($validation_labour->fails()) {
                     return (new \App\Helpers\GlobalResponseHelper())->sendError($validation_labour->errors()->all());
                 }
                 $service_labour = $this->serviceLabour($request, $wo);
@@ -106,39 +105,39 @@ class WorkOrderController extends Controller
                     'service_sublet.*.sublet' => ['required'],
                     'service_sublet.*.harga'  => ['required']
                 ]);
-                if($service_sublet->fails()){
+                if ($service_sublet->fails()) {
                     return (new \App\Helpers\GlobalResponseHelper())->sendError($service_sublet->errors()->all());
                 }
                 $service_sublet = $this->serviceSublet($request, $wo);
             }
 
             //Transaction Sparepart
-            if($request->service_part && count($request->service_part) > 0){
+            if ($request->service_part && count($request->service_part) > 0) {
                 $service_part = Validator::make($request->all(), [
                     'service_part'                 => ['required', 'array'],
                     'service_part.*.spare_part_id' => ['required'],
                     'service_part.*.quantity'      => ['required']
                 ]);
-                if($service_part->fails()){
+                if ($service_part->fails()) {
                     return (new \App\Helpers\GlobalResponseHelper())->sendError($service_part->errors()->all());
                 }
                 $service_part = $this->servicePart($request, $wo);
             }
 
             $total_sublet = 0;
-            if($wo->serviceSublet && count($wo->serviceSublet) > 0){
+            if ($wo->serviceSublet && count($wo->serviceSublet) > 0) {
                 foreach ($wo->serviceSublet as $value) {
                     $total_sublet += $value->subtotal;
                 }
             }
             $total_labour = 0;
-            if($wo->serviceLabour && count($wo->serviceLabour) > 0){
+            if ($wo->serviceLabour && count($wo->serviceLabour) > 0) {
                 foreach ($wo->serviceLabour as $val) {
                     $total_labour += $val->subtotal;
                 }
             }
             $total_part = 0;
-            if($wo->sellSparepartDetail && count($wo->sellSparepartDetail) > 0){
+            if ($wo->sellSparepartDetail && count($wo->sellSparepartDetail) > 0) {
                 foreach ($wo->sellSparepartDetail as $part) {
                     $total_part += $part->subtotal;
                 }
@@ -150,13 +149,13 @@ class WorkOrderController extends Controller
                 'total'            => $total_sublet + $total_labour + $total_part,
                 'remark'           => $request->remark,
                 'updated_by'       => auth()->user()->name,
-                'technician'       => $request->technician
+                'technician'       => $request->technician,
+                'km'               => $request->km
             ];
-            
+
             $wo->update($data);
 
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($wo, ['Data Berhasil Disimpan']);
-
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
@@ -273,15 +272,15 @@ class WorkOrderController extends Controller
                 'status'             => ['required', 'in:On Progress,Outstanding'],
             ]);
 
-            if($validation->fails()){
+            if ($validation->fails()) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError($validation->errors()->all());
             }
 
             $wo = WorkOrder::where('transaction_unique', $request->transaction_unique)->first();
-            if(!$wo){
+            if (!$wo) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
-            if($request->status == 'Outstanding'){
+            if ($request->status == 'Outstanding') {
                 $invoice_code = (new \App\Helpers\GlobalGenerateCodeHelper())->generateTransactionCodeInvoice();
 
                 $data_invoice = [
@@ -298,7 +297,6 @@ class WorkOrderController extends Controller
             ]);
 
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse([], ['Data Berhasil Disimpan']);
-
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }

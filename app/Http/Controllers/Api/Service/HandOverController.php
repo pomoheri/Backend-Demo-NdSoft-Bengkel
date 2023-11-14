@@ -222,6 +222,7 @@ class HandOverController extends Controller
                     'status'               => 'Draft',
                     'carrier'              => $handOver->carrier,
                     'carrier_phone'        => $handOver->carrier_phone,
+                    'km'                   => $handOver->vehicle->last_km,
                     'created_by'           => auth()->user()->name
                 ]);
 
