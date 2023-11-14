@@ -20,5 +20,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::group(['prefix' => 'service-invoice', "as" => 'service-invoice.'], function () {
             Route::get('/{start_date?}/{end_date?}', [\App\Http\Controllers\Api\Register\RegisterServiceInvoiceController::class, 'list']);
         });
+        //Register Workorder
+        Route::group(['prefix' => 'work-order', "as" => 'work-order.'], function () {
+            Route::get('/{start_date?}/{end_date?}', [\App\Http\Controllers\Api\Register\RegisterWorkOrderController::class, 'list']);
+        });
     });
 });

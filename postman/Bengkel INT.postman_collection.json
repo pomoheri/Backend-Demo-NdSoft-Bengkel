@@ -1911,6 +1911,28 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Register Workorder",
+					"item": [
+						{
+							"name": "List",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}register/work-order",
+									"host": [
+										"{{url}}register"
+									],
+									"path": [
+										"work-order"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
@@ -2541,6 +2563,84 @@
 					]
 				}
 			]
+		},
+		{
+			"name": "Rekap Harian",
+			"item": [
+				{
+					"name": "Penjualan Langsung Sparepart",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}rekap-harian/invoice-sell?date=2023-10-26",
+							"host": [
+								"{{url}}rekap-harian"
+							],
+							"path": [
+								"invoice-sell"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2023-10-26"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invoice Service",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}rekap-harian/invoice-service?date=2023-11-11",
+							"host": [
+								"{{url}}rekap-harian"
+							],
+							"path": [
+								"invoice-service"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2023-11-11"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-pdf",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}rekap-harian/get-pdf?date=2023-10-26",
+							"host": [
+								"{{url}}rekap-harian"
+							],
+							"path": [
+								"get-pdf"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2023-10-26"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Laporan",
+			"item": []
 		},
 		{
 			"name": "Login",
