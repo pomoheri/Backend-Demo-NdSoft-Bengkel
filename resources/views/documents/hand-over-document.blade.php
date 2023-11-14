@@ -11,7 +11,8 @@
             border: none;
             background-color: #F8F8FF;
             border-bottom: solid 1mm #696969;
-            padding: 1mm
+            padding: 1mm;
+            font-family: 'Helvetica Neue', Helvetica, Arial;
         }
         .table-header { 
             border-collapse: collapse; 
@@ -53,16 +54,6 @@
             border: 1px; 
             height: 15px;
         }
-        .footer {
-            position: fixed;
-            bottom: -30px;
-            left: 0;
-            right: 0;
-            height: 40px;
-            color: #808080;
-            text-align: center;
-            line-height: 40px;
-        }
         .line {
             width: 100%;
             border-top: 1px solid #000;
@@ -85,6 +76,7 @@
             height: 50px; 
             text-align: center; 
             color: #808080;
+            font-family: 'Helvetica Neue', Helvetica, Arial;
         }
     </style>
 </head>
@@ -102,7 +94,7 @@
                         Gandu, Sendangtirto<br>
                         Berbah, Sleman<br>
                         Yogyakarta<br>
-                        0821-3782-5012
+                        0821-3782-5012<br>
                     </span>
                 </td>
                 <td style="text-align: right; width: 25%; font-size: 14px"><b>SURAT BUKTI SERVICE</b></td>
