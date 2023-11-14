@@ -125,6 +125,11 @@ class WorkOrderController extends Controller
                 $service_part = $this->servicePart($request, $wo);
             }
 
+            $wo = WorkOrder::with('serviceSublet', 'serviceLabour', 'sellSparepartDetail')->where('transaction_unique', $request->transaction_unique)->first();
+            if(!$wo){
+                return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
+            }
+
             $total_sublet = 0;
             if($wo->serviceSublet && count($wo->serviceSublet) > 0){
                 foreach ($wo->serviceSublet as $value) {
