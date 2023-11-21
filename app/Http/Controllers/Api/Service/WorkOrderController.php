@@ -151,7 +151,7 @@ class WorkOrderController extends Controller
 
             $data = [
                 'transaction_code' => $wo_code,
-                'status'           => 'New',
+                'status'           => ($wo->status == 'Draft') ? 'New' : $wo->status,
                 'total'            => $total_sublet + $total_labour + $total_part,
                 'remark'           => $request->remark,
                 'updated_by'       => auth()->user()->name,
