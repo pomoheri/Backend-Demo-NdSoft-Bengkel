@@ -63,7 +63,7 @@ class GlobalGenerateCodeHelper
     }
     public function generateTransactionCode($prefix = 'INT/PO/', $length = 4)
     {
-        $currentMonth = now()->format('Y/m');
+        $currentMonth = now()->format('y/m');
 
         $lastCode = PurchaseOrder::max('transaction_code');
         $storedMonth = substr($lastCode, strlen($prefix), 7);
@@ -83,7 +83,7 @@ class GlobalGenerateCodeHelper
     }
     public function generateTransactionCodeSell($prefix = 'INT/PL/', $length = 4)
     {
-        $currentMonth = now()->format('Y/m');
+        $currentMonth = now()->format('y/m');
 
         $lastCode = SellSparepart::max('transaction_code');
         $storedMonth = substr($lastCode, strlen($prefix), 7);
@@ -103,7 +103,7 @@ class GlobalGenerateCodeHelper
     }
     public function generateTransactionCodeWo($prefix = 'INT/WO/', $length = 4)
     {
-        $currentMonth = now()->format('Y/m');
+        $currentMonth = now()->format('y/m');
 
         $lastCode = WorkOrder::max('transaction_code');
         $storedMonth = substr($lastCode, strlen($prefix), 7);
@@ -123,7 +123,7 @@ class GlobalGenerateCodeHelper
     }
     public function generateTransactionCodeInvoice($prefix = 'INT/INV/', $length = 4)
     {
-        $currentMonth = now()->format('Y/m');
+        $currentMonth = now()->format('y/m');
 
         $lastCode = ServiceInvoice::max('transaction_code');
         $storedMonth = substr($lastCode, strlen($prefix), 7);

@@ -125,7 +125,7 @@ class WorkOrderController extends Controller
             }
 
             $wo = WorkOrder::with('serviceSublet', 'serviceLabour', 'sellSparepartDetail')->where('transaction_unique', $request->transaction_unique)->first();
-            if(!$wo){
+            if (!$wo) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
 
@@ -150,7 +150,7 @@ class WorkOrderController extends Controller
 
             $data = [
                 'transaction_code' => $wo_code,
-                'status'           => 'New',
+                'status'           => $wo->status = 'Draft' ? 'New' : $wo->status,
                 'total'            => $total_sublet + $total_labour + $total_part,
                 'remark'           => $request->remark,
                 'updated_by'       => auth()->user()->name,
