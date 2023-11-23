@@ -11,8 +11,6 @@ class Estimation extends Model
     protected $fillable = [
         'estimation_unique',
         'vehicle_id',
-        'carrier',
-        'carrier_phone',
         'labour',
         'spare_part',
         'sublet',
