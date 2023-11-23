@@ -307,8 +307,16 @@ class InvoiceController extends Controller
                     'remark'           => $request->remark,
                     'updated_by'       => auth()->user()->name
                 ];
-                $invoice->update($data);
+                $invoice->workOrder->update($data);
             }
+
+            $invoice_code = (new \App\Helpers\GlobalGenerateCodeHelper())->generateTransactionCodeInvoice();
+
+            $invoice->update([
+                'transaction_code' => ($invoice->status == 'Draft') ? $invoice_code : $invoice->transaction_code,
+                'payment_method'   => $request->payment_method,
+                'payment_gateway'  => $request->payment_gateway
+            ]);
 
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($invoice, ['Data Berhasil Di Update']);
             
