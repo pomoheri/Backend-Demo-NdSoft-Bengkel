@@ -38,6 +38,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('/', [\App\Http\Controllers\Api\Service\InvoiceController::class, 'list']);
             Route::get('/detail/{transaction_unique}', [\App\Http\Controllers\Api\Service\InvoiceController::class, 'detail']);
             Route::post('/submit-payment', [\App\Http\Controllers\Api\Service\InvoiceController::class, 'submitPayment']);
+            Route::post('/update-invoice', [\App\Http\Controllers\Api\Service\InvoiceController::class, 'updateInvoice']);
+            Route::get('/get-pdf/{transaction_unique}', [\App\Http\Controllers\Api\Service\InvoiceController::class, 'getPdf']);
         });
 
     });
