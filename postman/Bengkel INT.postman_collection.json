@@ -2485,7 +2485,35 @@
 				},
 				{
 					"name": "Estimation",
-					"item": []
+					"item": [
+						{
+							"name": "List Estimation",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}service/estimation?start_date=2023-06-10&end_date=2023-11-29",
+									"host": [
+										"{{url}}service"
+									],
+									"path": [
+										"estimation"
+									],
+									"query": [
+										{
+											"key": "start_date",
+											"value": "2023-06-10"
+										},
+										{
+											"key": "end_date",
+											"value": "2023-11-29"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				},
 				{
 					"name": "Service Invoice",
@@ -2555,6 +2583,58 @@
 									"path": [
 										"invoice",
 										"submit-payment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get PDF",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}service/invoice/get-pdf/bd7bcbc9-0d7f-44f9-b32a-6c2788dced2a",
+									"host": [
+										"{{url}}service"
+									],
+									"path": [
+										"invoice",
+										"get-pdf",
+										"bd7bcbc9-0d7f-44f9-b32a-6c2788dced2a"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Invoice",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"transaction_unique\" : \"bd7bcbc9-0d7f-44f9-b32a-6c2788dced2a\", //[required]\r\n    \"payment_method\"     : \"Kredit\", //[enum:Tunai,Kredit]\r\n    \"payment_gateway\"    : \"Cash\", //[enum('Cash','Transfer','QRIS','EDC')]\r\n    \"remark\"             : \"Cek Update remark\",\r\n    \"service_request\"    : [\r\n        {\r\n            \"id\" : \"1\",\r\n            \"solution\" : \"Ganti Ban Baru\"\r\n        }\r\n    ],\r\n    \"service_labour\"    : [\r\n        {\r\n            \"id\" : \"1\",\r\n            \"frt\" : \"1.5\",\r\n            \"discount\" : \"10000\"\r\n        }\r\n    ],\r\n    \"service_part\"     : [\r\n        {\r\n            \"id\" : \"13\",\r\n            \"quantity\" : \"20\",\r\n            \"discount\" : \"5000\"\r\n\r\n        }\r\n    ],\r\n    \"service_sublet\" : [\r\n        {\r\n            \"id\" : \"1\",\r\n            \"sublet\" : \"xx\",\r\n            \"harga\" : \"5000\"\r\n        }\r\n    ] \r\n}"
+								},
+								"url": {
+									"raw": "{{url}}service/invoice/update-invoice",
+									"host": [
+										"{{url}}service"
+									],
+									"path": [
+										"invoice",
+										"update-invoice"
 									]
 								}
 							},
@@ -2640,7 +2720,35 @@
 		},
 		{
 			"name": "Laporan",
-			"item": []
+			"item": [
+				{
+					"name": "get Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}laporan/get-data?month=10&year=2023",
+							"host": [
+								"{{url}}laporan"
+							],
+							"path": [
+								"get-data"
+							],
+							"query": [
+								{
+									"key": "month",
+									"value": "10"
+								},
+								{
+									"key": "year",
+									"value": "2023"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Login",

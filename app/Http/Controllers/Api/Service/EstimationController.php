@@ -25,7 +25,9 @@ class EstimationController extends Controller
                 $estimation = $estimation->where('created_at', '<=', $request->end_date);
             }
 
-            $estimation = $estimation->where('status', 'New')->orderBy('created_at', 'desc')->get();
+            $estimation = $estimation->join('Vehicle', 'estimationRequest')->whereIn('status', ['Darft','New'])->orderBy('created_at', 'desc')->get();
+
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($estimation, ['Data List Estimation']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
@@ -41,6 +43,7 @@ class EstimationController extends Controller
             if(!$validation->fails()){
                 return (new \App\Helpers\GlobalResponseHelper())->sendError($validation->errors()->all());
             }
+
 
             
 
