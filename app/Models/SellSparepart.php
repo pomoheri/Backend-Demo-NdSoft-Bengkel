@@ -25,7 +25,8 @@ class SellSparepart extends Model
         'remark',
         'created_by',
         'closed_by',
-        'closed_at'
+        'closed_at',
+        'is_paid'
     ];
 
     protected static function boot()

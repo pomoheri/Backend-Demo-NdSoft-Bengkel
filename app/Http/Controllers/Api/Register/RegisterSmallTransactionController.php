@@ -16,16 +16,16 @@ class RegisterSmallTransactionController extends Controller
     {
         try {
             $data = SmallTransaction::orderBy('date', 'desc');
-            if($start_date && $end_date){
+            if ($start_date && $end_date) {
                 $data = $data->whereBetween('date', [$start_date, $end_date]);
             }
 
             $data = $data->get();
             $output = [];
-            if($data->count() > 0){
+            if ($data->count() > 0) {
                 foreach ($data as $key => $value) {
                     $output[] = [
-                        'date'     => $value->tanggal,
+                        'date'     => $value->date,
                         'description' => $value->description,
                         'pic'         => $value->pic,
                         'status'      => $value->status,

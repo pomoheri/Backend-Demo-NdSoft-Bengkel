@@ -40,7 +40,7 @@ class SellSparePartController extends Controller
                 'sparepart.*.quantity' => ['required'],
             ]);
 
-            if($validation->fails()){
+            if ($validation->fails()) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError($validation->errors()->all());
             }
 
@@ -49,7 +49,7 @@ class SellSparePartController extends Controller
             $data_sell = [
                 'transaction_code' => $sell_code,
                 'name'             => $request->name,
-                'phone'            => $request->phone,    
+                'phone'            => $request->phone,
                 'address'          => $request->address,
                 'total'            => 0,
                 'payment_date'     => date('Y-m-d'),
@@ -67,17 +67,17 @@ class SellSparePartController extends Controller
                 $sum_subtotal = 0;
                 foreach ($request->sparepart as $key => $value) {
                     $spare_part = SparePart::where('id', $value['spare_part_id'])->first();
-                    if(!$spare_part){
+                    if (!$spare_part) {
                         return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Spare Part Tidak Ditemukan']);
                     }
-                    if($spare_part->stock < $value['quantity']){
+                    if ($spare_part->stock < $value['quantity']) {
                         return (new \App\Helpers\GlobalResponseHelper())->sendError(['Stock Sparepart Kurang dari Quantity']);
                     }
-                    $stock = $spare_part->stock-$value['quantity'];
+                    $stock = $spare_part->stock - $value['quantity'];
                     $spare_part->update(['stock' => $stock]);
-                    $subtotal = $spare_part->selling_price*$value['quantity'];
-                    if($value['discount']){
-                        $subtotal = $subtotal-$value['discount'];
+                    $subtotal = $spare_part->selling_price * $value['quantity'];
+                    if ($value['discount']) {
+                        $subtotal = $subtotal - $value['discount'];
                     }
 
                     $data_detail = [
@@ -96,9 +96,9 @@ class SellSparePartController extends Controller
                 ]);
             }
 
-           $data = [
-            'transaction_unique' => $sell->transaction_unique,
-           ];
+            $data = [
+                'transaction_unique' => $sell->transaction_unique,
+            ];
 
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($data, ['Data Berhasil Disimpan']);
         } catch (\Exception $e) {
@@ -113,21 +113,21 @@ class SellSparePartController extends Controller
                 'transaction_unique' => ['required']
             ]);
 
-            if($validation->fails()){
+            if ($validation->fails()) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError($validation->errors()->all());
             }
 
             $sell = SellSparepart::where('transaction_unique', $request->transaction_unique)->first();
-            if(!$sell){
+            if (!$sell) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
 
-            if($sell->payment_method == 'Kredit'){
+            if ($sell->payment_method == 'Kredit') {
                 $validation = Validator::make($request->all(), [
                     'amount' => ['required']
                 ]);
-    
-                if($validation->fails()){
+
+                if ($validation->fails()) {
                     return (new \App\Helpers\GlobalResponseHelper())->sendError($validation->errors()->all());
                 }
 
@@ -155,13 +155,13 @@ class SellSparePartController extends Controller
                         'status'    => 'Closed',
                         'closed_at' => date('Y-m-d'),
                         'closed_by' => auth()->user()->name
-                    ]); 
-                }else{
+                    ]);
+                } else {
                     $sell->update([
                         'is_paid' => 1
                     ]);
                 }
-            }else{
+            } else {
                 $sell->update([
                     'status'    => 'Closed',
                     'closed_at' => date('Y-m-d'),
@@ -178,9 +178,9 @@ class SellSparePartController extends Controller
     public function detail($transaction_unique)
     {
         try {
-            $sell = SellSparepart::with('details','details.sparepart')->where('transaction_unique', $transaction_unique)->first();
+            $sell = SellSparepart::with('details', 'details.sparepart')->where('transaction_unique', $transaction_unique)->first();
 
-            if(!$sell){
+            if (!$sell) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($sell, ['Data Detail Sell']);
@@ -204,15 +204,15 @@ class SellSparePartController extends Controller
                 'sparepart.*.quantity'  => ['required'],
             ]);
 
-            if($validation->fails()){
+            if ($validation->fails()) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError($validation->errors()->all());
             }
 
             $sell = SellSparepart::where('transaction_unique', $request->transaction_unique)->first();
-            if(!$sell){
+            if (!$sell) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data tidak ditemukan']);
             }
-            if($sell->status == 'Closed'){
+            if ($sell->status == 'Closed') {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Tidak dapat melakukan edit,Status Penjualan sudah Closed']);
             }
 
@@ -223,17 +223,18 @@ class SellSparePartController extends Controller
                 'payment_method' => ($request->payment_method) ? $request->payment_method : $sell->payment_method,
                 'payment_gateway' => ($request->payment_gateway) ? $request->payment_gateway : $sell->payment_gateway,
                 'remark'         => ($request->remark) ? $request->remark : $sell->remark,
+                'status'         => ($request->payment_method) ? (($request->payment_method == 'Cash') ? 'Outstanding' : 'Receivable') : $sell->payment_method,
             ]);
 
             $get_id = [];
-                foreach ($request->sparepart as $key => $value) {
-                    $get_id[] = $value['spare_part_id'];
-                };
+            foreach ($request->sparepart as $key => $value) {
+                $get_id[] = $value['spare_part_id'];
+            };
 
             $deleteNotInSell = SellSparepartDetail::with('sparepart')->where('transaction_unique', $request->transaction_unique)->whereNotIn('spare_part_id', $get_id)->get();
-            if($deleteNotInSell){
+            if ($deleteNotInSell) {
                 foreach ($deleteNotInSell as $keys => $val) {
-                    if($val->sparepart){
+                    if ($val->sparepart) {
                         $val->sparepart->update([
                             'stock' =>  $val->sparepart->stock + $val->quantity
                         ]);
@@ -245,9 +246,9 @@ class SellSparePartController extends Controller
             foreach ($request->sparepart as $key => $value) {
                 $detail_sell = SellSparepartDetail::where('spare_part_id', $value['spare_part_id'])->where('transaction_unique', $request->transaction_unique)->first();
                 $spare_part = Sparepart::where('id', $value['spare_part_id'])->first();
-                $subtotal = $spare_part->selling_price*$value['quantity'];
-                if($value['discount']){
-                    $subtotal = $subtotal-$value['discount'];
+                $subtotal = $spare_part->selling_price * $value['quantity'];
+                if ($value['discount']) {
+                    $subtotal = $subtotal - $value['discount'];
                 }
                 if ($detail_sell) {
                     $data_detail = [
@@ -296,14 +297,13 @@ class SellSparePartController extends Controller
     {
         try {
             $sell = SellSparepart::where('transaction_unique', $transaction_unique)->first();
-            if(!$sell){
+            if (!$sell) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
 
             $pdf = PDF::loadView('documents.invoice-sell-sparepart')->setPaper('a7');
-            
-            return $pdf->stream();
 
+            return $pdf->stream();
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }

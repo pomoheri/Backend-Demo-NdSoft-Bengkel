@@ -16,15 +16,15 @@ class RegisterSellController extends Controller
     {
         try {
             $data = SellSparepart::with('details')
-                                ->where('status', 'Closed');
-                                
-            if($start_date && $end_date){
+                ->where('status', 'Closed');
+
+            if ($start_date && $end_date) {
                 $data = $data->whereBetween('closed_at', [$start_date, $end_date]);
             }
 
             $data = $data->orderBy('updated_at', 'DESC')->get();
             $output = [];
-            if($data->count() > 0){
+            if ($data->count() > 0) {
                 foreach ($data as $key => $value) {
                     $output[] = [
                         'transaction_code'   => $value->transaction_code,
@@ -36,9 +36,11 @@ class RegisterSellController extends Controller
                         'payment_date'       => $value->payment_date,
                         'payment_method'     => $value->payment_method,
                         'payment_gateway'    => $value->payment_gateway,
+                        'created_at'         => $value->created_at,
                         'closed_at'          => $value->closed_at,
                         'closed_by'          => $value->closed_by,
-                        'total'              => $value->total
+                        'total'              => $value->total,
+                        'status'              => $value->status,
                     ];
                 }
             }

@@ -17,7 +17,7 @@ class VehicleManagementController extends Controller
     public function list()
     {
         try {
-            $vehicles = Vehicle::with('carType')
+            $vehicles = Vehicle::with('carType', 'carType.carBrand')
                 ->join('customer', 'vehicle.customer_id', '=', 'customer.id')
                 ->orderBy('customer.code')
                 ->select('vehicle.*', 'customer.code as kode_customer', 'customer.name as nama_customer', 'customer.phone as phone')

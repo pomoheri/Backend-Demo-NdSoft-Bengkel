@@ -9,6 +9,7 @@ class Labour extends Model
     protected $table = 'labour';
     protected $fillable = [
         'labour_code',
+        'labour_name',
         'frt',
         'price',
         'created_by',
