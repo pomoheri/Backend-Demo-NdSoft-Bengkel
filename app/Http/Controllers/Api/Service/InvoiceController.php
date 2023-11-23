@@ -35,7 +35,7 @@ class InvoiceController extends Controller
     public function detail($transaction_unique)
     {
         try {
-            $invoice = ServiceInvoice::with('workOrder', 'workOrder.vehicle', 'workOrder.vehicle.customer', 'workOrder.serviceRequest', 'workOrder.serviceLabour', 'workOrder.serviceSublet', 'workOrder.sellSparepartDetail')
+            $invoice = ServiceInvoice::with('workOrder', 'workOrder.vehicle', 'workOrder.vehicle.carType', 'workOrder.vehicle.carType.carBrand', 'workOrder.vehicle.customer', 'workOrder.serviceRequest', 'workOrder.serviceLabour', 'workOrder.serviceLabour.labour', 'workOrder.serviceSublet', 'workOrder.sellSparepartDetail', 'workOrder.sellSparepartDetail.sparepart')
                 ->where('transaction_unique', $transaction_unique)
                 ->first();
             if (!$invoice) {

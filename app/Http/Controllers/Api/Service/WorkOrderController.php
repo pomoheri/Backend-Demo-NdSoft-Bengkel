@@ -149,7 +149,7 @@ class WorkOrderController extends Controller
             }
 
             $data = [
-                'transaction_code' => $wo_code,
+                'transaction_code' => ($wo->status == 'Draft') ? $wo_code : $wo->transaction_code,
                 'status'           => ($wo->status == 'Draft') ? 'New' : $wo->status,
                 'total'            => $total_sublet + $total_labour + $total_part,
                 'remark'           => $request->remark,
@@ -291,6 +291,8 @@ class WorkOrderController extends Controller
                 $data_invoice = [
                     'transaction_code'    => $invoice_code,
                     'transaction_unique'  => $wo->transaction_unique,
+                    'payment_method'      => 'Cash',
+                    'payment_gateway'     => 'Cash',
                     'status'              => 'Outstanding',
                     'created_by'          => auth()->user()->name
                 ];
