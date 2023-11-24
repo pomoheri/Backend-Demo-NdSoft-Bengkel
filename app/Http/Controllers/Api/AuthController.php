@@ -129,14 +129,52 @@ class AuthController extends Controller
     public function defaultMenu()
     {
         try {
-            $data = [];
-            $user = User::with('roles', 'roles.menus.parent', 'roles.menus.children')->where('id', auth()->user()->id)->first();
+            // $data = [];
+            // $user = User::with('roles', 'roles.menus.parent', 'roles.menus.children')->where('id', auth()->user()->id)->first();
+            // if($user && $user->roles){
+            //     $data['roles'] = $user->roles->name;
+            //     foreach($user->roles->menus->whereNull('parent_id')->sortBy('id') as $menus){
+            //        $data['menus'][] = $menus;
+            //     }
+            // }
+            $user = auth()->user();
+            $role_id = [];
             if($user && $user->roles){
-                $data['roles'] = $user->roles->name;
-                foreach($user->roles->menus->whereNull('parent_id')->sortBy('id') as $menus){
-                   $data['menus'][] = $menus;
-                }
+                $role_id[] = $user->roles->id; 
             }
+            $userMenu = [];
+
+            $userMenu = Menus::whereIn('id', function ($query) use ($role_id) {
+                            $query->select('menu_id')
+                                ->from('role_menu as um')
+                                ->whereIn('role_id', $role_id);
+                        })->get();
+            
+            $data = [];
+            if ($userMenu->count() > 0) {
+                $menuItems = [];
+                foreach ($userMenu as $menu) {
+                    $parentID = $menu->parent_id ?? 'top';
+                    $menuItems[$parentID][] = $menu;
+                }
+            
+                $topLevelMenu = $menuItems['top'] ?? [];
+            
+                // Check if $topLevelMenu is not null before sorting
+                if (!is_null($topLevelMenu)) {
+                    // Sort the top-level (parent) menu items by id
+                    usort($topLevelMenu, function ($a, $b) {
+                        return $a->id - $b->id;
+                    });
+                }
+            
+                foreach ($topLevelMenu as $menu) {
+                    $menu->children = $menuItems[$menu->id] ?? [];
+                }
+                
+                $data['menus'] = $topLevelMenu;
+            }
+            $data['roles'] = ($user->roles) ? $user->roles->name : '';
 
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($data, ['Data Default Menu']);
         } catch (\Exception $e) {
