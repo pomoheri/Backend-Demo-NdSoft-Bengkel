@@ -35,7 +35,6 @@ class InvoiceController extends Controller
             $data = $data->where('status', '!=', 'Closed')->with('workOrder', 'workOrder.vehicle', 'workOrder.vehicle.carType', 'workOrder.vehicle.carType.carBrand', 'workOrder.vehicle.customer')->orderBy('created_at', 'desc')->get();
 
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($data, ['List Data HandOver']);
-
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
@@ -74,7 +73,7 @@ class InvoiceController extends Controller
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
 
-            if ($request->payment_method == 'Tunai') {
+            if ($request->payment_method == 'Cash') {
                 $invoice->update([
                     'payment_method'  => $request->payment_method,
                     'payment_gateway' => $request->payment_gateway,
@@ -137,8 +136,8 @@ class InvoiceController extends Controller
     public function getPdf($transaction_unique)
     {
         try {
-            $invoice = ServiceInvoice::with('workOrder', 'workOrder.vehicle' ,'workOrder.vehicle.customer')->where('transaction_unique', $transaction_unique)->first();
-            if(!$invoice){
+            $invoice = ServiceInvoice::with('workOrder', 'workOrder.vehicle', 'workOrder.vehicle.customer')->where('transaction_unique', $transaction_unique)->first();
+            if (!$invoice) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
 
@@ -154,10 +153,9 @@ class InvoiceController extends Controller
             $pdf_file = $pdf->stream();
 
             return $pdf_file;
-
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
-         }
+        }
     }
 
     public function updateInvoice(Request $request)
@@ -170,28 +168,28 @@ class InvoiceController extends Controller
 
             ]);
 
-            if($validation->fails()){
+            if ($validation->fails()) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError($validation->errors()->all());
             }
 
-            $invoice = ServiceInvoice::with('workOrder','workOrder.serviceRequest', 'workOrder.serviceSublet', 'workOrder.serviceLabour', 'workOrder.sellSparepartDetail')
-                                ->where('transaction_unique', $request->transaction_unique)
-                                ->first();
-            if(!$invoice){
+            $invoice = ServiceInvoice::with('workOrder', 'workOrder.serviceRequest', 'workOrder.serviceSublet', 'workOrder.serviceLabour', 'workOrder.sellSparepartDetail')
+                ->where('transaction_unique', $request->transaction_unique)
+                ->first();
+            if (!$invoice) {
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
 
             //Update Service Request
-            if($request->service_request && count($request->service_request) > 0){
+            if ($request->service_request && count($request->service_request) > 0) {
                 $validation_request = Validator::make($request->all(), [
                     'service_request'               => ['required', 'array'],
                     'service_request.*.id'          => ['required'],
-                    'service_request.*.solution'    => ['required']
+                    // 'service_request.*.solution'    => ['required']
                 ]);
-                if($validation_request->fails()){
+                if ($validation_request->fails()) {
                     return (new \App\Helpers\GlobalResponseHelper())->sendError($validation_request->errors()->all());
                 }
-                
+
                 foreach ($request->service_request as $key => $value) {
                     $detail_request = ServiceRequest::where('id', $value['id'])->where('transaction_unique', $request->transaction_unique)->first();
                     $data_detail = [
@@ -204,16 +202,16 @@ class InvoiceController extends Controller
             }
 
             //Update Service Labour
-            if($request->service_labour && count($request->service_labour) > 0){
+            if ($request->service_labour && count($request->service_labour) > 0) {
                 $validation_labour = Validator::make($request->all(), [
                     'service_labour'             => ['required', 'array'],
                     'service_labour.*.id'        => ['required'],
                     'service_labour.*.frt'       => ['required']
                 ]);
-                if($validation_labour->fails()){
+                if ($validation_labour->fails()) {
                     return (new \App\Helpers\GlobalResponseHelper())->sendError($validation_labour->errors()->all());
                 }
-                
+
                 foreach ($request->service_labour as $key => $value) {
                     $detail_labour = ServiceLabour::where('id', $value['id'])->where('transaction_unique', $request->transaction_unique)->first();
                     $labour = Labour::where('id', $detail_labour->labour_id)->first();
@@ -237,7 +235,7 @@ class InvoiceController extends Controller
                     'service_sublet.*.sublet' => ['required'],
                     'service_sublet.*.harga'  => ['required']
                 ]);
-                if($service_sublet->fails()){
+                if ($service_sublet->fails()) {
                     return (new \App\Helpers\GlobalResponseHelper())->sendError($service_sublet->errors()->all());
                 }
 
@@ -249,18 +247,18 @@ class InvoiceController extends Controller
                     ];
                     if ($detail_sublet) {
                         $detail_sublet->update($data_detail);
-                    } 
+                    }
                 }
             }
 
             //Update Sparepart
-            if($request->service_part && count($request->service_part) > 0){
+            if ($request->service_part && count($request->service_part) > 0) {
                 $service_part = Validator::make($request->all(), [
                     'service_part'                 => ['required', 'array'],
                     'service_part.*.id'            => ['required'],
                     'service_part.*.quantity'      => ['required']
                 ]);
-                if($service_part->fails()){
+                if ($service_part->fails()) {
                     return (new \App\Helpers\GlobalResponseHelper())->sendError($service_part->errors()->all());
                 }
 
@@ -283,21 +281,21 @@ class InvoiceController extends Controller
                 }
             }
 
-            if($invoice->workOrder){
+            if ($invoice->workOrder) {
                 $total_sublet = 0;
-                if($invoice->workOrder->serviceSublet && count($invoice->workOrder->serviceSublet) > 0){
+                if ($invoice->workOrder->serviceSublet && count($invoice->workOrder->serviceSublet) > 0) {
                     foreach ($invoice->workOrder->serviceSublet as $value) {
                         $total_sublet += $value->subtotal;
                     }
                 }
                 $total_labour = 0;
-                if($invoice->workOrder->serviceLabour && count($invoice->workOrder->serviceLabour) > 0){
+                if ($invoice->workOrder->serviceLabour && count($invoice->workOrder->serviceLabour) > 0) {
                     foreach ($invoice->workOrder->serviceLabour as $val) {
                         $total_labour += $val->subtotal;
                     }
                 }
                 $total_part = 0;
-                if($invoice->workOrder->sellSparepartDetail && count($invoice->workOrder->sellSparepartDetail) > 0){
+                if ($invoice->workOrder->sellSparepartDetail && count($invoice->workOrder->sellSparepartDetail) > 0) {
                     foreach ($invoice->workOrder->sellSparepartDetail as $part) {
                         $total_part += $part->subtotal;
                     }
@@ -319,9 +317,8 @@ class InvoiceController extends Controller
             ]);
 
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($invoice, ['Data Berhasil Di Update']);
-            
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
-         }
+        }
     }
 }

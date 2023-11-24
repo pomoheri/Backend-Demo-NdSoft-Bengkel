@@ -15,15 +15,15 @@ class RegisterServiceInvoiceController extends Controller
     public function list($start_date = null, $end_date = null)
     {
         try {
-            $data = ServiceInvoice::with('workOrder','workOrder.vehicle', 'workOrder.vehicle.customer', 'workOrder.vehicle.carType')
-                                    ->orderBy('closed_at', 'desc');
-            if($start_date && $end_date){
+            $data = ServiceInvoice::with('workOrder', 'workOrder.vehicle', 'workOrder.vehicle.carType', 'workOrder.vehicle.carType.carBrand', 'workOrder.vehicle.customer')
+                ->orderBy('closed_at', 'desc');
+            if ($start_date && $end_date) {
                 $data = $data->whereBetween('closed_at', [$start_date, $end_date]);
             }
 
             $data = $data->where('status', 'Closed')->get();
             $output = [];
-            if($data->count() > 0){
+            if ($data->count() > 0) {
                 foreach ($data as $key => $value) {
                     $output[] = [
                         'invoice_no'  => $value->transaction_code,
@@ -37,7 +37,7 @@ class RegisterServiceInvoiceController extends Controller
                     ];
                 }
             }
-            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($output, ['List Data Register Service Invoice']);
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($data, ['List Data Register Service Invoice']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
