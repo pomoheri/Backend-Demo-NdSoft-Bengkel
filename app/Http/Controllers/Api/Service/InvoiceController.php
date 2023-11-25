@@ -157,9 +157,15 @@ class InvoiceController extends Controller
 
             $pdf = PDF::loadView('documents.service-invoice', $data)->setPaper('a4', 'potrait');
 
-            $pdf_file = $pdf->stream();
+            $pdf_file = $pdf->output();
 
-            return $pdf_file;
+            $directory = 'public/invoice/' . $invoice->transaction_unique . '.pdf';
+
+            \Storage::put($directory, $pdf_file);
+
+            $pdf_url = env('APP_URL') . \Storage::url($directory);
+
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($pdf_url, ['Data Berhasil Di Generate']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }

@@ -250,7 +250,7 @@
                 $subtotalpart = 0;
                 $subtotalsublet = 0;
             @endphp
-            @if ($workOrder->serviceLabour)
+            @if ($workOrder->serviceLabour->count() > 0)
                     <tr>
                         <td></td>
                         <td></td>
@@ -271,7 +271,7 @@
                     @endphp
                 @endforeach
             @endif
-            @if ($workOrder->sellSparepartDetail)
+            @if ($workOrder->sellSparepartDetail->count() > 0)
                     <tr>
                         <td></td>
                         <td></td>
@@ -292,7 +292,7 @@
                     @endphp
                 @endforeach
             @endif
-            @if ($workOrder->serviceSublet)
+            @if ($workOrder->serviceSublet->count() > 0)
                     <tr>
                         <td></td>
                         <td></td>
@@ -313,13 +313,16 @@
                     @endphp
                 @endforeach
             @endif
+            @php
+                $total = $subtotalsublet+$subtotalpart+$subtotallabour;
+            @endphp
+            @if ($total > 0)
             <tr>
                 <th colspan="6" style="text-align: right">Total (Rp.)</th>
-                @php
-                    $total = $subtotalsublet+$subtotalpart+$subtotallabour;
-                @endphp
+                
                 <th style="text-align: right">{{ number_format($total,2,',','.') }}</th>
             </tr>
+            @endif
         </table>
         <div style="margin-top: 10px; margin-left:15px;">
             <p style="font-size: 12px; margin-top:15px;" class="table-ttd">Yogyakarta, {{ date('d F Y') }}</p>
