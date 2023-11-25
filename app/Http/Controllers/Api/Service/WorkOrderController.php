@@ -13,6 +13,8 @@ use App\Models\ServiceRequest;
 use App\Models\SellSparepartDetail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use PDF;
 
 class WorkOrderController extends Controller
 {
@@ -307,5 +309,41 @@ class WorkOrderController extends Controller
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
+    }
+    public function getPdf($transaction_unique)
+    {
+        try {
+            $workOrder = WorkOrder::with('vehicle' ,'vehicle.customer', 'serviceRequest', 'serviceSublet', 'serviceLabour', 'sellSparepartDetail', 'sellSparepartDetail.sparepart', 'serviceLabour.labour')
+                                    ->where('transaction_unique', $transaction_unique)
+                                    ->first();
+            if(!$workOrder){
+                return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
+            }
+
+            $content_qrcode = 'WorkOrder-'.$workOrder->transaction_code.'/'.$workOrder->created_at;
+            $qrcode_ttd = base64_encode(QrCode::format('svg')->size(200)->errorCorrection('H')->generate($content_qrcode));
+
+            $data = [
+                'workOrder' => $workOrder,
+                'vehicle' => $workOrder->vehicle,
+                'customer' => ($workOrder->vehicle) ? $workOrder->vehicle->customer : null,
+                'qrcode_ttd' => $qrcode_ttd
+            ];
+
+            $pdf = PDF::loadView('documents.workorder', $data)->setPaper('a4', 'potrait');
+
+            $pdf_file = $pdf->output();
+
+            $directory = 'public/workorder/' . $workOrder->transaction_unique . '.pdf';
+
+            \Storage::put($directory, $pdf_file);
+
+            $pdf_url = env('APP_URL') . \Storage::url($directory);
+
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($pdf_url, ['Data Berhasil Di Generate']);
+
+        } catch (\Exception $e) {
+            return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
+         }
     }
 }

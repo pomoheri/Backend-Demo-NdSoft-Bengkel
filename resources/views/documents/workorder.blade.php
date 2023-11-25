@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Service Invoice</title>
+    <title>Work Order Document</title>
     <style type="text/css">
         table.page_header { 
             width: 100%; 
@@ -31,7 +31,7 @@
             text-align: center; 
             color: #808080;
             font-family: 'Helvetica Neue', Helvetica, Arial;
-            font-size: 12px;
+            font-size: 10px;
         }
         main {
             margin-top: 95px;
@@ -59,7 +59,7 @@
             text-align: left;
             font-family: 'Helvetica Neue', Helvetica, Arial;
             font-weight: normal;
-            font-size: 12px;
+            font-size: 10px;
         }
 
         .table-header { 
@@ -87,20 +87,17 @@
             margin-bottom: 2px;
         }
         .tbl-request {
-            border: 1px solid;
             border-collapse: collapse;
         }
 
         .tbl-request th {
-            border: 1px solid;
             border-collapse: collapse;
         }
         .tbl-request td {
-            border: 1px solid;
             border-collapse: collapse;
             padding: 8px 5px; 
             font-family: 'Helvetica Neue', Helvetica, Arial;
-            font-size: 10px;
+            font-size: 12px;
             text-align: left;
         }
         .tbl-request {
@@ -111,6 +108,7 @@
             text-align: center; 
             font-family: 'Helvetica Neue', Helvetica, Arial;
             font-size: 12px;
+            background-color: #d3d3d3;
         }
         .detail-invoice {
             margin-top: 15px;
@@ -138,7 +136,7 @@
         }
         .table-ttd {
             font-family: 'Helvetica Neue', Helvetica, Arial;
-            font-size: 12px;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -159,7 +157,7 @@
                         0821-3782-5012<br>
                     </span>
                 </td>
-                <td style="text-align: right; width: 25%; font-size: 14px"><b>INVOICE SERVICE</td>
+                <td style="text-align: right; width: 25%; font-size: 14px"><b>WORK ORDER</td>
             </tr>
         </table>
     </header>
@@ -171,7 +169,7 @@
             <tr>
                 <td><b>Kepada :</b></td>
                 <td colspan="2"><b>Detail Kendaraan :</b></td>
-                <td colspan="2"><b>No Invoice : {{ $invoice->transaction_code }}</b></td>
+                <td colspan="2"><b>No. WO : {{ $workOrder->transaction_code }}</b></td>
             </tr>
             <tr>
                 <td style="width: 34%">
@@ -197,16 +195,12 @@
                     </td>
                 @endif
                 <td style="width: 11%">
-                    Tgl Invoice<br>
-                    No. WO<br>
-                    Tgl WO<br>
+                    Tanggal<br>
                     Kilometer<br>
                     Teknisi
                 </td>
                 @if ($vehicle)
                     <td style="width: 22%">
-                        : {{ Carbon\Carbon::parse($invoice->created_at)->format('d-M-Y') }}<br>
-                        : {{ $workOrder->transaction_code }}<br>
                         : {{ Carbon\Carbon::parse($workOrder->created_at)->format('d-M-Y') }}<br>
                         : {{ $workOrder->km }}<br>
                         : {{ $workOrder->technician }}<br>
@@ -221,7 +215,7 @@
                 <th width="47%">Request</th>
                 <th width="47%">Solution</th>
             </tr>
-            @if ($workOrder->serviceRequest)
+            @if ($workOrder->serviceRequest->count() > 0)
                 @foreach ($workOrder->serviceRequest as $key => $val)
                 <tr>
                     <td>{{ $key+1 }}</td>
@@ -229,6 +223,9 @@
                     <td>{!! $val->solution !!}</td>
                 </tr>
                 @endforeach
+                <tr>
+                    <th colspan="3"></th>
+                </tr>
             @endif
         </table>
         <h6 class="detail-invoice">Detail Invoice</h6>
