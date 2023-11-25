@@ -32,6 +32,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('/detail/{transaction_unique}', [\App\Http\Controllers\Api\Service\WorkOrderController::class, 'detail']);
             Route::post('/update', [\App\Http\Controllers\Api\Service\WorkOrderController::class, 'updateWo']);
             Route::post('/update-status', [\App\Http\Controllers\Api\Service\WorkOrderController::class, 'updateStatus']);
+            Route::get('/get-pdf/{transaction_unique}', [\App\Http\Controllers\Api\Service\WorkOrderController::class, 'getPdf']);
         });
         //Invoice
         Route::group(['prefix' => 'invoice', "as" => 'invoice.'], function () {
