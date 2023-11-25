@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Hand Over Document</title>
     <style type="text/css">
         table.page_header { 
             width: 100%; 
@@ -18,7 +18,7 @@
             border-collapse: collapse; 
             border-spacing: 0; 
             width: 100%; 
-            border: 1px solid #ddd; 
+            /* border: 1px solid #ddd;  */
             vertical-align: top; 
             margin-top: 85px;
         }
@@ -27,20 +27,24 @@
             font-size: 11px; 
             background-color: #D3D3D3; 
             text-align: center; 
+            font-family: 'Helvetica Neue', Helvetica, Arial;
         }
 		.table-header td { 
             padding: 5px 5px; 
             font-size: 11px; 
+            font-family: 'Helvetica Neue', Helvetica, Arial;
         }
         .request { 
             width: 100%;
             border: 1px;
             font-size: 11px;
             border-collapse: collapse;
+            font-family: 'Helvetica Neue', Helvetica, Arial;
         }
         .request tbody {
             page-break-after: auto; 
             page-break-before: auto; 
+            font-family: 'Helvetica Neue', Helvetica, Arial;
         }
         .request tbody:last-child { 
             page-break-after: never; 
@@ -48,15 +52,18 @@
         .request th {
             border: 1px; 
             height: 20px; 
-            text-align: center
+            text-align: center;
+            font-family: 'Helvetica Neue', Helvetica, Arial;
         }
         .request td {
             border: 1px; 
             height: 15px;
+            font-family: 'Helvetica Neue', Helvetica, Arial;
         }
         .line {
             width: 100%;
             border-top: 1px solid #000;
+            font-family: 'Helvetica Neue', Helvetica, Arial;
         }
         .page {
             /* page-break-after: auto; */
@@ -69,14 +76,20 @@
             height: 50px; 
         }
         footer { 
+            border-top: solid 1mm #696969;
             position: fixed; 
-            bottom: -55px; 
+            bottom: -40px; 
             left: 0px; 
             right: 0px;  
             height: 50px; 
             text-align: center; 
             color: #808080;
             font-family: 'Helvetica Neue', Helvetica, Arial;
+            font-size: 12px;
+        }
+        .table-ttd {
+            font-family: 'Helvetica Neue', Helvetica, Arial;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -93,17 +106,16 @@
                         Jl. Gandu<br>
                         Gandu, Sendangtirto<br>
                         Berbah, Sleman<br>
-                        Yogyakarta<br>
+                        D.I Yogyakarta<br>
                         0821-3782-5012<br>
                     </span>
                 </td>
-                <td style="text-align: right; width: 25%; font-size: 14px"><b>SURAT BUKTI SERVICE</b></td>
+                <td style="text-align: right; width: 25%; font-size: 14px"><b>Bukti Penyerahan Mobil</b></td>
             </tr>
         </table>
     </header>
     <footer>
-        <div class="line"></div>
-        Copyright © {{ date('Y') }} - INT AUTOCARE
+        <p>Copyright © {{ date('Y') }} - INT AUTOCARE</p>
     </footer>
     <main>
         <table class="table-header">
@@ -157,7 +169,7 @@
             @endif
         </table>
         <div style="margin-top: 30px; margin-left:35px;">
-            <p style="font-size: 12px">Klaten, {{ date('d-M-Y') }}</p>
+            <p style="font-size: 12px" class="table-ttd">Yogyakarta, {{ date('d F Y') }}</p>
         </div>
         <div style="margin-top: 15px; margin-left: 35px;">
             <table class="table-ttd">
@@ -167,7 +179,17 @@
                 </tr>
             </table>
         </div>
-        <div style="margin-top: 50px; margin-left: 35px;">
+        <div style="margin-top: 3px; margin-left: 35px;">
+            <table class="table-ttd">
+                <tr>
+                    <td style="width: 250px;">
+                        <img src="data:image/png;base64,{{ $qrcode_ttd }}" style="width: 50; height:50">
+                    </td>
+                    <td style="width: 250px; text-align:center;"></td>
+                </tr>
+            </table>
+        </div>
+        <div style="margin-top: 3px; margin-left: 35px;">
             <table class="table-ttd">
                 <tr>
                     <td style="width: 380px;">(INT AutoCare)</td>

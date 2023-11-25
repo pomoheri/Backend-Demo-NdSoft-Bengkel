@@ -14,6 +14,7 @@ use App\Models\ServiceRequest;
 use App\Models\SellSparepartDetail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class InvoiceController extends Controller
 {
@@ -137,16 +138,22 @@ class InvoiceController extends Controller
     public function getPdf($transaction_unique)
     {
         try {
-            $invoice = ServiceInvoice::with('workOrder', 'workOrder.vehicle' ,'workOrder.vehicle.customer')->where('transaction_unique', $transaction_unique)->first();
+            $invoice = ServiceInvoice::with('workOrder', 'workOrder.vehicle' ,'workOrder.vehicle.customer', 'workOrder.serviceRequest', 'workOrder.serviceSublet', 'workOrder.serviceLabour', 'workOrder.sellSparepartDetail', 'workOrder.sellSparepartDetail.sparepart', 'workOrder.serviceLabour.labour')
+                                    ->where('transaction_unique', $transaction_unique)
+                                    ->first();
             if(!$invoice){
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
+
+            $content_qrcode = 'Invoice-'.$invoice->transaction_code.'/'.$invoice->created_at;
+            $qrcode_ttd = base64_encode(QrCode::format('svg')->size(200)->errorCorrection('H')->generate($content_qrcode));
 
             $data = [
                 'invoice' => $invoice,
                 'workOrder' => $invoice->workOrder,
                 'vehicle' => ($invoice->workOrder) ? $invoice->workOrder->vehicle : null,
-                'customer' => ($invoice->workOrder) ? (($invoice->workOrder->vehicle) ? $invoice->workOrder->vehicle->customer : null) : null
+                'customer' => ($invoice->workOrder) ? (($invoice->workOrder->vehicle) ? $invoice->workOrder->vehicle->customer : null) : null,
+                'qrcode_ttd' => $qrcode_ttd
             ];
 
             $pdf = PDF::loadView('documents.service-invoice', $data)->setPaper('a4', 'potrait');
