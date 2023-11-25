@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api\Service;
 
-use App\Models\HandOverRequest;
 use PDF;
 use App\Models\HandOver;
 use App\Models\WorkOrder;
 use Illuminate\Http\Request;
 use App\Models\ServiceRequest;
+use App\Models\HandOverRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class HandOverController extends Controller
 {
@@ -164,8 +165,12 @@ class HandOverController extends Controller
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
 
+            $content_qrcode = 'HandOver-'.$handOver->handover_unique.'/'.$handOver->created_at;
+            $qrcode_ttd = base64_encode(QrCode::format('svg')->size(200)->errorCorrection('H')->generate($content_qrcode));
+
             $data = [
-                'handOver' => $handOver
+                'handOver' => $handOver,
+                'qrcode_ttd' => $qrcode_ttd
             ];
             $pdf = PDF::loadView('documents.hand-over-document', $data)->setPaper('a4', 'potrait');
 
