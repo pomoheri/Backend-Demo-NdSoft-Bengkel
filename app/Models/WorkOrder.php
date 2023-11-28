@@ -46,4 +46,9 @@ class WorkOrder extends Model
     {
         return $this->hasMany(SellSparepartDetail::class, 'transaction_unique', 'transaction_unique');
     }
+
+    public function serviceInvoice()
+    {
+        return $this->hasOne(ServiceInvoice::class, 'transaction_unique', 'transaction_unique');
+    }
 }

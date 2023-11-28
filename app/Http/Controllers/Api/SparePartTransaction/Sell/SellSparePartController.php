@@ -30,7 +30,7 @@ class SellSparePartController extends Controller
     {
         try {
             $validation = Validator::make($request->all(), [
-                'name'                  => ['required', 'max:255', 'string'],
+                'name'                  => ['nullable', 'max:255', 'string'],
                 'phone'                 => ['nullable', 'max:255', 'string'],
                 'address'               => ['nullable', 'max:255', 'string'],
                 'payment_method'        => ['required', 'in:Cash,Kredit'],
@@ -194,7 +194,7 @@ class SellSparePartController extends Controller
         try {
             $validation = Validator::make($request->all(), [
                 'transaction_unique'    => ['required'],
-                'name'                  => ['required', 'max:255', 'string'],
+                'name'                  => ['nullable', 'max:255', 'string'],
                 'phone'                 => ['nullable', 'max:255', 'string'],
                 'address'               => ['nullable', 'max:255', 'string'],
                 'payment_method'        => ['required', 'in:Cash,Kredit'],

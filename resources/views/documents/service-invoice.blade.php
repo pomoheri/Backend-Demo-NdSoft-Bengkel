@@ -159,7 +159,7 @@
                         0821-3782-5012<br>
                     </span>
                 </td>
-                <td style="text-align: right; width: 25%; font-size: 14px"><b>INVOICE SERVICE</td>
+                <td style="text-align: right; width: 25%; font-size: 14px"><b>INVOICE SERVICE</b></td>
             </tr>
         </table>
     </header>
@@ -213,23 +213,6 @@
                     </td>
                 @endif
             </tr>
-        </table>
-        <h6 class="detail-request">Detail Request</h6>
-        <table class="tbl-request">
-            <tr>
-                <th width="5%">#</th>
-                <th width="47%">Request</th>
-                <th width="47%">Solution</th>
-            </tr>
-            @if ($workOrder->serviceRequest)
-                @foreach ($workOrder->serviceRequest as $key => $val)
-                <tr>
-                    <td>{{ $key+1 }}</td>
-                    <td>{!! $val->request !!}</td>
-                    <td>{!! $val->solution !!}</td>
-                </tr>
-                @endforeach
-            @endif
         </table>
         <h6 class="detail-invoice">Detail Invoice</h6>
         <table class="tbl-invoice">

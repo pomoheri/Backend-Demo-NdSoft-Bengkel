@@ -34,5 +34,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/edit/{vehicle}', [\App\Http\Controllers\Api\Pelanggan\VehicleManagementController::class, 'edit']);
         Route::post('/update/{vehicle}', [\App\Http\Controllers\Api\Pelanggan\VehicleManagementController::class, 'update']);
         Route::get('/delete/{vehicle}', [\App\Http\Controllers\Api\Pelanggan\VehicleManagementController::class, 'delete']);
+        Route::get('/history/{id}', [\App\Http\Controllers\Api\Pelanggan\VehicleManagementController::class, 'historyVehicle']);
+        Route::get('/history/get-pdf/{id}', [\App\Http\Controllers\Api\Pelanggan\VehicleManagementController::class, 'getPdfHistoryVehicle']);
     });
 });
