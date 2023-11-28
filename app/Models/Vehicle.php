@@ -28,4 +28,9 @@ class Vehicle extends Model
     {
         return $this->belongsTo(Cartype::class, 'car_type_id', 'id');
     }
+
+    public function workOrder()
+    {
+        return $this->hasMany(WorkOrder::class, 'vehicle_id', 'id');
+    }
 }
