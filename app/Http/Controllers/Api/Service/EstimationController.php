@@ -71,7 +71,9 @@ class EstimationController extends Controller
             if ($request->estimation_labour && count($request->estimation_labour) > 0) {
                 foreach ($request->estimation_labour as $key => $value) {
                     $labour = Labour::where('id', $value['labour_id'])->first();
-                    $subtotal = ($labour) ? ($labour->price * $value['frt']) - $value['discount'] : 0;
+                    $subotalbeforediskon = ($labour) ? ($labour->price * $value['frt']) : 0;
+                    $diskon = ($subotalbeforediskon*$value['discount'])/100;
+                    $subtotal = $subotalbeforediskon - $diskon;
                     $data_detail = [
                         'estimation_unique'  => $request->estimation_unique,
                         'labour_id'          => $value['labour_id'],
@@ -97,14 +99,16 @@ class EstimationController extends Controller
             if($request->estimation_part && count($request->estimation_part) > 0){
                 foreach ($request->estimation_part as $key => $value) {
                     $sparepart = SparePart::where('id', $value['spare_part_id'])->first();
-                    $subtotal = ($sparepart) ? ($sparepart->selling_price * $value['quantity']) - $value['discount'] : 0;
+                    $subotalbeforediskon = ($sparepart) ? ($sparepart->selling_price * $value['quantity']) : 0;
+                    $diskon = ($subotalbeforediskon*$value['discount'])/100;
+                    $subtotal = $subotalbeforediskon - $diskon;
                     $data_detail_part = [
                         'estimation_unique' => $request->estimation_unique,
                         'sparepart_id'      => $sparepart->id,
                         'quantity'          => $value['quantity'],
                         'subtotal'          => $subtotal,
                         'discount'          => $value['discount'],
-                        'total'             => ($value['discount']) ? $subtotal - $value['discount'] : 0,
+                        'total'             => $subtotal - $diskon,
                         'profit'            => 0
                     ];
                 }

@@ -77,7 +77,10 @@ class SellSparePartController extends Controller
                     $spare_part->update(['stock' => $stock]);
                     $subtotal = $spare_part->selling_price * $value['quantity'];
                     if ($value['discount']) {
-                        $subtotal = $subtotal - $value['discount'];
+
+                        $subotalbeforediskon = $spare_part->selling_price * $value['quantity'];
+                        $diskon = ($subotalbeforediskon*$value['discount'])/100;
+                        $subtotal = $subotalbeforediskon - $diskon;
                     }
 
                     $data_detail = [
@@ -248,7 +251,10 @@ class SellSparePartController extends Controller
                 $spare_part = Sparepart::where('id', $value['spare_part_id'])->first();
                 $subtotal = $spare_part->selling_price * $value['quantity'];
                 if ($value['discount']) {
-                    $subtotal = $subtotal - $value['discount'];
+                    $subotalbeforediskon = $spare_part->selling_price * $value['quantity'];
+                    $diskon = ($subotalbeforediskon*$value['discount'])/100;
+                    $subtotal = $subotalbeforediskon - $diskon;
+
                 }
                 if ($detail_sell) {
                     $data_detail = [
