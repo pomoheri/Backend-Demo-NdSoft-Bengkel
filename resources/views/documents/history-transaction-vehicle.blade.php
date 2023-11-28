@@ -85,7 +85,7 @@
                         0821-3782-5012<br>
                     </span>
                 </td>
-                <td style="text-align: right; width: 25%; font-size: 16px"><b>HISTORY SERVICE</b></td>
+                <td style="text-align: right; width: 25%; font-size: 16px"><h4>HISTORY SERVICE<br>{{ $vehicle->license_plate.' / '.$carType->name }}</h4></td>
             </tr>
         </table>
     </header>
@@ -93,7 +93,6 @@
         <p>Copyright © {{ date('Y') }} - INT AUTOCARE</p>
     </footer>
     <main>
-        <h4>HISTORY SERVICE<br>{{ $vehicle->license_plate.' / '.$carType->name }}</h4>
         <table class="table-content">
             <tr>
                 <th>Tanggal</th>
@@ -113,14 +112,14 @@
                         <td style="padding-left:20px">
                             @if ($item->serviceRequest->count() > 0)
                                 @foreach ($item->serviceRequest as $request)
-                                    <li>{{ $request->request }}</li>
+                                    <li>{!! $request->request !!}</li>
                                 @endforeach
                             @endif
                         </td>
                         <td style="padding-left:20px">
                             @if ($item->serviceRequest->count() > 0)
                                 @foreach ($item->serviceRequest as $solution)
-                                    <li>{{ $solution->solution }}</li>
+                                    <li>{!! $solution->solution !!}</li>
                                 @endforeach
                             @endif
                         </td>
