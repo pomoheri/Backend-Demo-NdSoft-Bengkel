@@ -258,7 +258,7 @@
                         <td>{{ ($labour->labour) ? $labour->labour->labour_name : '' }}</td>
                         <td style="text-align: right">{{ $labour->frt }}</td>
                         <td style="text-align: right">{{ ($labour->labour) ? number_format($labour->labour->price,2,',','.') : '' }}</td>
-                        <td style="text-align: right">{{ number_format($labour->discount,2,',','.') }}</td>
+                        <td style="text-align: right">{{ $labour->discount.' %' }}</td>
                         <td style="text-align: right">{{ number_format($labour->subtotal,2,',','.') }}</td>
                     </tr>
                     @php
@@ -279,7 +279,7 @@
                         <td>{{ ($sparepart->sparepart) ? $sparepart->sparepart->name : '' }}</td>
                         <td style="text-align: right">{{ $sparepart->quantity }}</td>
                         <td style="text-align: right">{{ ($sparepart->sparepart) ? number_format($sparepart->sparepart->selling_price,2,',','.') : '' }}</td>
-                        <td style="text-align: right">{{ number_format($sparepart->discount,2,',','.') }}</td>
+                        <td style="text-align: right">{{ $sparepart->discount.' %' }}</td>
                         <td style="text-align: right">{{ number_format($sparepart->subtotal,2,',','.') }}</td>
                     </tr>
                     @php

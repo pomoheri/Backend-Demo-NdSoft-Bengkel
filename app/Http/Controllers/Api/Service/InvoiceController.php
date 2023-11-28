@@ -230,7 +230,10 @@ class InvoiceController extends Controller
                 foreach ($request->service_labour as $key => $value) {
                     $detail_labour = ServiceLabour::where('id', $value['id'])->where('transaction_unique', $request->transaction_unique)->first();
                     $labour = Labour::where('id', $detail_labour->labour_id)->first();
-                    $subtotal = ($labour) ? ($labour->price * $value['frt']) - $value['discount'] : 0;
+                    $subotalbeforediskon = ($labour) ? ($labour->price * $value['frt']) : 0;
+                    $diskon = ($subotalbeforediskon*$value['discount'])/100;
+                    $subtotal = $subotalbeforediskon - $diskon;
+
                     $data_detail = [
                         'frt'                => $value['frt'],
                         'discount'           => $value['discount'],
@@ -280,7 +283,10 @@ class InvoiceController extends Controller
                 foreach ($request->service_part as $key => $value) {
                     $detail_part = SellSparepartDetail::where('transaction_unique', $request->transaction_unique)->where('id', $value['id'])->first();
                     $sparepart = SparePart::where('id', $detail_part->spare_part_id)->first();
-                    $subtotal = ($sparepart) ? ($sparepart->selling_price * $value['quantity']) - $value['discount'] : 0;
+                    $subotalbeforediskon = ($sparepart) ? ($sparepart->selling_price * $value['quantity']) : 0;
+                    $diskon = ($subotalbeforediskon*$value['discount'])/100;
+                    $subtotal = $subotalbeforediskon - $diskon;
+
                     $data_detail = [
                         'quantity'           => $value['quantity'],
                         'discount'           => $value['discount'],
