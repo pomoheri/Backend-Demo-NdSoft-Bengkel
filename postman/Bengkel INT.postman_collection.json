@@ -59,6 +59,23 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "List Teknisi",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}master-data/list-teknisi",
+							"host": [
+								"{{url}}master-data"
+							],
+							"path": [
+								"list-teknisi"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
