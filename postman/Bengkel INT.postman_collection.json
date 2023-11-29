@@ -59,6 +59,23 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "List Teknisi",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}master-data/list-teknisi",
+							"host": [
+								"{{url}}master-data"
+							],
+							"path": [
+								"list-teknisi"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -2808,6 +2825,38 @@
 								{
 									"key": "month",
 									"value": "10"
+								},
+								{
+									"key": "year",
+									"value": "2023"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dashboard",
+			"item": [
+				{
+					"name": "Get Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}dashboard/?month=11&year=2023",
+							"host": [
+								"{{url}}dashboard"
+							],
+							"path": [
+								""
+							],
+							"query": [
+								{
+									"key": "month",
+									"value": "11"
 								},
 								{
 									"key": "year",
