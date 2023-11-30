@@ -45,7 +45,7 @@ class LaporanController extends Controller
                    if($value->sellSparepartDetail->count() > 0) {
                         foreach ($value->sellSparepartDetail as $key => $part) {
                            $sum_part += $part->subtotal;
-                           $profit_part += ($part->sparepart) ? $part->sparepart->profit : 0;
+                           $profit_part += $part->profit;
                         }
                    }
                 }
@@ -115,7 +115,7 @@ class LaporanController extends Controller
                 'sell_sparepart' => $sell_sparepart+$sum_part,
                 'buy_sparepart'  => $buy_sparepart,
                 'total_cost'     => $total_cost,
-                'profit_part'    => 'Profit Nilai nya masih belum fix, bimbang',
+                'profit_part'    => $profit_part,
                 'buy_part_3_month'   => $list_3_month
             ];
 
