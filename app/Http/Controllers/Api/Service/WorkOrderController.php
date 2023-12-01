@@ -264,7 +264,8 @@ class WorkOrderController extends Controller
                 'spare_part_id'      => $value['spare_part_id'],
                 'quantity'           => $value['quantity'],
                 'discount'           => $value['discount'],
-                'subtotal'           => $subtotal
+                'subtotal'           => $subtotal,
+                'profit'             => $subtotal - ($sparepart->sale_price*$value['quantity'])
             ];
             if ($detail_part) {
                 $detail_part->update($data_detail);

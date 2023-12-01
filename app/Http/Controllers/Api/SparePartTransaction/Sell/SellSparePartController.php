@@ -88,7 +88,8 @@ class SellSparePartController extends Controller
                         'spare_part_id'      => $value['spare_part_id'],
                         'quantity'           => $value['quantity'],
                         'discount'           => $value['discount'],
-                        'subtotal'           => $subtotal
+                        'subtotal'           => $subtotal,
+                        'profit'             => $subtotal - ($spare_part->sale_price*$value['quantity'])
                     ];
                     SellSparepartDetail::updateOrCreate($data_detail);
 
@@ -273,7 +274,8 @@ class SellSparePartController extends Controller
                         'spare_part_id'      => $value['spare_part_id'],
                         'quantity'           => $value['quantity'],
                         'discount'           => $value['discount'],
-                        'subtotal'           => $subtotal
+                        'subtotal'           => $subtotal,
+                        'profit'             => $subtotal - ($spare_part->sale_price*$value['quantity'])
                     ];
                     SellSparepartDetail::create($data_detail);
                     $spare_part->update([
