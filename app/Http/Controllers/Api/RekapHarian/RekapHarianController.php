@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\SellSparepart;
 use App\Models\ServiceInvoice;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class RekapHarianController extends Controller
 {
@@ -133,14 +134,19 @@ class RekapHarianController extends Controller
             $pdf = PDF::loadView('documents.rekap-harian', $data)->setPaper('a4', 'potrait');
 
             $pdf_file = $pdf->output();
-            
-            $directory = 'public/rekap-harian/'.date('y-m-d').'.pdf';
 
-            \Storage::put($directory,$pdf_file);
+            $directory = 'rekap-harian/' . date('y-m-d') . '/';
+            $filename = md5(date('y-m-d')) . '.pdf';
+        
+            if (Storage::disk('s3')->exists($directory . $filename)) {
+                Storage::disk('s3')->delete($directory . $filename);
+            }
+            // Upload the file to S3
+            Storage::disk('s3')->put($directory . $filename, $pdf_file, 'public');
+        
+            $pdf_url = env('AWS_URL') . $directory . $filename;
 
-            $pdf_url = env('APP_URL').\Storage::url($directory);
-
-            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($pdf_url,['Data Berhasil Di Generate']);
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($pdf_url, ['Data Berhasil Di Generate']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }

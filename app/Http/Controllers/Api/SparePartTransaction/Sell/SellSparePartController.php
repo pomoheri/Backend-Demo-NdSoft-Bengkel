@@ -15,7 +15,7 @@ class SellSparePartController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:sanctum');
+        // $this->middleware('auth:sanctum');
     }
     public function list()
     {
@@ -309,9 +309,11 @@ class SellSparePartController extends Controller
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
 
-            $pdf = PDF::loadView('documents.invoice-sell-sparepart')->setPaper('a7');
+            // $pdf = PDF::loadView('documents.invoice-sell-sparepart')->setPaper('a7','potrait');
 
-            return $pdf->stream();
+            // return $pdf->stream();
+
+            return view('documents.invoice-sell-sparepart');
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
