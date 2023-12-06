@@ -1,74 +1,191 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="style.css">
+        <title>Receipt example</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+       #invoice-POS{
+  box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5);
+  padding:2mm;
+  margin: 0 auto;
+  width: 44mm;
+  background: #FFF;
+  
+  
+::selection {background: #f31544; color: #FFF;}
+::moz-selection {background: #f31544; color: #FFF;}
+h1{
+  font-size: 1.5em;
+  color: #222;
+}
+h2{font-size: .9em;}
+h3{
+  font-size: 1.2em;
+  font-weight: 300;
+  line-height: 2em;
+}
+p{
+  font-size: .7em;
+  color: #666;
+  line-height: 1.2em;
+}
+ 
+#top, #mid,#bot{ /* Targets all id with 'col-' */
+  border-bottom: 1px solid #EEE;
+}
 
-        .receipt {
-            width: 48mm;
-            border: 1px solid #000;
-        }
+#top{min-height: 100px;}
+#mid{min-height: 80px;} 
+#bot{ min-height: 50px;}
 
-        .header {
-            text-align: center;
-        }
+#top .logo{
+  //float: left;
+	height: 60px;
+	width: 60px;
+	background: url(http://michaeltruong.ca/images/logo1.png) no-repeat;
+	background-size: 60px 60px;
+}
+.clientlogo{
+  float: left;
+	height: 60px;
+	width: 60px;
+	background: url(http://michaeltruong.ca/images/client.jpg) no-repeat;
+	background-size: 60px 60px;
+  border-radius: 50px;
+}
+.info{
+  display: block;
+  //float:left;
+  margin-left: 0;
+}
+.title{
+  float: right;
+}
+.title p{text-align: right;} 
+table{
+  width: 100%;
+  border-collapse: collapse;
+}
+td{
+  //padding: 5px 0 5px 15px;
+  //border: 1px solid #EEE
+}
+.tabletitle{
+  //padding: 5px;
+  font-size: .5em;
+  background: #EEE;
+}
+.service{border-bottom: 1px solid #EEE;}
+.item{width: 24mm;}
+.itemtext{font-size: .5em;}
 
-        .receipt-details {
-            margin-top: 3mm;
-        }
+#legalcopy{
+  margin-top: 5mm;
+}
 
-        .item {
-            margin-bottom: 2mm;
-        }
-
-        .item-description {
-            display: inline-block;
-            width: 60%;
-        }
-
-        .item-amount {
-            display: inline-block;
-            width: 40%;
-            text-align: right;
-        }
-
-        .total {
-            border-top: 1px solid #000;
-            margin-top: 3mm;
-            padding-top: 2mm;
-            text-align: right;
-        }
+  
+  
+}
     </style>
 </head>
+
 <body>
-    <div class="receipt">
-        <div class="header">
-            <h5>Your Store Name</h5>
-            <p>123 Main Street</p>
-            <p>City, State ZIP</p>
-            <p>Phone: (555) 555-5555</p>
-        </div>
-        <div class="receipt-details">
-            <div class="item">
-                <div class="item-description">Item 1 Description</div>
-                <div class="item-amount">$10.00</div>
-            </div>
-            <div class="item">
-                <div class="item-description">Item 2 Description</div>
-                <div class="item-amount">$15.00</div>
-            </div>
-            <div class="item">
-                <div class="item-description">Item 3 Description</div>
-                <div class="item-amount">$5.00</div>
-            </div>
-        </div>
-        <div class="total">
-            <p>Total: $30.00</p>
-        </div>
-    </div>
+    
+  <div id="invoice-POS">
+    
+    <center id="top">
+      <div class="logo"></div>
+      <div class="info"> 
+        <h2>SBISTechs Inc</h2>
+      </div><!--End Info-->
+    </center><!--End InvoiceTop-->
+    
+    <div id="mid">
+      <div class="info">
+        <h2>Contact Info</h2>
+        <p> 
+            Address : street city, state 0000</br>
+            Email   : JohnDoe@gmail.com</br>
+            Phone   : 555-555-5555</br>
+        </p>
+      </div>
+    </div><!--End Invoice Mid-->
+    
+    <div id="bot">
+
+					<div id="table">
+						<table>
+							<tr class="tabletitle">
+								<td class="item"><h2>Item</h2></td>
+								<td class="Hours"><h2>Qty</h2></td>
+								<td class="Rate"><h2>Sub Total</h2></td>
+							</tr>
+
+							<tr class="service">
+								<td class="tableitem"><p class="itemtext">Communication</p></td>
+								<td class="tableitem"><p class="itemtext">5</p></td>
+								<td class="tableitem"><p class="itemtext">$375.00</p></td>
+							</tr>
+
+							<tr class="service">
+								<td class="tableitem"><p class="itemtext">Asset Gathering</p></td>
+								<td class="tableitem"><p class="itemtext">3</p></td>
+								<td class="tableitem"><p class="itemtext">$225.00</p></td>
+							</tr>
+
+							<tr class="service">
+								<td class="tableitem"><p class="itemtext">Design Development</p></td>
+								<td class="tableitem"><p class="itemtext">5</p></td>
+								<td class="tableitem"><p class="itemtext">$375.00</p></td>
+							</tr>
+
+							<tr class="service">
+								<td class="tableitem"><p class="itemtext">Animation</p></td>
+								<td class="tableitem"><p class="itemtext">20</p></td>
+								<td class="tableitem"><p class="itemtext">$1500.00</p></td>
+							</tr>
+
+							<tr class="service">
+								<td class="tableitem"><p class="itemtext">Animation Revisions</p></td>
+								<td class="tableitem"><p class="itemtext">10</p></td>
+								<td class="tableitem"><p class="itemtext">$750.00</p></td>
+							</tr>
+
+
+							<tr class="tabletitle">
+								<td></td>
+								<td class="Rate"><h2>tax</h2></td>
+								<td class="payment"><h2>$419.25</h2></td>
+							</tr>
+
+							<tr class="tabletitle">
+								<td></td>
+								<td class="Rate"><h2>Total</h2></td>
+								<td class="payment"><h2>$3,644.25</h2></td>
+							</tr>
+
+						</table>
+					</div><!--End Table-->
+
+					<div id="legalcopy">
+						<p class="legal"><strong>Thank you for your business!</strong>  Payment is expected within 31 days; please process this invoice within that time. There will be a 5% interest charge per month on late invoices. 
+						</p>
+					</div>
+
+				</div><!--End InvoiceBot-->
+  </div><!--End Invoice-->
+  <script type="text/javascript">
+    function printReceipt() {
+        window.print();
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        printReceipt(); // Manually trigger print when the DOM is ready
+    });
+</script>
 </body>
 </html>
