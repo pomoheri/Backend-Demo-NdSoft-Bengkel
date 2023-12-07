@@ -76,7 +76,7 @@ class InvoiceController extends Controller
                 return (new \App\Helpers\GlobalResponseHelper())->sendError(['Data Tidak Ditemukan']);
             }
 
-            if ($request->payment_method == 'Tunai') {
+            if ($request->payment_method == 'Cash') {
                 $invoice->update([
                     'payment_method'  => $request->payment_method,
                     'payment_gateway' => $request->payment_gateway,
