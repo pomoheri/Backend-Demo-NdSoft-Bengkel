@@ -16,12 +16,16 @@ class RegisterWorkOrderController extends Controller
     public function list($start_date = null, $end_date = null)
     {
         try {
-            $data = WorkOrder::with('vehicle','vehicle.customer', 'vehicle.carType')->orderBy('created_at', 'desc');
-            if($start_date && $end_date){
-                $data = $data->whereBetween('created_at', [$start_date, $end_date]);
+            $data = WorkOrder::query();
+            $data = $data->with('vehicle','vehicle.customer', 'vehicle.carType');
+            if($start_date){
+                $data = $data->whereDate('updated_at', '>=', $start_date);
+            }
+            if($end_date){
+                $data = $data->whereDate('updated_at', '<=', $end_date);
             }
 
-            $data = $data->where('status', 'Closed')->get();
+            $data = $data->orderBy('updated_at', 'desc')->where('status', 'Closed')->get();
             $output = [];
             if($data->count() > 0){
                 foreach ($data as $key => $value) {
