@@ -189,8 +189,10 @@ class PurchasingSparePartController extends Controller
                 $po->status = 'Not paid';
             }else if($po->is_paid == 1 && $po->status == 'On Order'){
                 $po->status = 'Paid';
+                $po->closed_at = date('Y-m-d');
             }else if($po->is_paid == 1 && $po->status == 'Paid'){
                 $po->status = 'Paid';
+                $po->closed_at = date('Y-m-d');
             }else{
                 $po->status = 'Outstanding';
             }
