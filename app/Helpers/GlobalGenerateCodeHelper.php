@@ -66,7 +66,7 @@ class GlobalGenerateCodeHelper
         $currentMonth = now()->format('y/m');
 
         $lastCode = PurchaseOrder::max('transaction_code');
-        $storedMonth = substr($lastCode, strlen($prefix), 7);
+        $storedMonth = substr($lastCode, strlen($prefix), 5);
 
         if ($storedMonth != $currentMonth) {
             $nextNumber = 1;
@@ -86,7 +86,7 @@ class GlobalGenerateCodeHelper
         $currentMonth = now()->format('y/m');
 
         $lastCode = SellSparepart::max('transaction_code');
-        $storedMonth = substr($lastCode, strlen($prefix), 7);
+        $storedMonth = substr($lastCode, strlen($prefix), 5);
 
         if ($storedMonth != $currentMonth) {
             $nextNumber = 1;
@@ -106,7 +106,7 @@ class GlobalGenerateCodeHelper
         $currentMonth = now()->format('y/m');
 
         $lastCode = WorkOrder::max('transaction_code');
-        $storedMonth = substr($lastCode, strlen($prefix), 7);
+        $storedMonth = substr($lastCode, strlen($prefix), 5);
 
         if ($storedMonth != $currentMonth) {
             $nextNumber = 1;
@@ -126,7 +126,7 @@ class GlobalGenerateCodeHelper
         $currentMonth = now()->format('y/m');
 
         $lastCode = ServiceInvoice::max('transaction_code');
-        $storedMonth = substr($lastCode, strlen($prefix), 7);
+        $storedMonth = substr($lastCode, strlen($prefix), 5);
 
         if ($storedMonth != $currentMonth) {
             $nextNumber = 1;
