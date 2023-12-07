@@ -15,7 +15,7 @@ class RegisterServiceInvoiceController extends Controller
     public function list($start_date = null, $end_date = null)
     {
         try {
-            $data = ServiceInvoice::with('workOrder','workOrder.vehicle', 'workOrder.vehicle.customer', 'workOrder.vehicle.carType')
+            $data = ServiceInvoice::with('workOrder','workOrder.vehicle', 'workOrder.vehicle.customer', 'workOrder.vehicle.carType', 'workOrder.vehicle.carType.carBrand')
                                     ->orderBy('closed_at', 'desc');
             if($start_date && $end_date){
                 $data = $data->whereBetween('closed_at', [$start_date, $end_date]);
@@ -28,11 +28,13 @@ class RegisterServiceInvoiceController extends Controller
                     $output[] = [
                         'invoice_no'  => $value->transaction_code,
                         'invoice_date' => $value->created_at,
-                        'workorder_no' => ($value->workOrder) ? $value->workOrder->transaction_code : null,
+                        'workorder_no' => ($value->workOrder) ? $value->workOrder->transaction_code : '',
                         'payment_date' => $value->closed_at,
-                        'customer'     => ($value->workOrder) ? (($value->workOrder->vehicle) ? (($value->workOrder->vehicle->customer) ? $value->workOrder->vehicle->customer->name : null) : null) : null,
-                        'nopol'        => ($value->workOrder) ? (($value->workOrder->vehicle) ? $value->workOrder->vehicle->license_plate : null) : null,
-                        'total'        => ($value->workOrder) ? $value->workOrder->total : null,
+                        'customer'     => ($value->workOrder) ? (($value->workOrder->vehicle) ? (($value->workOrder->vehicle->customer) ? $value->workOrder->vehicle->customer->name : '') : '') : '',
+                        'nopol'        => ($value->workOrder) ? (($value->workOrder->vehicle) ? $value->workOrder->vehicle->license_plate : '') : '',
+                        'cartype'      => ($value->workOrder) ? (($value->workOrder->vehicle) ? ($value->workOrder->vehicle->carType ? $value->workOrder->vehicle->carType->name : '') : '') : '',
+                        'carbrand'     => ($value->workOrder) ? (($value->workOrder->vehicle) ? ($value->workOrder->vehicle->carType ? ($value->workOrder->vehicle->carType->carBrand) ? $value->workOrder->vehicle->carType->carBrand : '' : '') : '') : '',
+                        'total'        => ($value->workOrder) ? $value->workOrder->total : '',
                         'closed_by'    => $value->closed_by,
                     ];
                 }
