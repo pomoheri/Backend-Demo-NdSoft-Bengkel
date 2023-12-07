@@ -32,8 +32,9 @@ class RegisterServiceInvoiceController extends Controller
                         'payment_date' => $value->closed_at,
                         'customer'     => ($value->workOrder) ? (($value->workOrder->vehicle) ? (($value->workOrder->vehicle->customer) ? $value->workOrder->vehicle->customer->name : '') : '') : '',
                         'nopol'        => ($value->workOrder) ? (($value->workOrder->vehicle) ? $value->workOrder->vehicle->license_plate : '') : '',
+                        'color'        => ($value->workOrder) ? (($value->workOrder->vehicle) ? $value->workOrder->vehicle->color : '') : '',
                         'cartype'      => ($value->workOrder) ? (($value->workOrder->vehicle) ? ($value->workOrder->vehicle->carType ? $value->workOrder->vehicle->carType->name : '') : '') : '',
-                        'carbrand'     => ($value->workOrder) ? (($value->workOrder->vehicle) ? ($value->workOrder->vehicle->carType ? ($value->workOrder->vehicle->carType->carBrand) ? $value->workOrder->vehicle->carType->carBrand : '' : '') : '') : '',
+                        'carbrand'     => ($value->workOrder) ? (($value->workOrder->vehicle) ? ($value->workOrder->vehicle->carType ? ($value->workOrder->vehicle->carType->carBrand) ? $value->workOrder->vehicle->carType->carBrand->name : '' : '') : '') : '',
                         'total'        => ($value->workOrder) ? $value->workOrder->total : '',
                         'closed_by'    => $value->closed_by,
                     ];
