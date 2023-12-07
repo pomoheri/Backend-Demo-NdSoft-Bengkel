@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\RekapHarian;
 
+use App\Models\PurchaseOrder;
+use App\Models\SmallTransaction;
 use PDF;
 use Nim4n\SimpleDate;
 use Illuminate\Http\Request;
@@ -84,6 +86,22 @@ class RekapHarianController extends Controller
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
     }
+    public function lainnya(Request $request)
+    {
+        try {
+            $date = (isset($request->date) && $request->date) ? $request->date : date('Y-m-d');
+
+            $data = SmallTransaction::query();
+            $total = $data->where('status', 'Debit')->where('date', $date)->get()->sum('total');
+
+            $output = [
+                'total' => $total
+            ];
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($output, ['Data Rekap Harian Pemasukan Small Transaction']);
+        } catch (\Exception $e) {
+            return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
+        }
+    }
 
     public function getPdf(Request $request)
     {
@@ -147,6 +165,36 @@ class RekapHarianController extends Controller
             $pdf_url = env('AWS_URL') . $directory . $filename;
 
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($pdf_url, ['Data Berhasil Di Generate']);
+        } catch (\Exception $e) {
+            return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
+        }
+    }
+
+    public function pengeluaran(Request $request)
+    {
+        try {
+            $date = (isset($request->date) && $request->date) ? $request->date : date('Y-m-d');
+
+            $po_sparepart = PurchaseOrder::where('status', 'Paid')->where('invoice_date', $date)->get()->sum('total');
+
+            $small_transaction = SmallTransaction::query();
+
+            $data = $small_transaction->where('status', 'Kredit')->where('date', $date);
+
+            $cost = $data->where('category', 'Cost')->get()->sum('total');
+            $sublet = $data->where('category', 'Sublet')->get()->sum('total');
+            $asset = $data->where('category', 'Asset')->get()->sum('total');
+            $prive = $data->where('category', 'Prive')->get()->sum('total');
+
+            $output = [
+                'po_sparepart' => $po_sparepart,
+                'cost'         => $cost,
+                'sublet'       => $sublet,
+                'asset'        => $asset,
+                'prive'        => $prive
+            ];
+
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($output, ['Data Rekap Harian Pengeluaran']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }

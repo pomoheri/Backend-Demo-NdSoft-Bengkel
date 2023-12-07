@@ -2802,6 +2802,52 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Pemasukkan Lainnya",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}rekap-harian/lainnya?date=2023-12-07",
+							"host": [
+								"{{url}}rekap-harian"
+							],
+							"path": [
+								"lainnya"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2023-12-07"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pengeluaran",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}rekap-harian/pengeluaran?date=2023-10-31",
+							"host": [
+								"{{url}}rekap-harian"
+							],
+							"path": [
+								"pengeluaran"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2023-10-31"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -2814,7 +2860,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}laporan/get-data?month=10&year=2023",
+							"raw": "{{url}}laporan/get-data?month=11&year=2023",
 							"host": [
 								"{{url}}laporan"
 							],
@@ -2824,7 +2870,7 @@
 							"query": [
 								{
 									"key": "month",
-									"value": "10"
+									"value": "11"
 								},
 								{
 									"key": "year",
@@ -2890,7 +2936,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\" : \"superadmin\",\r\n    \"password\" : \"default123\"\r\n}"
+					"raw": "{\r\n    \"username\" : \"superadmin\",\r\n    \"password\" : \"12345678\"\r\n}"
 				},
 				"url": {
 					"raw": "{{url}}login",
@@ -3054,7 +3100,7 @@
 		},
 		{
 			"key": "token",
-			"value": "23|vXwftbAfyLri7heZZquNIgL3TfGZdhFmdgntGvF4bb60a494",
+			"value": "76|0aNWcvmxFp0RSX2tAmBWcqQHEfnHWUmDZUwF51DBd51b5247",
 			"type": "string"
 		}
 	]
