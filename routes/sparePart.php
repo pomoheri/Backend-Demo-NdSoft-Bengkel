@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'sparepart-transaction', "as" => 'sparepart-transaction.'], function () {
         //puchasing order
         Route::group(['prefix' => 'purchasing', "as" => 'purchasing.'], function () {
@@ -28,4 +28,4 @@ use Illuminate\Support\Facades\Route;
             Route::get('/kredit-history/{transaction_unique}', [\App\Http\Controllers\Api\SparePartTransaction\Sell\KreditHistoryController::class, 'kreditHistory']);
         });
     });
-// });
+});
