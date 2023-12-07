@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Data Rekap Harian</title>
+    <title>Data Rekap Harian Pengeluaran</title>
     <style type="text/css">
         table.page_header { 
             width: 100%; 
@@ -90,7 +90,7 @@
                         0821-3782-5012<br>
                     </span>
                 </td>
-                <td style="text-align: right; width: 25%; font-size: 14px"><b>REKAP HARIAN<br>{{ $date }}</b></td>
+                <td style="text-align: right; width: 25%; font-size: 14px"><b>REKAP PENGELUARAN<br>{{ $date }}</b></td>
             </tr>
         </table>
     </header>
@@ -98,58 +98,28 @@
         <p>Copyright © {{ date('Y') }} - INT AUTOCARE</p>
     </footer>
     <main>
-        <h4>Rekap Invoice Service</h4>
+        <h4>Rekap Pengeluaran Harian</h4>
         <table class="table-content">
             <tr>
                 <th style="background-color: #92b9f3;">
-                    <p>CASH</p>
-                    <h4>{{ "Rp. " . number_format($service_cash,2,',','.') }}</h4>
+                    <p>SPAREPART</p>
+                    <h4>{{ "Rp. " . number_format($po_sparepart,2,',','.') }}</h4>
                 </th>
                 <th style=" background-color: rgb(146, 241, 243);">
-                    <p>TRANSFER</p>
-                    <h4>{{ "Rp. " . number_format($service_transfer,2,',','.') }}</h4>
+                    <p>COST</p>
+                    <h4>{{ "Rp. " . number_format($cost,2,',','.') }}</h4>
                 </th>
                 <th style=" background-color: #f4f482;">
-                    <p>QRIS</p>
-                    <h4>{{ "Rp. " . number_format($service_qris,2,',','.') }}</h4>
+                    <p>SUBLET</p>
+                    <h4>{{ "Rp. " . number_format($sublet,2,',','.') }}</h4>
                 </th>
                 <th style="background-color: #f588ae">
-                    <p>EDC</p>
-                    <h4>{{ "Rp. " . number_format($service_edc,2,',','.') }}</h4>
+                    <p>ASSET</p>
+                    <h4>{{ "Rp. " . number_format($asset,2,',','.') }}</h4>
                 </th>
-            </tr>
-        </table>
-        <h4>Rekap Invoice Penjualan Langsung Spare Part</h4>
-        <table class="table-content">
-            <tr>
-                <th style="background-color: #92b9f3;">
-                    <p>CASH</p>
-                    <h4>{{ "Rp. " . number_format($sell_cash,2,',','.') }}</h4>
-                </th>
-                <th style=" background-color: rgb(146, 241, 243);">
-                    <p>TRANSFER</p>
-                    <h4>{{ "Rp. " . number_format($sell_transfer,2,',','.') }}</h4>
-                </th>
-                <th style=" background-color: #f4f482;">
-                    <p>QRIS</p>
-                    <h4>{{ "Rp. " . number_format($sell_qris,2,',','.') }}</h4>
-                </th>
-                <th style="background-color: #f588ae">
-                    <p>EDC</p>
-                    <h4>{{ "Rp. " . number_format($sell_edc,2,',','.') }}</h4>
-                </th>
-            </tr>
-        </table>
-        <h4>Rekap Transaksi Lainnya</h4>
-        <table class="table-content" width="80%">
-            <tr>
-                <th style="background-color: #f588ae; width:30%">
-                    <p>KAS</p>
-                    <h4>{{ "Rp. " . number_format($kas,2,',','.') }}</h4>
-                </th>
-                <th style=" background-color: #f4f482; width:30%">
-                    <p>MODAL</p>
-                    <h4>{{ "Rp. " . number_format($modal,2,',','.') }}</h4>
+                <th style="background-color: #8af588">
+                    <p>PRIVE</p>
+                    <h4>{{ "Rp. " . number_format($prive,2,',','.') }}</h4>
                 </th>
             </tr>
         </table>
