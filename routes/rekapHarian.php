@@ -11,6 +11,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::group(['prefix' => 'pengeluaran', "as" => 'pengeluaran.'], function () {
             Route::get('/', [\App\Http\Controllers\Api\RekapHarian\RekapHarianController::class, 'pengeluaran']);
+            Route::get('/get-pdf', [\App\Http\Controllers\Api\RekapHarian\RekapHarianController::class, 'getPdfPengeluaran']);
         });
     });
 });

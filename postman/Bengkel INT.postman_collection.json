@@ -2848,6 +2848,30 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "get-pdf-pengeluaran",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}rekap-harian/pengeluaran/get-pdf?date=2023-11-25",
+							"host": [
+								"{{url}}rekap-harian"
+							],
+							"path": [
+								"pengeluaran",
+								"get-pdf"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2023-11-25"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
