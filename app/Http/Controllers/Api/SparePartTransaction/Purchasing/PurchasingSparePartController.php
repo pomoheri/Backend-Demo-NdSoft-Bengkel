@@ -62,7 +62,7 @@ class PurchasingSparePartController extends Controller
                         $validation = Validator::make($value, [
                             'name'          => ['required', 'string', 'max:255', 'unique:spare_part,name'],
                             'car_brand_id'  => ['required'],
-                            'category'      => ['required', 'in:Spare Part, Material, Asset'],
+                            'category'      => ['required'],
                             'selling_price' => ['required'],
                             'part_number'   => ['required', 'string', 'max:255', 'unique:spare_part,part_number'],
                         ]);
@@ -117,7 +117,7 @@ class PurchasingSparePartController extends Controller
 
             'spare_part.*.name'          => ['nullable', 'string', 'max:255'],
             'spare_part.*.car_brand_id'  => ['nullable'],
-            'spare_part.*.category'      => ['nullable', 'in:Spare Part, Material, Asset'],
+            'spare_part.*.category'      => ['nullable'],
             'spare_part.*.selling_price' => ['nullable'],
             'spare_part.*.part_number'   => ['nullable', 'string', 'max:255'],
         ]);
