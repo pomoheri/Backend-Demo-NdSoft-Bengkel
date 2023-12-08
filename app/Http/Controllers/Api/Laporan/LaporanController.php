@@ -116,7 +116,7 @@ class LaporanController extends Controller
                 'buy_sparepart'  => $buy_sparepart,
                 'total_cost'     => $total_cost,
                 'profit_part'    => $profit_part,
-                'buy_part_3_month'   => $list_3_month
+                'sell_part_3_month'   => $list_3_month
             ];
 
             return (new \App\Helpers\GlobalResponseHelper())->sendResponse($output, ['Data Laporan']);
