@@ -40,7 +40,7 @@ class RegisterServiceInvoiceController extends Controller
                     ];
                 }
             }
-            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($data, ['List Data Register Service Invoice']);
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($output, ['List Data Register Service Invoice']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
