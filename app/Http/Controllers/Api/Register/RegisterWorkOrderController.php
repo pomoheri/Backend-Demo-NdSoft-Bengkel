@@ -44,7 +44,7 @@ class RegisterWorkOrderController extends Controller
                     ];
                 }
             }
-            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($data, ['List Data Register Workorder']);
+            return (new \App\Helpers\GlobalResponseHelper())->sendResponse($output, ['List Data Register Workorder']);
         } catch (\Exception $e) {
             return (new \App\Helpers\GlobalResponseHelper())->sendError($e->getMessage());
         }
