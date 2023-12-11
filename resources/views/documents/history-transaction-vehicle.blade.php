@@ -75,14 +75,14 @@
                 <td style="text-align: left; width: 10%; margin-right:0px;">
                     <img src="{{ public_path('image/logo-png.png') }}" style="width: 70px;height: 70px">
                 </td>
-                <td style="text-align: left; width: 65%; margin-left: 0px;">
-                    <b style="font-size: 14px">INT AUTOCARE</b><br>
+                <td style="text-align: left; width: 65%;">
+                    <b style="font-size: 14px">YOUR COMPANY</b><br>
                     <span style="font-size: 9px">
-                        Jl. Gandu<br>
-                        Gandu, Sendangtirto<br>
-                        Berbah, Sleman<br>
-                        D.I Yogyakarta<br>
-                        0821-3782-5012<br>
+                        Your Address Bar<br>
+                        Klaten<br>
+                        Klaten<br>
+                        Klaten<br>
+                        0838-6955-0401<br>
                     </span>
                 </td>
                 <td style="text-align: right; width: 25%; font-size: 16px"><h4>HISTORY SERVICE<br>{{ $vehicle->license_plate.' / '.$carType->name }}</h4></td>
@@ -90,7 +90,7 @@
         </table>
     </header>
     <footer>
-        <p>Copyright © {{ date('Y') }} - INT AUTOCARE</p>
+        <p>Copyright © {{ date('Y') }} - YOUR COMPANY</p>
     </footer>
     <main>
         <table class="table-content">
